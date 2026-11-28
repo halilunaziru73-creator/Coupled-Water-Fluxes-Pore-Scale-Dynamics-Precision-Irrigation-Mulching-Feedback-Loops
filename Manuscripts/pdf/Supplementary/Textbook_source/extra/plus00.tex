@@ -24,12 +24,21 @@ Between $h_w$ and $h_d$ the pore can be either full or empty, according to its h
 \node[lab,align=center] at (0,2.75) {drying: empties at $h_d\propto 1/r_t$ \quad wetting: fills at $h_w\propto 1/r_b$};
 \end{kfig}
 
-\exbox{Haines jump in an ink-bottle pore}{A pore of a sandy loam has a body of radius $25\ \mu$m and throats of radius $5\ \mu$m. Take $\gamma=0.0728$ N\,m$^{-1}$, $\beta=0$, $\rho_w=1000$ kg\,m$^{-3}$ and $g=9.81$ m\,s$^{-2}$. Find the suctions at which the pore empties and fills, and the width of the hysteresis loop.}\sol \givenline{$r_b=25\times10^{-6}$ m ; $r_t=5\times10^{-6}$ m}
-\par\noindent Emptying is controlled by the throat:
-\[h_d=\frac{2\gamma}{\rho_w g r_t}=\frac{2\times0.0728}{1000\times9.81\times5\times10^{-6}}=2.97\ \text{m}=297\ \text{cm}\quad\text{\finans}\]
-Filling is controlled by the body:
-\[h_w=\frac{2\gamma}{\rho_w g r_b}=\frac{0.1456}{1000\times9.81\times25\times10^{-6}}=0.594\ \text{m}=59\ \text{cm}\quad\text{\finans}\]
-Between 59 and 297 cm the pore may be full or empty. The loop is a factor $h_d/h_w=r_b/r_t=5$ wide. A sensor reading of 150 cm in this soil therefore corresponds to two different water contents, the wetter one on the drying branch.
+\exbox{Haines jump in an ink-bottle pore}{A pore of a sandy loam has a body of radius $25\ \mu$m and throats of radius $5\ \mu$m. Take $\gamma=0.0728$ N\,m$^{-1}$, $\beta=0$, $\rho_w=1000$ kg\,m$^{-3}$ and $g=9.81$ m\,s$^{-2}$. Find the suctions at which the pore empties and fills, and the width of the hysteresis loop.}\sol
+\givenline{$r_b=25\ \mu\text{m}=25\times10^{-6}$ m ; $r_t=5\ \mu\text{m}=5\times10^{-6}$ m ; $\gamma=0.0728$ N\,m$^{-1}$ ; $\beta=0$ ; $\rho_w=1000$ kg\,m$^{-3}$ ; $g=9.81$ m\,s$^{-2}$}
+\sh{Suction at which the pore empties}
+\wkt\ during drying the air must enter through the throat, so the suction at which the pore empties is given by Equation~\ref{eq:pg-hd}, with $\cos\beta=1$:
+\[h_d=\frac{2\gamma\cos\beta}{\rho_w\,g\,r_t}\ti{i}\]
+Substituting the given values in equation \rfi{i},
+\[h_d=\frac{2\times0.0728\times1}{1000\times9.81\times5\times10^{-6}}=\frac{0.1456}{0.04905}=2.968\ \text{m}\]
+\[\therefore\quad h_d=297\ \text{cm}\Ans\]
+\sh{Suction at which the pore fills}
+During wetting the meniscus of largest radius lies in the body. Therefore from Equation~\ref{eq:pg-hw},
+\[h_w=\frac{2\gamma\cos\beta}{\rho_w\,g\,r_b}=\frac{0.1456}{1000\times9.81\times25\times10^{-6}}=\frac{0.1456}{0.24525}=0.594\ \text{m}=59\ \text{cm}\Ans\]
+\sh{Width of the hysteresis loop}
+Dividing equation \rfi{i} by the corresponding expression for $h_w$,
+\[\frac{h_d}{h_w}=\frac{r_b}{r_t}=\frac{25}{5}=5\Ans\]
+Thus between 59 cm and 297 cm the pore may be either full or empty, according to its history. A tensiometer reading of 150 cm in this soil therefore corresponds to two different water contents, the wetter one lying on the drying branch.
 
 \section{Water films and corner flow in the dry range}\label{sec:pg-film}
 When the suction is so high that even the smallest throats have emptied, water remains in two forms: in the \kw{corners} of angular pores, held by menisci of small radius, and as \kw{adsorbed films} on the walls, held by the attraction of the solid (van der Waals forces). The film is thin, but it is continuous, and it carries the slow flow that feeds evaporation and the uptake of roots in a dry soil.
@@ -50,10 +59,23 @@ where $\delta$ is the thickness (m) and $h$ the suction (m). The film thins only
 \draw[vec] (1.2,-2.4)--(0.6,-1.42);\node[lab,below] at (1.4,-2.4) {film $\delta$};
 \end{kfig}
 
-\exbox{Thickness of the water film}{Find the thickness of the adsorbed water film on a silicate surface ($A_H=6\times10^{-20}$ J) at suctions of 1 m, 10 m and 150 m (the last is the wilting point). Compare with the radius of the pore that is just full at 150 m.}\sol \givenline{$A_H=6\times10^{-20}$ J ; $\rho_wg=9810$ N\,m$^{-3}$}
-\par\noindent At $h=1$ m: $\delta=\bigl(6\times10^{-20}/(6\pi\times9810\times1)\bigr)^{1/3}=6.9\times10^{-9}$ m $=6.9$ nm.
-\par\noindent At $h=10$ m: $\delta=3.2$ nm, and at $h=150$ m: $\delta=1.3$ nm.\finans
-\par\noindent The pore that is just full at 150 m has $r=2\gamma/(\rho_wgh)=0.1456/(9810\times150)=9.9\times10^{-8}$ m $=0.099\ \mu$m, about 80 times the film thickness. The film is only a few water molecules thick (one molecule is about 0.28 nm), yet it remains connected over the whole surface of the soil.
+\exbox{Thickness of the water film}{Find the thickness of the adsorbed water film on a silicate surface ($A_H=6\times10^{-20}$ J) at suctions of 1 m, 10 m and 150 m (the last is the wilting point). Compare with the radius of the pore that is just full at 150 m.}\sol
+\givenline{$A_H=6\times10^{-20}$ J ; $\rho_w=1000$ kg\,m$^{-3}$ ; $g=9.81$ m\,s$^{-2}$ ; $h=1$, $10$ and $150$ m}
+\wkt\ the equilibrium thickness of the film (Equation~\ref{eq:pg-film}) is
+\[\delta=\Bigl(\frac{A_H}{6\pi\,\rho_w\,g\,h}\Bigr)^{1/3}\ti{i}\]
+The constant part of the denominator is \[6\pi\rho_wg=6\times3.1416\times1000\times9.81=1.849\times10^{5}\ \text{N\,m$^{-3}$}\]
+\sh{1. Thickness at a suction of 1 m}
+Substituting $h=1$ m in equation \rfi{i},
+\[\delta=\Bigl(\frac{6\times10^{-20}}{1.849\times10^{5}\times1}\Bigr)^{1/3}=(3.245\times10^{-25})^{1/3}=6.87\times10^{-9}\ \text{m}=6.9\ \text{nm}\Ans\]
+\sh{2. Thickness at a suction of 10 m}
+\[\delta=\Bigl(\frac{6\times10^{-20}}{1.849\times10^{6}}\Bigr)^{1/3}=(3.245\times10^{-26})^{1/3}=3.19\times10^{-9}\ \text{m}=3.2\ \text{nm}\Ans\]
+\sh{3. Thickness at the wilting point (150 m)}
+\[\delta=\Bigl(\frac{6\times10^{-20}}{2.774\times10^{7}}\Bigr)^{1/3}=(2.163\times10^{-27})^{1/3}=1.29\times10^{-9}\ \text{m}=1.3\ \text{nm}\Ans\]
+\sh{4. Radius of the pore just full at 150 m}
+From the Young--Laplace law,
+\[r=\frac{2\gamma}{\rho_w\,g\,h}=\frac{2\times0.0728}{1000\times9.81\times150}=9.9\times10^{-8}\ \text{m}=0.099\ \mu\text{m}\Ans\]
+\[\therefore\quad\frac{r}{\delta}=\frac{99\ \text{nm}}{1.3\ \text{nm}}\approx76\]
+The film at the wilting point is only four or five molecules of water thick (one molecule is about 0.28 nm), yet it remains connected over the whole surface of the soil and carries the slow flow of the dry range.
 
 \section{The pore network as a lattice: percolation and critical paths}\label{sec:pg-perc}
 The bundle of capillaries (Section~\ref{sec:bundle}) treats every pore as a straight tube that crosses the sample. A better picture is a \kw{network}: pore bodies at the nodes of a lattice, joined by throats along its bonds. Each node has $z$ neighbours, the \kw{coordination number}, which is about 4 to 8 in soils.
@@ -76,9 +98,19 @@ which is why the conductivity of a drying soil does not fall smoothly but collap
 \node[lab,below] at (3.3,-0.35) {open fraction $p>p_c$: a spanning path exists};
 \end{kfig}
 
-\exbox{Conductance near the percolation threshold}{In a network on a simple cubic lattice ($p_c=0.249$, exponent $t=2$) half of the throats are water-filled at a suction of 100 cm and 35 per cent at 300 cm. By what factor has the network conductance fallen? What fraction must remain filled for the water phase to stay connected?}\sol \givenline{$p_1=0.50$ ; $p_2=0.35$ ; $p_c=0.249$ ; $t=2$}
-\[\frac{K_2}{K_1}=\Bigl(\frac{p_2-p_c}{p_1-p_c}\Bigr)^{t}=\Bigl(\frac{0.35-0.249}{0.50-0.249}\Bigr)^{2}=\Bigl(\frac{0.101}{0.251}\Bigr)^2=0.162\quad\text{\finans}\]
-The conductance has fallen by a factor of 6.2 although the filled fraction fell only from 0.50 to 0.35. The water phase stays connected while more than $p_c=0.249$ of the throats are filled.\finans
+\exbox{Conductance near the percolation threshold}{In a network on a simple cubic lattice ($p_c=0.249$, exponent $t=2$) half of the throats are water-filled at a suction of 100 cm and 35 per cent at 300 cm. By what factor has the network conductance fallen? What fraction must remain filled for the water phase to stay connected?}\sol
+\givenline{$p_c=0.249$ ; $t=2$ ; $p_1=0.50$ (at 100 cm) ; $p_2=0.35$ (at 300 cm)}
+\wkt\ near the percolation threshold the conductance of the network is given by Equation~\ref{eq:pg-perc}:
+\[K=C\,(p-p_c)^{t}\ti{i}\]
+where $C$ is a constant of the network. Writing equation \rfi{i} for the two states and dividing, the constant cancels:
+\[\frac{K_2}{K_1}=\Bigl(\frac{p_2-p_c}{p_1-p_c}\Bigr)^{t}\ti{ii}\]
+Substituting the given values in equation \rfi{ii},
+\[\frac{K_2}{K_1}=\Bigl(\frac{0.35-0.249}{0.50-0.249}\Bigr)^{2}=\Bigl(\frac{0.101}{0.251}\Bigr)^{2}=(0.4024)^2=0.162\Ans\]
+\[\therefore\quad\frac{K_1}{K_2}=\frac1{0.162}=6.2\]
+\sh{Fraction that keeps the water phase connected}
+A spanning path of water exists only while $p>p_c$, i.e. while more than
+\[p_c=0.249\quad\text{(about one throat in four)}\Ans\]
+of the throats remain filled. The conductance has fallen by a factor of 6.2 although the filled fraction fell only from 0.50 to 0.35, which is why the conductivity of a drying soil collapses rather than falls smoothly.
 
 \section{Evaporation from the pores: the two stages and the characteristic length}\label{sec:pg-evap}
 A wet bare soil first loses water at nearly the rate of open water (\kw{stage 1}), limited by the energy at the surface. The surface stays wet because capillary flow lifts water from the large pores below through the small pores that remain full at the surface. When the drying front has receded to a depth at which the capillary pull of the small pores can no longer balance gravity and the viscous loss, the liquid connection breaks; evaporation then takes place below the surface and the vapour must diffuse up through a dry layer (\kw{stage 2}), at a rate that falls with the thickness of that layer.
@@ -104,11 +136,26 @@ where $L_G$ is the length limited by gravity alone, $e_0$ the evaporation rate i
 \end{scope}
 \end{kfig}
 
-\exbox{Characteristic length of a sandy loam}{In a sandy loam the connection to the surface is made by pores of radius $r_s=20\ \mu$m, while the bulk of the water drains from pores of $r_l=200\ \mu$m. Find the length $L_G$ limited by gravity. If the stage-1 rate is $e_0=5$ mm\,d$^{-1}$ and the effective conductivity of the path $K_{\mathrm{eff}}=20$ mm\,d$^{-1}$, find $L_C$ and the water that can evaporate in stage 1 if the large pores hold 0.15 m$^3$\,m$^{-3}$.}\sol \givenline{$r_s=2\times10^{-5}$ m ; $r_l=2\times10^{-4}$ m ; $e_0/K_{\mathrm{eff}}=0.25$}
-\[L_G=\frac{2\times0.0728}{9810}\Bigl(\frac{1}{2\times10^{-5}}-\frac{1}{2\times10^{-4}}\Bigr)=1.484\times10^{-5}\times45\,000=0.668\ \text{m}\]
-\[L_C=\frac{0.668}{1+0.25}=0.534\ \text{m}\quad\text{\finans}\]
-The water released from the large pores above the front is $0.15\times534=80$ mm.\finans
-At 5 mm\,d$^{-1}$ stage 1 would last about 16 days, which is why a medium-textured soil can lose a large part of a rain to evaporation before the surface dries, and why a mulch, which cuts $e_0$, saves most in such soils.
+\exbox{Characteristic length of a sandy loam}{In a sandy loam the connection to the surface is made by pores of radius $r_s=20\ \mu$m, while the bulk of the water drains from pores of $r_l=200\ \mu$m. Find the length $L_G$ limited by gravity. If the stage-1 rate is $e_0=5$ mm\,d$^{-1}$ and the effective conductivity of the path $K_{\mathrm{eff}}=20$ mm\,d$^{-1}$, find $L_C$ and the water that can evaporate in stage 1 if the large pores hold 0.15 m$^3$\,m$^{-3}$.}\sol
+\givenline{\[r_s=20\ \mu\text{m}=2\times10^{-5}\ \text{m}\]
+\[r_l=200\ \mu\text{m}=2\times10^{-4}\ \text{m}\]
+$e_0=5$ mm\,d$^{-1}$ ; $K_{\mathrm{eff}}=20$ mm\,d$^{-1}$ ; drainable porosity of the large pores $=0.15$}
+\sh{Length limited by gravity}
+\wkt\ the characteristic length limited by gravity alone is (Equation~\ref{eq:pg-lg})
+\[L_G=\frac{2\gamma}{\rho_w\,g}\Bigl(\frac1{r_s}-\frac1{r_l}\Bigr)\ti{i}\]
+The capillary length of water is
+\[\frac{2\gamma}{\rho_w\,g}=\frac{2\times0.0728}{1000\times9.81}=1.484\times10^{-5}\ \text{m}^2\]
+and the difference of the curvatures is
+\[\frac1{r_s}-\frac1{r_l}=\frac1{2\times10^{-5}}-\frac1{2\times10^{-4}}=50\,000-5000=45\,000\ \text{m}^{-1}\]
+Substituting in equation \rfi{i},
+\[L_G=1.484\times10^{-5}\times45\,000=0.668\ \text{m}\Ans\]
+\sh{Characteristic length with the viscous loss}
+\[L_C=\frac{L_G}{1+e_0/K_{\mathrm{eff}}}=\frac{0.668}{1+5/20}=\frac{0.668}{1.25}=0.534\ \text{m}\Ans\]
+\sh{Water that can evaporate in stage 1}
+The large pores above the front release their water, so
+\[\text{Water}=0.15\times L_C=0.15\times534\ \text{mm}=80\ \text{mm}\Ans\]
+\[\therefore\quad\text{Duration of stage 1}=\frac{80}{5}=16\ \text{days}\]
+A medium-textured soil can therefore lose a large part of a rain to evaporation before its surface dries, and a mulch, which cuts $e_0$, saves most in such soils.
 
 \section{Diffusion of gases and vapour through the air-filled pores}\label{sec:pg-diff}
 Oxygen reaches the roots, carbon dioxide and nitrous oxide leave the soil and water vapour crosses the dry layer of stage 2 by \kw{molecular diffusion} through the air-filled pores. Fick's law for the soil is written with an effective coefficient $D_s$:
@@ -123,7 +170,21 @@ where $J$ is the flux (g\,m$^{-2}$\,s$^{-1}$), $C$ the concentration in the soil
 \node[lab,right] at (6.5,1.7) {$J=-D_s\,\mathrm dC/\mathrm dz$};
 \end{kfig}
 
-\exbox{Oxygen diffusion in a wet and a dry loam}{A loam has porosity $\phi=0.45$. Find the relative diffusivity by Millington and Quirk and by Penman at an air-filled porosity of 0.20, and the effective diffusivity of oxygen ($D_0=0.205$ cm$^2$\,s$^{-1}$). Repeat for $\varepsilon=0.10$, after rain.}\sol \givenline{$\phi=0.45$ ; $D_0=0.205$ cm$^2$\,s$^{-1}$}
-\par\noindent At $\varepsilon=0.20$: $D_s/D_0=0.20^{10/3}/0.45^2=0.004678/0.2025=0.0231$, so $D_s=0.0231\times0.205=4.7\times10^{-3}$ cm$^2$\,s$^{-1}$. Penman gives $0.66\times0.20=0.132$, nearly six times more.\finans
-\par\noindent At $\varepsilon=0.10$: $D_s/D_0=0.10^{10/3}/0.2025=4.642\times10^{-4}/0.2025=2.29\times10^{-3}$, ten times less than at $\varepsilon=0.20$.\finans
-\par\noindent Halving the air-filled porosity cuts the diffusion of oxygen tenfold. This steep fall is why a waterlogged root zone becomes anaerobic within a day or two, and why denitrification (Chapter~\ref{chap:17}) is concentrated in the wettest periods.
+\exbox{Oxygen diffusion in a wet and a dry loam}{A loam has porosity $\phi=0.45$. Find the relative diffusivity by Millington and Quirk and by Penman at an air-filled porosity of 0.20, and the effective diffusivity of oxygen ($D_0=0.205$ cm$^2$\,s$^{-1}$). Repeat for $\varepsilon=0.10$, after rain.}\sol
+\givenline{$\phi=0.45$ ; $D_0=0.205$ cm$^2$\,s$^{-1}$ ; $\varepsilon=0.20$ and $0.10$}
+\wkt\ the relative diffusivity by Millington and Quirk (Equation~\ref{eq:pg-fick}) is
+\[\frac{D_s}{D_0}=\frac{\varepsilon^{10/3}}{\phi^{2}}\ti{i}\]
+and by Penman
+\[\frac{D_s}{D_0}=0.66\,\varepsilon\ti{ii}\]
+\sh{1. Air-filled porosity of 0.20}
+From equation \rfi{i}, with $\phi^2=0.45^2=0.2025$,
+\[\frac{D_s}{D_0}=\frac{0.20^{10/3}}{0.2025}=\frac{0.004678}{0.2025}=0.0231\Ans\]
+\[\therefore\quad D_s=0.0231\times0.205=4.74\times10^{-3}\ \text{cm}^2\,\text{s}^{-1}\Ans\]
+From equation \rfi{ii},
+\[\frac{D_s}{D_0}=0.66\times0.20=0.132\Ans\]
+which is $0.132/0.0231=5.7$ times the value of Millington and Quirk.
+\sh{2. Air-filled porosity of 0.10 (after rain)}
+\[\frac{D_s}{D_0}=\frac{0.10^{10/3}}{0.2025}=\frac{4.642\times10^{-4}}{0.2025}=2.29\times10^{-3}\Ans\]
+\[\therefore\quad\frac{D_s(0.20)}{D_s(0.10)}=\frac{0.0231}{0.00229}=10.1\]
+Halving the air-filled porosity cuts the diffusion of oxygen tenfold. This steep fall is why a waterlogged root zone becomes anaerobic within a day or two, and why denitrification (Chapter~\ref{chap:17}) is concentrated in the wettest periods.
+

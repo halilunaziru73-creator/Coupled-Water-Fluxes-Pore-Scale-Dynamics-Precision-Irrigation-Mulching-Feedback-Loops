@@ -67,7 +67,7 @@ A widely used linear relation (FAO-33) links the relative yield loss to the rela
 
 \section{Link with the trigger}
 The suction at the sensor at which the depletion reaches $RAW$ is the \emph{ideal} trigger. If it lies beyond the reach $\hc$ of the soil, the crop cannot reach it and the field is stressed before the sensor says so. Comparing the two is the use of Chapter~6 in design: choose the trigger below the smaller of the two, and below $\hc/2$ in practice.
-\exbox{}{A soil has $TAW=95$ mm (S05) and $p=0.55$. Find $RAW$ and $K_s$ at $D_r=70$ mm.}\sol \givenline{$TAW=95$ mm ; $p=0.55$ ; $D_r=70$ mm}\ans $RAW=0.55(95)=52.3$ mm; $K_s=(95-70)/(0.45\cdot95)=0.585$. \finans
+\exbox{}{A soil has $TAW=95$ mm (S05) and $p=0.55$. Find $RAW$ and $K_s$ at $D_r=70$ mm.}\sol \givenline{$TAW=95$ mm ; $p=0.55$ ; $D_r=70$ mm}\ans $RAW=0.55(95)=52.3$ mm; \[K_s=(95-70)/(0.45\cdot95)=0.585\quad\text{\finans}\]
 
 \exbox{}{With $K_y=0.9$ and a season mean $ET_a/ET_m=0.7$, find the relative yield.}\sol \givenline{$K_y=0.9$ ; $ET_a/ET_m=0.7$}\ans $1-0.9(0.3)=0.73$. \finans
 
@@ -81,7 +81,8 @@ The suction at the sensor at which the depletion reaches $RAW$ is the \emph{idea
 \begin{equation}K_c(t)=\begin{cases}K_{c,\rm ini}&t<L_1\\K_{c,\rm ini}+(K_{c,\rm mid}-K_{c,\rm ini})\dfrac{t-L_1}{L_2}&L_1\le t<L_1+L_2\\K_{c,\rm mid}&L_1+L_2\le t<L_1+L_2+L_3\\K_{c,\rm mid}+(K_{c,\rm end}-K_{c,\rm mid})\min\!\Big(1,\dfrac{t-L_1-L_2-L_3}{L_4}\Big)&\text{after}\end{cases}\end{equation}
 with $t$ days after planting and stage lengths $L_1\ldots L_4$ (initial, development, mid-season, late). Outside the season the bare soil has $K_c=0.25$ (the FAO-56 single-coefficient curve).
 
-\exbox{Reading the curve}{Maize: $K_{c,\rm ini}=0.30$, $K_{c,\rm mid}=1.20$, $K_{c,\rm end}=0.60$; stages $15/30/40/20$ d. Find $K_c$ at $t=10,\,30,\,60,\,95$ d.}\sol \givenline{$K_{c,\rm ini}=0.30$ ; $K_{c,\rm mid}=1.20$ ; $K_{c,\rm end}=0.60$ ; stages ; $t=10,\,30,\,60,\,95$ d}\ans $t=10<15$: $K_c=0.30$. $t=30$ lies in the development stage ($15\le30<45$): $K_c=0.30+0.90\times(30-15)/30=0.30+0.45=0.75$. $t=60$ lies in the mid-season ($45\le60<85$): $K_c=1.20$. $t=95$ is in the late season ($85\le95<105$): $K_c=1.20+(0.60-1.20)\times(95-85)/20=1.20-0.30=0.90$. \finans
+\exbox{Reading the curve}{Maize: $K_{c,\rm ini}=0.30$, $K_{c,\rm mid}=1.20$, $K_{c,\rm end}=0.60$; stages $15/30/40/20$ d. Find $K_c$ at $t=10,\,30,\,60,\,95$ d.}\sol \givenline{$K_{c,\rm ini}=0.30$ ; $K_{c,\rm mid}=1.20$ ; $K_{c,\rm end}=0.60$ ; stages ; $t=10,\,30,\,60,\,95$ d}\ans $t=10<15$: $K_c=0.30$. $t=30$ lies in the development stage ($15\le30<45$): \[K_c=0.30+0.90\times(30-15)/30=0.30+0.45=0.75\]
+$t=60$ lies in the mid-season ($45\le60<85$): $K_c=1.20$. $t=95$ is in the late season ($85\le95<105$): \[K_c=1.20+(0.60-1.20)\times(95-85)/20=1.20-0.30=0.90\quad\text{\finans}\]
 
 
 \exbox{Daily crop need}{The daily need is $ET_c=K_cET_0$. On a day with $ET_0=5.2$ mm d$^{-1}$ find $ET_c$ of maize at $t=30$ and $t=60$, and the total need of the development stage if $ET_0$ stays at 5.2.}\sol \givenline{$ET_c=K_cET_0$ ; $ET_0=5.2$ mm d$^{-1}$ find ; $t=30$ ; $t=60$}\ans $t=30$: $0.75\times5.2=3.90$ mm. $t=60$: $1.20\times5.2=6.24$ mm. The development stage covers $t=15\ldots44$, $K_c$ rising linearly from 0.30 to 1.20; its mean is 0.75 (the average of the end points), so the need is $30\times0.75\times5.2=117.0$ mm. \finans
@@ -98,7 +99,9 @@ and the total and readily available water follow FAO-56:
 
 and $ET_a=K_sET_c$. The depletion $D_r$ changes by $D_{r,d}=D_{r,d-1}-(P_d-RO_d)+ET_{a,d}$ with $RO_d=0.3\max(0,P_d-35)$, and a negative $D_r$ drains below the roots. Irrigation refills the root zone to field capacity on the day the depletion reaches the trigger, $D_r\ge f_T\mathrm{TAW}$: the net depth is $I_n=D_r$ and the gross depth $I=I_n/E_{a,m}$ with $E_{a,m}=0.60$ (surface), 0.75 (overhead), 0.90 (drip).
 
-\exbox{TAW, RAW and the stress coefficient}{Maize ($R_{\max}=135$ cm, capped at 100 cm by the model profile; $p=0.50$) on the loam (AWC $=1.7$ mm cm$^{-1}$). At $t=30$ ($K_c=0.75$) with $ET_0=5.2$ mm d$^{-1}$, find $z_r$, TAW, $p_d$, RAW, and $K_s$ when $D_r=40$ mm and when $D_r=55$ mm.}\sol \givenline{$R_{\max}=135$ cm ; $p=0.50$ ; $=1.7$ mm cm$^{-1}$ ; $t=30$ ; $K_c=0.75$ ; $ET_0=5.2$ mm d$^{-1}$ ; $D_r=40$ mm ; $D_r=55$ mm}\ans $1.15K_c/\max(0.3,1.20)=1.15\times0.75/1.20=0.719$; $z_r=15+85\times0.719=76.1$ cm. TAW $=1.7\times76.1=129.4$ mm. $p_d=0.50+0.04(5-0.75\times5.2)=0.50+0.04\times1.1=0.544$; RAW $=0.544\times129.4=70.4$ mm. With $D_r=40\le$ RAW: $K_s=1$. With $D_r=55>$ RAW: $K_s=(129.4-55)/((1-0.544)\times129.4)=74.4/59.0=1.261$. \finans
+\exbox{TAW, RAW and the stress coefficient}{Maize ($R_{\max}=135$ cm, capped at 100 cm by the model profile; $p=0.50$) on the loam (AWC $=1.7$ mm cm$^{-1}$). At $t=30$ ($K_c=0.75$) with $ET_0=5.2$ mm d$^{-1}$, find $z_r$, TAW, $p_d$, RAW, and $K_s$ when $D_r=40$ mm and when $D_r=55$ mm.}\sol \givenline{$R_{\max}=135$ cm ; $p=0.50$ ; $=1.7$ mm cm$^{-1}$ ; $t=30$ ; $K_c=0.75$ ; $ET_0=5.2$ mm d$^{-1}$ ; $D_r=40$ mm ; $D_r=55$ mm}\ans \[1.15K_c/\max(0.3,1.20)=1.15\times0.75/1.20=0.719\]
+$z_r=15+85\times0.719=76.1$ cm. TAW $=1.7\times76.1=129.4$ mm. \[p_d=0.50+0.04(5-0.75\times5.2)=0.50+0.04\times1.1=0.544\]
+RAW $=0.544\times129.4=70.4$ mm. With $D_r=40\le$ RAW: $K_s=1$. With $D_r=55>$ RAW: \[K_s=(129.4-55)/((1-0.544)\times129.4)=74.4/59.0=1.261\quad\text{\finans}\]
 
 
 \begin{table}[!htbp]\centering\small\caption{Growth of the maize root zone on the loam ($ET_0=4.5$ mm d$^{-1}$ in $p_d$).}\label{tab:roots}
@@ -132,7 +135,8 @@ Running the balance day by day from planting gives the irrigations of the season
 \item day 41: $K_c=1.050$, $ET_0=5.66$, $ET_c=5.94$, $z_r=100.0$, TAW $=170.0$, RAW $=78.6$, $K_s=1.000$, $ET_a=5.94$, $P=3.3$, $D_r=75.96$ mm, $I_n=0.0$
 \item day 42: $K_c=1.080$, $ET_0=5.11$, $ET_c=5.52$, $z_r=100.0$, TAW $=170.0$, RAW $=81.5$, $K_s=1.000$, $ET_a=5.52$, $P=0.0$, $D_r=0.00$ mm, $I_n=81.5$
 \end{itemize}
-The trigger depletion is $f_T\mathrm{TAW}=0.468\times170.0=79.5$ mm. On the last day $D_r$ reaches that value, so the layer irrigates the net depth $I_n=D_r=81.5$ mm and the root zone returns to field capacity ($D_r=0$). The gross depth for surface irrigation is $81.5/0.60=135.8$ mm. \finans
+The trigger depletion is \[f_T\mathrm{TAW}=0.468\times170.0=79.5\ \text{mm}\]
+On the last day $D_r$ reaches that value, so the layer irrigates the net depth $I_n=D_r=81.5$ mm and the root zone returns to field capacity ($D_r=0$). The gross depth for surface irrigation is $81.5/0.60=135.8$ mm. \finans
 
 
 \begin{table}[!htbp]\centering\small\caption{The same season under three methods.}\label{tab:method}
@@ -163,7 +167,8 @@ with $K_y=1$ when the crop has no tabulated value.
 5000 & 0.941 & 1 & 267 & 364 & 0.708 & 0.626\\
 50000 & 1.000 & 1 & 194 & 252 & 0.490 & 0.347\\\bottomrule\end{tabular}\end{table}
 
-\exbox{Rainfed maize}{Compute $Y_{\rm rel}$ of maize with no irrigation, $K_y=1.28$.}\sol \givenline{$K_y=1.28$}\ans With rain only, the season has $\sum ET_c=514$ mm and $\sum ET_a=252$ mm, so the ratio is $0.490$. $Y_{\rm rel}=1-1.28\times(1-0.490)=0.347$. A deficit of 51.0\% of the crop need becomes a yield loss of 65.3\%, because $K_y>1$ (maize is sensitive). A tolerant crop such as groundnut ($K_y=0.70$) would lose only 35.7\% for the same deficit. \finans
+\exbox{Rainfed maize}{Compute $Y_{\rm rel}$ of maize with no irrigation, $K_y=1.28$.}\sol \givenline{$K_y=1.28$}\ans With rain only, the season has $\sum ET_c=514$ mm and $\sum ET_a=252$ mm, so the ratio is $0.490$. \[Y_{\rm rel}=1-1.28\times(1-0.490)=0.347\]
+A deficit of 51.0\% of the crop need becomes a yield loss of 65.3\%, because $K_y>1$ (maize is sensitive). A tolerant crop such as groundnut ($K_y=0.70$) would lose only 35.7\% for the same deficit. \finans
 
 
 \begin{keybox}Table~\ref{tab:trig} shows the same shape as the manuscript trigger experiment (Chapter~\ref{ch:e2}): yield is flat over a wide range of wet triggers, then falls as the trigger goes drier, while the gross irrigation falls overall (not strictly at every step, because a wetter trigger irrigates earlier and rain refills part of the root zone). At the wettest triggers ($f_T=0$) the rule irrigates every day, which is the model's limit of continuous irrigation. The numbers come from a synthetic climate, so they differ from the manuscript's; the shape is the point.\end{keybox}
@@ -195,7 +200,15 @@ T&=\min\Big(0.9ET,\;T_m\,\mathrm{clip}\Big(\frac{ET_{a,c}}{ET_{c,c}}\cdot\frac{E
 D&=\max(0.2D_m,D_m+0.5(DP_c-DP_r)),\quad ET=\mathrm{clip}(P+I-D-\Delta S_m;50,5000),\quad N_L=N_{L,m}\frac{D+5}{D_m+5}.\end{align}
 The remainder of the balance, $ET-T$, is shared between soil evaporation and the other evaporation terms in proportion to their targets ($E_{\rm other}^*=E_{{\rm other},m}ET/ET_m$).
 
-\exbox{Transferring sorghum from the cereal result}{The cereal model run of the loam (trigger $-300$ cm, 600 mm rain; Chapter~\ref{ch:e2}) gives $P=606$, $I_m=90$, $D_m=200$, $E_m=158$, $T_m=230$ mm, so $ET_m=P+I_m-D_m=496$ mm and $E_{{\rm other},m}=ET_m-T_m-E_m=108$ mm; assume $\Delta S_m=0$ and $N_{L,m}=40$ kg ha$^{-1}$. Transfer sorghum with ground covers $f_{c,c}=0.80$ and $f_{c,r}=0.85$ (assumed mid-season values). The balances of this chapter give: sorghum $I_c=538$ mm, $ET_{a,c}/ET_{c,c}=1.000$, $ET_{c,c}=527$ mm, $DP_c=11$ mm; reference $I_r=609$ mm, $ET_{c,r}=543$ mm, $DP_r=0$ mm.}\sol \givenline{$P=606$ ; $I_m=90$ ; $D_m=200$ ; $E_m=158$ ; $T_m=230$ mm ; $ET_m=P+I_m-D_m=496$ mm ; $E_{{\rm other},m}=ET_m-T_m-E_m=108$ mm; assume ; $\Delta S_m=0$ ; $N_{L,m}=40$ kg ha$^{-1}$}\ans \emph{Irrigation:} $I=90\times\mathrm{clip}(538/609)=90\times0.884=80$ mm. \emph{Drainage:} $D=\max(0.2\times200,200+0.5(11-0))=206$ mm. \emph{Evapotranspiration:} $ET=P+I-D=606+80-206=480$ mm. \emph{Transpiration:} ratio $=1.000\times(527/543)\times(0.80/0.85)^{0.3}=0.952$, so $T=\min(0.9\times480,\,230\times0.952)=219$ mm. \emph{Evaporation:} $E^*=158\times\mathrm{clip}((1-0.56)/(1-0.595))=158\times1.086=172$ mm, $E^*_{\rm other}=108\times480/496=104$ mm; sharing $ET-T=261$ mm in that proportion gives $E=163$ and $E_{\rm other}=99$ mm. Leaching: $N_L=40\times(206+5)/(200+5)=41.1$ kg ha$^{-1}$. The balance closes: $T+E+E_{\rm other}=480=ET$. \finans
+\exbox{Transferring sorghum from the cereal result}{The cereal model run of the loam (trigger $-300$ cm, 600 mm rain; Chapter~\ref{ch:e2}) gives $P=606$, $I_m=90$, $D_m=200$, $E_m=158$, $T_m=230$ mm, so $ET_m=P+I_m-D_m=496$ mm and $E_{{\rm other},m}=ET_m-T_m-E_m=108$ mm; assume $\Delta S_m=0$ and $N_{L,m}=40$ kg ha$^{-1}$. Transfer sorghum with ground covers $f_{c,c}=0.80$ and $f_{c,r}=0.85$ (assumed mid-season values). The balances of this chapter give: sorghum $I_c=538$ mm, $ET_{a,c}/ET_{c,c}=1.000$, $ET_{c,c}=527$ mm, $DP_c=11$ mm; reference $I_r=609$ mm, $ET_{c,r}=543$ mm, $DP_r=0$ mm.}\sol \givenline{$P=606$ ; $I_m=90$ ; $D_m=200$ ; $E_m=158$ ; $T_m=230$ mm ; $ET_m=P+I_m-D_m=496$ mm ; \[E_{{\rm other},m}=ET_m-T_m-E_m=108\ \text{mm}\]
+assume ; $\Delta S_m=0$ ; $N_{L,m}=40$ kg ha$^{-1}$}\ans \emph{Irrigation:} \[I=90\times\mathrm{clip}(538/609)=90\times0.884=80\ \text{mm}\]
+\emph{Drainage:} \[D=\max(0.2\times200,200+0.5(11-0))=206\ \text{mm}\]
+\emph{Evapotranspiration:} $ET=P+I-D=606+80-206=480$ mm. \emph{Transpiration:} ratio \[=1.000\times(527/543)\times(0.80/0.85)^{0.3}=0.952\]
+so \[T=\min(0.9\times480,\,230\times0.952)=219\ \text{mm}\]
+\emph{Evaporation:} \[E^*=158\times\mathrm{clip}((1-0.56)/(1-0.595))=158\times1.086=172\ \text{mm}\]
+\[E^*_{\rm other}=108\times480/496=104\ \text{mm}\]
+sharing $ET-T=261$ mm in that proportion gives $E=163$ and $E_{\rm other}=99$ mm. Leaching: \[N_L=40\times(206+5)/(200+5)=41.1\ \text{kg ha$^{-1}$}\]
+The balance closes: $T+E+E_{\rm other}=480=ET$. \finans
 
 
 \begin{keybox}These transfer rules are engineered, not measured: the clips (0.2--3, 0.6--1.6, 0--4) keep the result within the range in which the cereal simulation is informative, and the layer never gives a library crop the resolution of the cereal runs. The yield shown for a library crop is the relative yield of Equation 21.5, in per cent.\end{keybox}

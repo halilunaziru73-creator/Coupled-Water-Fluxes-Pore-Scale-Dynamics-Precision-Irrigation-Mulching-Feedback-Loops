@@ -5,8 +5,16 @@ The development stage of Equation~\ref{eq:dm-tsum} advances with the \kw{thermal
 Daisy uses $DS=0$ at emergence, $DS=1$ at flowering and $DS=2$ at maturity, each phase with its own requirement. Because the sum counts only degrees above $T_b$, a cool spring delays the crop more than the fall in mean temperature suggests.
 
 \exbox{A week of thermal time}{The daily mean temperatures of a spring week are 12, 14, 17, 9, $-1$, 6 and 11 $^\circ$C. Find the thermal time accumulated by a maize crop with $T_b=4$ $^\circ$C. How many such weeks does it need for a vegetative phase of 700 $^\circ$C\,d?}\sol
-\par\noindent The daily contributions are $8+10+13+5+0+2+7=45$ $^\circ$C\,d. The phase needs $700/45=15.6$ such weeks.\finans
-\par\noindent A wheat crop ($T_b=0$ $^\circ$C) at a steady 15 $^\circ$C would reach flowering (1100 $^\circ$C\,d) in $1100/15=73$ days.\finans
+\givenline{$T_d=12,14,17,9,-1,6,11$ $^\circ$C ; $T_b=4$ $^\circ$C ; $TS_{\mathrm{req}}=700$ $^\circ$C\,d}
+\wkt\ each day contributes $\max(T_d-T_b,\,0)$ to the thermal time (Equation~\ref{eq:dm-ds}). The contributions are
+\[(12-4)+(14-4)+(17-4)+(9-4)+0+(6-4)+(11-4)=8+10+13+5+0+2+7\]
+\[\therefore\quad TS=45\ ^\circ\text{C\,d per week}\Ans\]
+Note that the day at $-1$ $^\circ$C contributes nothing, not a negative amount.
+\sh{Number of such weeks for the vegetative phase}
+\[\text{Weeks}=\frac{TS_{\mathrm{req}}}{TS}=\frac{700}{45}=15.6\Ans\]
+\sh{Wheat at a steady 15 $^\circ$C}
+With $T_b=0$ $^\circ$C each day contributes 15 $^\circ$C\,d, so flowering (1100 $^\circ$C\,d) comes after
+\[\frac{1100}{15}=73\ \text{days}\Ans\]
 
 \section{Light interception and radiation-use efficiency}\label{sec:dm-rue}
 The light that reaches a depth in the canopy where the cumulative leaf area above is $L$ follows the exponential law of Monsi and Saeki (Equation~\ref{eq:dm-beer}). The fraction intercepted by the whole canopy, $f=1-e^{-kL}$, rises quickly at first and then saturates: the last leaves add little. A useful summary of production is the \kw{radiation-use efficiency} (RUE), the dry matter formed per unit of intercepted photosynthetically active radiation (PAR):
@@ -26,9 +34,19 @@ For C$_3$ cereals RUE is about 2.5 to 3.0 g\,MJ$^{-1}$ of intercepted PAR, and f
 \end{kfig}
 
 \exbox{Interception and growth rate of a wheat canopy}{A wheat canopy has $k=0.6$ and $L=3$. Find the fraction of light intercepted and the leaf area needed to intercept 95 per cent. With RUE $=3.0$ g\,MJ$^{-1}$ and PAR $=10$ MJ\,m$^{-2}$\,d$^{-1}$, find the daily growth.}\sol
-\par\noindent $f=1-e^{-0.6\times3}=1-0.165=0.835$.\finans
-\par\noindent For $f=0.95$: $e^{-0.6L}=0.05$, $L=\ln20/0.6=5.0$.\finans
-\par\noindent Growth: $3.0\times0.835\times10=25$ g\,m$^{-2}$\,d$^{-1}$, that is 250 kg of dry matter per hectare per day.\finans
+\givenline{$k=0.6$ ; $L=3$ ; RUE $=3.0$ g\,MJ$^{-1}$ ; PAR $=10$ MJ\,m$^{-2}$\,d$^{-1}$}
+\sh{1. Fraction intercepted}
+\wkt\ the fraction of light intercepted by a canopy is
+\[f=1-e^{-kL}\ti{i}\]
+\[\therefore\quad f=1-e^{-0.6\times3}=1-e^{-1.8}=1-0.165=0.835\Ans\]
+\sh{2. Leaf area for 95 per cent interception}
+Putting $f=0.95$ in equation \rfi{i},
+\[e^{-0.6L}=1-0.95=0.05\qquad\text{or}\qquad L=\frac{\ln(1/0.05)}{0.6}=\frac{\ln20}{0.6}=\frac{2.996}{0.6}=5.0\Ans\]
+Raising the interception from 83.5 to 95 per cent therefore needs two more units of leaf area: the last leaves add little light.
+\sh{3. Daily growth}
+From Equation~\ref{eq:dm-rueq},
+\[\frac{\mathrm dW}{\mathrm dt}=\text{RUE}\times f\times\text{PAR}=3.0\times0.835\times10=25.0\ \text{g\,m}^{-2}\,\text{d}^{-1}\Ans\]
+\[=25.0\times10=250\ \text{kg DM\,ha}^{-1}\,\text{d}^{-1}\tb{$\because$ 1 g\,m$^{-2}$ = 10 kg\,ha$^{-1}$}\]
 
 \section{The light-response curve of a leaf}\label{sec:dm-lrc}
 The gross photosynthesis of a leaf rises linearly with light at low irradiance, with the \kw{initial light-use efficiency} $\varepsilon$, and saturates at $A_{\max}$ (Equation~\ref{eq:dm-light}). The curve explains two facts of the canopy. Sunlit leaves at the top work near saturation and waste part of their light; shaded leaves below work on the linear part and use every photon well. A canopy therefore produces more when the same light is spread over more leaf area, which is why its response to light is nearly linear even when each leaf saturates.
@@ -44,9 +62,20 @@ The gross photosynthesis of a leaf rises linearly with light at low irradiance, 
 \end{kfig}
 
 \exbox{Sunlit and shaded leaves}{A leaf has $A_{\max}=40$ kg CO$_2$\,ha$^{-1}$\,h$^{-1}$ and $\varepsilon=0.45$ kg CO$_2$\,ha$^{-1}$\,h$^{-1}$ per W\,m$^{-2}$. Find its photosynthesis at 200 W\,m$^{-2}$ (sunlit) and at 50 W\,m$^{-2}$ (shaded). Which leaf uses its light more efficiently?}\sol
-\par\noindent Sunlit: $A=40(1-e^{-0.45\times200/40})=40(1-e^{-2.25})=35.8$ kg CO$_2$\,ha$^{-1}$\,h$^{-1}$.\finans
-\par\noindent Shaded: $A=40(1-e^{-0.5625})=17.2$ kg CO$_2$\,ha$^{-1}$\,h$^{-1}$.\finans
-\par\noindent Per unit of light the shaded leaf gives $17.2/50=0.34$ and the sunlit leaf $35.8/200=0.18$ kg CO$_2$\,ha$^{-1}$\,h$^{-1}$ per W\,m$^{-2}$: the shaded leaf is nearly twice as efficient.
+\givenline{$A_{\max}=40$ kg CO$_2$\,ha$^{-1}$\,h$^{-1}$ ; $\varepsilon=0.45$ kg CO$_2$\,ha$^{-1}$\,h$^{-1}$ per W\,m$^{-2}$ ; $I=200$ and $50$ W\,m$^{-2}$}
+\wkt\ the light-response curve of a leaf (Equation~\ref{eq:dm-light}) is
+\[A=A_{\max}\bigl(1-e^{-\varepsilon I/A_{\max}}\bigr)\ti{i}\]
+\sh{1. Sunlit leaf}
+\[\frac{\varepsilon I}{A_{\max}}=\frac{0.45\times200}{40}=2.25\]
+Substituting in equation \rfi{i},
+\[A=40\,(1-e^{-2.25})=40\times(1-0.1054)=35.8\ \text{kg CO}_2\,\text{ha}^{-1}\,\text{h}^{-1}\Ans\]
+\sh{2. Shaded leaf}
+\[\frac{\varepsilon I}{A_{\max}}=\frac{0.45\times50}{40}=0.5625\]
+\[A=40\,(1-e^{-0.5625})=40\times(1-0.5698)=17.2\ \text{kg CO}_2\,\text{ha}^{-1}\,\text{h}^{-1}\Ans\]
+\sh{3. Efficiency of the use of light}
+\[\frac AI\Bigr|_{\text{sunlit}}=\frac{35.8}{200}=0.179,\qquad\frac AI\Bigr|_{\text{shaded}}=\frac{17.2}{50}=0.344\]
+\[\therefore\quad\frac{0.344}{0.179}=1.9\]
+The shaded leaf uses its light nearly twice as efficiently, because it works on the linear part of the curve while the sunlit leaf works near saturation.
 
 \section{Maintenance and growth respiration}\label{sec:dm-resp}
 Part of the assimilate is burnt. \kw{Maintenance respiration} keeps the living tissue; it is proportional to the dry mass and doubles for each 10 $^\circ$C (a $Q_{10}$ of 2):
@@ -54,9 +83,20 @@ Part of the assimilate is burnt. \kw{Maintenance respiration} keeps the living t
 The remainder is converted into new tissue with the \kw{conversion efficiency} $E_g$ (about 0.72 for leaves and stems, lower for oil-rich seeds); the loss $1-E_g$ is the \kw{growth respiration}. A large, old crop in a warm period can spend half of its daily assimilate on maintenance.
 
 \exbox{The daily carbon budget of a crop}{A crop of 800 g\,m$^{-2}$ dry mass assimilates 25 g\,m$^{-2}$\,d$^{-1}$ of carbohydrate at a mean temperature of 15 $^\circ$C. Take $c_m=0.015$ g\,g$^{-1}$\,d$^{-1}$ at $T_{\mathrm{ref}}=25$ $^\circ$C, $Q_{10}=2$ and $E_g=0.72$. Find the maintenance respiration and the growth. Repeat at 25 $^\circ$C.}\sol
-\par\noindent At 15 $^\circ$C: $R_m=0.015\times800\times2^{-1}=6.0$ g\,m$^{-2}$\,d$^{-1}$; growth $0.72\times(25-6)=13.7$ g\,m$^{-2}$\,d$^{-1}$.\finans
-\par\noindent At 25 $^\circ$C: $R_m=12.0$ and growth $0.72\times13=9.4$ g\,m$^{-2}$\,d$^{-1}$, if the assimilation is unchanged.\finans
-\par\noindent A warmer period reduces the growth by a third through respiration alone, which is one reason why warming shortens and lowers the yield of temperate cereals.
+\givenline{$W=800$ g\,m$^{-2}$ ; $A=25$ g\,m$^{-2}$\,d$^{-1}$ ; $c_m=0.015$ g\,g$^{-1}$\,d$^{-1}$ at $T_{\mathrm{ref}}=25$ $^\circ$C ; $Q_{10}=2$ ; $E_g=0.72$}
+\wkt\ (Equation~\ref{eq:dm-rm})
+\[R_m=c_m\,W\,Q_{10}^{(T-T_{\mathrm{ref}})/10}\ti{i}\]
+\[\Delta W=E_g\,(A-R_m)\ti{ii}\]
+\sh{1. At 15 $^\circ$C}
+From equation \rfi{i},
+\[R_m=0.015\times800\times2^{(15-25)/10}=12.0\times2^{-1}=6.0\ \text{g\,m}^{-2}\,\text{d}^{-1}\Ans\]
+and from equation \rfi{ii},
+\[\Delta W=0.72\times(25-6.0)=0.72\times19.0=13.7\ \text{g\,m}^{-2}\,\text{d}^{-1}\Ans\]
+\sh{2. At 25 $^\circ$C}
+\[R_m=0.015\times800\times2^{0}=12.0\ \text{g\,m}^{-2}\,\text{d}^{-1}\Ans\]
+\[\Delta W=0.72\times(25-12.0)=9.4\ \text{g\,m}^{-2}\,\text{d}^{-1}\Ans\]
+\[\therefore\quad\text{Fall of growth}=\frac{13.7-9.4}{13.7}=0.31\]
+A warm period reduces the growth by about a third through respiration alone, if the assimilation is unchanged; this is one reason why warming lowers the yield of temperate cereals.
 
 \section{Water stress and yield: the yield-response factor}\label{sec:dm-ky}
 Over a season the relative loss of yield is nearly proportional to the relative deficit of evapotranspiration. Doorenbos and Kassam (FAO paper 33) wrote
@@ -72,7 +112,13 @@ where $Y_a$ and $Y_m$ are the actual and the maximum yield and $K_y$ the \kw{yie
 \end{kfig}
 
 \exbox{Yield under a planned deficit}{A wheat crop ($K_y=1.15$) with a potential yield of 7.0 Mg\,ha$^{-1}$ receives irrigation that meets 80 per cent of its seasonal water use. Find the expected yield.}\sol
-\par\noindent $1-Y_a/Y_m=1.15\times(1-0.8)=0.23$, so $Y_a=0.77\times7.0=5.39$ Mg\,ha$^{-1}$.\finans
+\givenline{$K_y=1.15$ ; $Y_m=7.0$ Mg\,ha$^{-1}$ ; $ET_a/ET_m=0.80$}
+\wkt\ (Equation~\ref{eq:dm-ky})
+\[1-\frac{Y_a}{Y_m}=K_y\Bigl(1-\frac{ET_a}{ET_m}\Bigr)\ti{i}\]
+Substituting in equation \rfi{i},
+\[1-\frac{Y_a}{Y_m}=1.15\times(1-0.80)=1.15\times0.20=0.23\]
+\[\therefore\quad\frac{Y_a}{Y_m}=0.77\qquad\text{and}\qquad Y_a=0.77\times7.0=5.39\ \text{Mg\,ha}^{-1}\Ans\]
+A 20 per cent deficit of water costs 23 per cent of the yield, because $K_y>1$.
 
 \section{The distribution of the roots}\label{sec:dm-rootdist}
 The root length density usually falls exponentially with depth, $L_v(z)=L_{v0}\,e^{-z/\lambda}$, with a decay length $\lambda$ of 15 to 30 cm for annual crops. The share of the roots above a depth $z_1$ in a root zone of depth $Z_r$ is
@@ -80,5 +126,10 @@ The root length density usually falls exponentially with depth, $L_v(z)=L_{v0}\,
 The uptake of Equation~\ref{eq:dm-feddes} is distributed in the same proportion when the soil is wet, which is why the upper soil dries first and why a sensor in the upper root zone sees the depletion early.
 
 \exbox{Where are the roots?}{A crop has a root zone 100 cm deep with $\lambda=20$ cm. What fraction of its roots lies in the top 30 cm?}\sol
-\[F(30)=\frac{1-e^{-1.5}}{1-e^{-5}}=\frac{0.777}{0.993}=0.78\quad\text{\finans}\]
-Nearly four-fifths of the roots are in the top 30 cm; a sensor at 20 cm therefore watches the part of the profile that delivers most of the water.
+\givenline{$Z_r=100$ cm ; $\lambda=20$ cm ; $z_1=30$ cm}
+\wkt\ the share of the roots above $z_1$ is (Equation~\ref{eq:dm-rootfrac})
+\[F(z_1)=\frac{1-e^{-z_1/\lambda}}{1-e^{-Z_r/\lambda}}\ti{i}\]
+Here $z_1/\lambda=30/20=1.5$ and $Z_r/\lambda=100/20=5$. Substituting in equation \rfi{i},
+\[F(30)=\frac{1-e^{-1.5}}{1-e^{-5}}=\frac{1-0.2231}{1-0.0067}=\frac{0.7769}{0.9933}=0.782\Ans\]
+Nearly four-fifths of the roots lie in the top 30 cm; a sensor at 20 cm therefore watches the part of the profile that delivers most of the water.
+

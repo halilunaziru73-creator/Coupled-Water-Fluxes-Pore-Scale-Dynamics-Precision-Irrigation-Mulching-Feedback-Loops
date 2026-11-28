@@ -44,9 +44,11 @@ The box \emph{Photosynthesis} turns the absorbed light and the carbon dioxide in
 \par\noindent where $A$ is the gross assimilation of the leaf ($\mu$mol\,CO$_2$\,m$^{-2}$\,s$^{-1}$), $A_{\max}$ the light-saturated rate, $\varepsilon$ the quantum efficiency (mol CO$_2$ per mol photons) and $I$ the absorbed light ($\mu$mol photons\,m$^{-2}$\,s$^{-1}$). In the box \emph{Stress factors} the rate is reduced by water stress, temperature, senescence and a shortage of nitrogen.
 
 \exbox{The light response of a leaf}{A leaf has $A_{\max}=30$ $\mu$mol\,m$^{-2}$\,s$^{-1}$ and $\varepsilon=0.05$. Find the assimilation at $I=500$ and $I=1500$ $\mu$mol photons\,m$^{-2}$\,s$^{-1}$, and the share of the maximum that each represents.}\sol \givenline{$A_{\max}=30$ ; $\varepsilon=0.05$ ; $I=500,\ 1500$}
-\par\noindent At $I=500$: $\varepsilon I/A_{\max}=25/30=0.833$, so
+\par\noindent At $I=500$: \[\varepsilon I/A_{\max}=25/30=0.833\]
+so
 \[A=30\bigl(1-e^{-0.833}\bigr)=30\times0.565=17.0\ \mu\text{mol\,m}^{-2}\,\text{s}^{-1}\quad\text{\finans}\]
-which is $17.0/30=57$ per cent of the maximum. At $I=1500$: $\varepsilon I/A_{\max}=2.5$, and $A=30(1-e^{-2.5})=30\times0.918=27.5$ \finans, 92 per cent of the maximum. Tripling the light raises the assimilation by only 62 per cent: a leaf in bright sun is almost saturated, while the leaves in the shade of the same canopy are not, which is why the light is distributed between sun leaves and shade leaves.
+which is $17.0/30=57$ per cent of the maximum. At $I=1500$: $\varepsilon I/A_{\max}=2.5$, and \[A=30(1-e^{-2.5})=30\times0.918=27.5\quad\text{\finans}\]
+92 per cent of the maximum. Tripling the light raises the assimilation by only 62 per cent: a leaf in bright sun is almost saturated, while the leaves in the shade of the same canopy are not, which is why the light is distributed between sun leaves and shade leaves.
 
 \section{Stomatal conductance}
 The leaf takes up carbon dioxide and loses water through the same pores, the \kw{stomata}. The box \emph{Stomatal conductance} sets how far they are open. Daisy has several models (Ball and Berry, Leuning, and others); the form of Ball and Berry relates the conductance to the assimilation, the humidity and the carbon dioxide at the leaf surface:
@@ -64,7 +66,8 @@ A part of the assimilate is used at once for the upkeep of the living tissue, th
 \par\noindent where $R_m$ is the maintenance respiration of the crop (g dry matter\,m$^{-2}$\,d$^{-1}$), $o$ runs over the organs (root, stem, leaf, storage organ), $r_o$ the rate of the organ at the reference temperature $T_{ref}$ (g\,g$^{-1}$\,d$^{-1}$), $W_o$ its dry matter (g\,m$^{-2}$) and $Q_{10}$ the factor for a rise of ten degrees ($\approx2$).
 
 \exbox{Maintenance respiration of a cereal}{The root, the leaf and the stem have a dry matter of $150$, $250$ and $300$ g\,m$^{-2}$, and rates of $0.003$, $0.010$ and $0.002$ g\,g$^{-1}$\,d$^{-1}$ at the reference temperature $T_{ref}=20$ $^\circ$C. Take $Q_{10}=2$. Find the maintenance respiration at 20 $^\circ$C and at 25 $^\circ$C.}\sol \givenline{$W=150,250,300$ g\,m$^{-2}$ ; $r=0.003,0.010,0.002$ ; $Q_{10}=2$ ; $T=20,\ 25$ $^\circ$C}
-\par\noindent The sum in Equation~(\ref{eq:dm-resp}) is $150\times0.003+250\times0.010+300\times0.002=0.45+2.50+0.60=3.55$ g\,m$^{-2}$\,d$^{-1}$. At 20 $^\circ$C, $f_T=1$, so $R_m=3.55$ g\,m$^{-2}$\,d$^{-1}$ \finans. At 25 $^\circ$C,
+\par\noindent The sum in Equation~(\ref{eq:dm-resp}) is \[150\times0.003+250\times0.010+300\times0.002=0.45+2.50+0.60=3.55\ \text{g\,m$^{-2}$\,d$^{-1}$}\]
+At 20 $^\circ$C, $f_T=1$, so $R_m=3.55$ g\,m$^{-2}$\,d$^{-1}$ \finans. At 25 $^\circ$C,
 \[f_T=2^{(25-20)/10}=2^{0.5}=1.414,\qquad R_m=1.414\times3.55=5.02\ \text{g\,m}^{-2}\,\text{d}^{-1}\quad\text{\finans}\]
 A warm night raises the cost of keeping the crop alive by 41 per cent and leaves less for growth; this is one reason why a warm night is bad for the yield of a cereal.
 

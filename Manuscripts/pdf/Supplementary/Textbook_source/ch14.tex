@@ -42,7 +42,11 @@ with $u=\pi r_0$ the wetted perimeter of a pipe running half full. Because $d$ d
 7 & 22.758 & 1.704 & 22.756\\
 8 & 22.756 & 1.703 & 22.756\\\bottomrule\end{tabular}\end{table}
 
-\exbox{One converged step}{Verify the converged spacing of Table~\ref{tab:hoogit}.}\sol  At $L=22.76$ m: $x=2\pi\times5/22.76=1.381$. $F(x)=4e^{-2x}/(1-e^{-2x})+\dots=0.2703$ (the $n=1$ term dominates). $u=\pi\times0.05=0.1571$ m, $\ln(L/u)=\ln(22.76/0.1571)=4.976$. Then $d=(\pi\times22.76/8)/(4.976+0.2703)=8.936/5.246=1.703$ m ($<D$). Check the spacing: $8K_2dh=8\times0.290\times1.703\times0.70=2.7631$, $4K_1h^2=4\times0.290\times0.49=0.5677$; sum $=3.3309$; $L^2=3.3309/0.00643=517.8$, $L=22.76$ m. ({\it Without} the correction, using $d=D=5$ m, the spacing would be $\sqrt{(8\times0.290\times5\times0.7+0.5677)/0.00643}=36.7$ m: the radial-flow correction matters.) \finans
+\exbox{One converged step}{Verify the converged spacing of Table~\ref{tab:hoogit}.}\sol  At $L=22.76$ m: $x=2\pi\times5/22.76=1.381$. \[F(x)=4e^{-2x}/(1-e^{-2x})+\dots=0.2703\] (the $n=1$ term dominates). $u=\pi\times0.05=0.1571$ m, \[\ln(L/u)=\ln(22.76/0.1571)=4.976\]
+Then \[d=(\pi\times22.76/8)/(4.976+0.2703)=8.936/5.246=1.703\] m ($<D$). Check the spacing: \[8K_2dh=8\times0.290\times1.703\times0.70=2.7631\]
+\[4K_1h^2=4\times0.290\times0.49=0.5677\]
+sum $=3.3309$; $L^2=3.3309/0.00643=517.8$, $L=22.76$ m. ({\it Without} the correction, using $d=D=5$ m, the spacing would be \[\sqrt{(8\times0.290\times5\times0.7+0.5677)/0.00643}=36.7\ \text{m}\]
+the radial-flow correction matters.) \finans
 
 
 \begin{table}[!htbp]\centering\small\caption{The same drains in the ten soils: $q=6.43$ mm d$^{-1}$, $z_d=1.4$ m, $h=0.70$ m, $D=5$ m, $K_2=K_1$ (Saxton--Rawls $K_s$).}\label{tab:drsoils}
@@ -60,14 +64,16 @@ Clay loam & 0.077 & 9.1 & 0.88 & 1{,}100\\
 Silty clay loam & 0.090 & 10.1 & 0.95 & 990\\\bottomrule\end{tabular}\end{table}
 
 \begin{keybox}Table~\ref{tab:drsoils} runs from 9.1 m (Clay loam) to 104.3 m (Sand). The spacing scales roughly with $\sqrt K$ (a tenfold increase in $K$ gives a spacing about three times larger), so the pipe per hectare, $10^4/L$ metres, is the cost driver of a drainage scheme in the finer soils.\end{keybox}
-\exbox{Falling water table}{After a wet spell the water table must fall from $h_0=0.70$ m to $h_t=0.35$ m above the drain within $t=3$ d. The drainable porosity of the loam is $\mu=0.95\theta_s-\theta_{33}=0.143$ (between 0.03 and 0.25). Find the spacing from $L^2=\pi^2Kdt/[\mu\ln(1.16h_0/h_t)]$ and compare with the steady value.}\sol \givenline{$h_0=0.70$ m ; $h_t=0.35$ m above ; $t=3$ d ; $\mu=0.95\theta_s-\theta_{33}=0.143$ ; $L^2=\pi^2Kdt/[\mu\ln(1.16h_0/h_t)]$}\ans $\ln(1.16\times0.70/0.35)=\ln2.32=0.842$. $L^2=\pi^2\times0.290\times1.703\times3/(0.143\times0.842)=14.609/0.1202=121.5$, $L=11.0$ m. The steady (Hooghoudt) spacing is 22.8 m, so the design takes the closer, $L=\min=11.0$ m. (Using $d=1.703$ m from the steady solution; the layer iterates $d$ with $L$ in the same way.) \finans
+\exbox{Falling water table}{After a wet spell the water table must fall from $h_0=0.70$ m to $h_t=0.35$ m above the drain within $t=3$ d. The drainable porosity of the loam is $\mu=0.95\theta_s-\theta_{33}=0.143$ (between 0.03 and 0.25). Find the spacing from $L^2=\pi^2Kdt/[\mu\ln(1.16h_0/h_t)]$ and compare with the steady value.}\sol \givenline{$h_0=0.70$ m ; $h_t=0.35$ m above ; $t=3$ d ; $\mu=0.95\theta_s-\theta_{33}=0.143$ ; $L^2=\pi^2Kdt/[\mu\ln(1.16h_0/h_t)]$}\ans \[\ln(1.16\times0.70/0.35)=\ln2.32=0.842\]
+\[L^2=\pi^2\times0.290\times1.703\times3/(0.143\times0.842)=14.609/0.1202=121.5\]
+$L=11.0$ m. The steady (Hooghoudt) spacing is 22.8 m, so the design takes the closer, $L=\min=11.0$ m. (Using $d=1.703$ m from the steady solution; the layer iterates $d$ with $L$ in the same way.) \finans
 
 
 \subhd{How to read the spacing equation.} The two terms of Hooghoudt's equation have a plain meaning. Water that is added to the soil by rain or irrigation reaches the water table, and the water table rises until the water can leave towards the drain at the same rate as it arrives. The flow towards the drain has two parts. One part moves through the soil \emph{below} the level of the drain, in a thick layer of depth $d$, and gives the term $8K_2dh$. The other part moves \emph{above} the level of the drain, in the layer between the drain level and the water table, and gives the term $4K_1h^2$. A larger spacing $L$ means that the water must travel further, so the water table between the drains rises higher. Closer drains keep the water table lower. The designer's task is to choose the largest $L$ for which the water table midway between two drains does not rise above the allowed height $h$.
 
 \exbox{One pass of the spacing calculation by hand}{Use the data of Table~\ref{tab:hoogit}: $q=6.43$ mm d$^{-1}$, $K_1=K_2=0.290$ m d$^{-1}$, allowed height $h=0.70$ m. (a) With the first value of the equivalent depth, $d=2.025$ m (found for a trial spacing of 30 m), compute the spacing. (b) Repeat with the improved depth $d=1.786$ m. (c) Explain why the calculation must be repeated.}\sol \givenline{$q=6.43\times10^{-3}$ m d$^{-1}$ ; $K_1=K_2=0.290$ m d$^{-1}$ ; $h=0.70$ m}
 \par\noindent We know that $qL^2=8K_2dh+4K_1h^2$, so $L=\sqrt{(8K_2dh+4K_1h^2)/q}$.
-\par\noindent The second term does not depend on the spacing: $4K_1h^2=4\times0.290\times0.70^2=0.568$ m$^2$ d$^{-1}$.
+\par\noindent The second term does not depend on the spacing: \[4K_1h^2=4\times0.290\times0.70^2=0.568\ \text{m$^2$ d$^{-1}$}\]
 \par\noindent\textbf{(a) First pass.} With $d=2.025$ m,
 \[8K_2dh=8\times0.290\times2.025\times0.70=3.289\ \text{m}^2\,\text{d}^{-1},\]
 \[L=\sqrt{\frac{3.289+0.568}{0.00643}}=\sqrt{599.8}=24.5\ \text{m}\quad\text{\finans}\]
@@ -118,7 +124,7 @@ choosing the smallest standard size (80--500 mm) that carries the design flow at
 400 & 75.67 & 60.54 & 0.60\\
 500 & 137.20 & 109.76 & 0.70\\\bottomrule\end{tabular}\end{table}
 
-\exbox{Pipes of the scheme}{The field is 400 m $\times$ 300 m; laterals run 200 m at slope 0.2\%. Size the lateral and the collector.}\sol  The lateral drains a strip $L=11.0$ m wide and 200 m long: $Q=qLL_{\rm lat}=0.00643\times11.0\times200=14.18$ m$^3$ d$^{-1}=0.164$ L s$^{-1}$. With 80\% of capacity allowed, Table~\ref{tab:pipe} gives the smallest pipe whose $0.8Q$ exceeds 0.164 L s$^{-1}$: $D=80$ mm. The collector carries the whole 12 ha: $Q=qA=0.00643\times120{,}000=771.9$ m$^3$ d$^{-1}=8.93$ L s$^{-1}$, so $D=200$ mm. The full-pipe speed of the lateral is 0.21 m s$^{-1}$, below the silting limit of 0.3 m s$^{-1}$. \finans
+\exbox{Pipes of the scheme}{The field is 400 m $\times$ 300 m; laterals run 200 m at slope 0.2\%. Size the lateral and the collector.}\sol  The lateral drains a strip $L=11.0$ m wide and 200 m long: \[Q=qLL_{\rm lat}=0.00643\times11.0\times200=14.18\] m$^3$ d$^{-1}=0.164$ L s$^{-1}$. With 80\% of capacity allowed, Table~\ref{tab:pipe} gives the smallest pipe whose $0.8Q$ exceeds 0.164 L s$^{-1}$: $D=80$ mm. The collector carries the whole 12 ha: \[Q=qA=0.00643\times120{,}000=771.9\] m$^3$ d$^{-1}=8.93$ L s$^{-1}$, so $D=200$ mm. The full-pipe speed of the lateral is 0.21 m s$^{-1}$, below the silting limit of 0.3 m s$^{-1}$. \finans
 
 
 \section{Salt and the leaching requirement}
@@ -132,7 +138,8 @@ The leaching requirement of Rhoades is $LR=EC_w/(5EC_e-EC_w)$, with $EC_w$ the s
 6 & 0.5 & 0.0169 & 1.5 & 0.0526\\
 10 & 0.5 & 0.0101 & 1.5 & 0.0309\\\bottomrule\end{tabular}\end{table}
 
-\exbox{Leaching requirement}{Irrigation water of 1.5 dS m$^{-1}$ is applied to a crop that tolerates $EC_e=3$ dS m$^{-1}$ (a moderately sensitive crop), net need 211.68 mm. Find $LR$ and the gross.}\sol \givenline{$EC_e=3$ dS m$^{-1}$}\ans $LR=1.5/(5\times3-1.5)=1.5/13.5=0.1111$. Gross $=211.68/(1-0.1111)=238.1$ mm: an extra 26.5 mm, which must leave through the drains. For $EC_e=6$: $LR=1.5/28.5=0.0526$ and the extra is only 11.8 mm. The more tolerant the crop, the less water the drains have to carry away for salt. \finans
+\exbox{Leaching requirement}{Irrigation water of 1.5 dS m$^{-1}$ is applied to a crop that tolerates $EC_e=3$ dS m$^{-1}$ (a moderately sensitive crop), net need 211.68 mm. Find $LR$ and the gross.}\sol \givenline{$EC_e=3$ dS m$^{-1}$}\ans \[LR=1.5/(5\times3-1.5)=1.5/13.5=0.1111\]
+Gross $=211.68/(1-0.1111)=238.1$ mm: an extra 26.5 mm, which must leave through the drains. For $EC_e=6$: $LR=1.5/28.5=0.0526$ and the extra is only 11.8 mm. The more tolerant the crop, the less water the drains have to carry away for salt. \finans
 
 
 \IfFileExists{extra/plus14.tex}{\input{extra/plus14}}{}

@@ -33,10 +33,10 @@ Daisy follows four principles. They explain the shape of almost every curve in t
 \end{enumerate}
 
 \exbox{Classifying the lines of the map}{Use Figure~\ref{fig:dmap} and the legend above. Classify each of the following as a movement of matter or an exchange of information, and say whether it is within a module or between modules: (a) throughfall from the canopy to the litter; (b) the leaf area index that sets the interception; (c) shoot residues passing to the soil; (d) the photosynthesis reading the light.}\sol \givenline{the four examples above}
-\par\noindent (a) Throughfall is water, so it is a movement of \emph{matter}; both boxes belong to the surface module, so it is \emph{within} a module (solid line).
-\par\noindent (b) The leaf area index is a number, so it is \emph{information}. It is passed from the crop module to the weather and surface module, so it is \emph{between} modules (dash-dotted line).
-\par\noindent (c) Residues are dry matter, so it is \emph{matter}. They pass from the crop to the soil, so it is \emph{between} modules (heavy solid line).
-\par\noindent (d) Light is read by the photosynthesis, a process in the same module, so it is information \emph{within} a module (dotted line). \finans
+\par\noindent {\bfseries\itshape\color{khmag}(a)}\ Throughfall is water, so it is a movement of \emph{matter}; both boxes belong to the surface module, so it is \emph{within} a module (solid line).
+\par\noindent {\bfseries\itshape\color{khmag}(b)}\ The leaf area index is a number, so it is \emph{information}. It is passed from the crop module to the weather and surface module, so it is \emph{between} modules (dash-dotted line).
+\par\noindent {\bfseries\itshape\color{khmag}(c)}\ Residues are dry matter, so it is \emph{matter}. They pass from the crop to the soil, so it is \emph{between} modules (heavy solid line).
+\par\noindent {\bfseries\itshape\color{khmag}(d)}\ Light is read by the photosynthesis, a process in the same module, so it is information \emph{within} a module (dotted line). \finans
 
 \banner{The driving variables and the weather}\label{ch:map-weather}
 \section{What drives the model}
@@ -53,8 +53,9 @@ Evaporation and transpiration are limited first by the energy of the air. The \k
 
 \exbox{Reference evapotranspiration of a summer day}{On a day in July the mean air temperature is $T=16.9$ $^\circ$C, the net radiation $R_n=13.28$ MJ\,m$^{-2}$\,d$^{-1}$ and the soil heat flux is negligible ($G=0$). The wind speed at 2 m is $u_2=2.078$ m\,s$^{-1}$ and the vapour pressure deficit is $e_s-e_a=0.589$ kPa. At this temperature $\Delta=0.122$ kPa\,$^\circ$C$^{-1}$, and $\gamma=0.0666$ kPa\,$^\circ$C$^{-1}$. Find $ET_0$.}\sol \givenline{$T=16.9$ ; $R_n=13.28$ ; $G=0$ ; $u_2=2.078$ ; $e_s-e_a=0.589$ ; $\Delta=0.122$ ; $\gamma=0.0666$}
 \par\noindent The energy term of the numerator is $0.408\times0.122\times13.28=0.661$.
-\par\noindent The aerodynamic term is $\gamma\,\dfrac{900}{T+273}\,u_2(e_s-e_a)=0.0666\times\dfrac{900}{289.9}\times2.078\times0.589=0.253$.
-\par\noindent The numerator is $0.661+0.253=0.914$. The denominator is $\Delta+\gamma(1+0.34u_2)=0.122+0.0666\times(1+0.34\times2.078)=0.122+0.0666\times1.707=0.236$. Then
+\par\noindent The aerodynamic term is \[\gamma\,\dfrac{900}{T+273}\,u_2(e_s-e_a)=0.0666\times\dfrac{900}{289.9}\times2.078\times0.589=0.253\]
+\par\noindent The numerator is $0.661+0.253=0.914$. The denominator is \[\Delta+\gamma(1+0.34u_2)=0.122+0.0666\times(1+0.34\times2.078)=0.122+0.0666\times1.707=0.236\]
+Then
 \[ET_0=\frac{0.914}{0.236}=3.9\ \text{mm\,d}^{-1}\quad\text{\finans}\]
 Both terms contribute: energy supplies 72 per cent of the numerator and the wind and dry air the remaining 28 per cent.
 
@@ -107,7 +108,8 @@ The large box with the red outline on the left of the map is the \kw{soil water}
 \par\noindent The soil is divided into layers. For each layer, the equation says in words: the water stored changes by what flows in at the top, less what flows out at the bottom, less what the roots take.
 
 \exbox{The water balance of one soil layer}{A layer 20 cm thick has a water content $\theta=0.250$. In one day, $5.0$ mm flows into it from above, $3.0$ mm flows out at the bottom and the roots take $2.4$ mm. Find the new water content.}\sol \givenline{$\Delta z=200$ mm ; $\theta_0=0.250$ ; inflow $=5.0$ mm ; outflow $=3.0$ mm ; uptake $=2.4$ mm}
-\par\noindent The change of water stored in the layer is $5.0-3.0-2.4=-0.4$ mm. Dividing by the thickness, $\Delta\theta=-0.4/200=-0.002$, so
+\par\noindent The change of water stored in the layer is $5.0-3.0-2.4=-0.4$ mm. Dividing by the thickness, \[\Delta\theta=-0.4/200=-0.002\]
+so
 \[\theta=0.250-0.002=0.248\quad\text{\finans}\]
 A very small change of water content is a large change of flux: the 0.4 mm of this layer is the difference of three terms that are each many times larger. This is why the soil-water box is solved with small steps and with the conservation of water built into the scheme. \finans
 
@@ -134,7 +136,7 @@ Worm channels and root channels carry water past the matrix. In the map they are
 A tile drain (the box \emph{Drain} at the lower edge of the red box) removes water from the layers at its depth when the soil there is saturated. The spacing and depth of the drains set the rate; Daisy uses the equations of Moody, of Wesseling and of Mol and Wesseling. These are the same family as the Hooghoudt equation of Chapter~\ref{chap:14}. The lower boundary can also be set as a fixed or varying water table or an aquitard with leakage (box \emph{Groundwater and aquitard}).
 
 \exbox{The discharge of a tile drain}{Use Hooghoudt's equation $qL^2=8K_2dh+4K_1h^2$ of Chapter~\ref{chap:14} with drains at a spacing $L=22$ m, conductivity $K_1=K_2=0.29$ m\,d$^{-1}$, equivalent depth $d=1.70$ m and a water table $h=0.50$ m above the drain level midway between the drains. Find the discharge per unit area.}\sol \givenline{$L=22$ m ; $K_1=K_2=0.29$ m\,d$^{-1}$ ; $d=1.70$ m ; $h=0.50$ m}
-\par\noindent The two terms are $8K_2dh=8\times0.29\times1.70\times0.50=1.972$ and $4K_1h^2=4\times0.29\times0.25=0.290$ (both m$^2$\,d$^{-1}$). Then
+\par\noindent The two terms are \[8K_2dh=8\times0.29\times1.70\times0.50=1.972\] and \[4K_1h^2=4\times0.29\times0.25=0.290\] (both m$^2$\,d$^{-1}$). Then
 \[q=\frac{1.972+0.290}{22^2}=\frac{2.262}{484}=0.00467\ \text{m\,d}^{-1}=4.7\ \text{mm\,d}^{-1}\quad\text{\finans}\]
 This is the water that this layout removes through the drains when the water table midway between them stands 0.5 m above the drain level. It is the same order as the design discharge of 6.4 mm\,d$^{-1}$ of Chapter~\ref{chap:14}, which corresponds to a higher water table of 0.7 m.
 
@@ -147,15 +149,18 @@ The box \emph{Soil heat and ice} at the foot of the map is a separate module tha
 \par\noindent The temperature matters to the rest of the map through the temperature factors of every biological rate in Chapters~\ref{chap:16} and~\ref{chap:17}, and through the freezing of the water. A frozen layer takes no more water, so a rapid thaw on frozen ground gives runoff.
 
 \exbox{How deep does a temperature wave reach?}{A soil has $\lambda=1.2$ W\,m$^{-1}$\,K$^{-1}$ and $C_h=2.5\times10^{6}$ J\,m$^{-3}$\,K$^{-1}$. For a periodic surface temperature of angular frequency $\omega$, the \kw{damping depth} (the depth at which the amplitude has fallen to $1/e$ of its surface value) is $d_d=\sqrt{2D/\omega}$, with the thermal diffusivity $D=\lambda/C_h$. Find the damping depth of the daily and of the annual wave.}\sol \givenline{$\lambda=1.2$ ; $C_h=2.5\times10^6$ ; $\omega_{day}=2\pi/86\,400$ ; $\omega_{year}=2\pi/(365\times86\,400)$}
-\par\noindent The diffusivity is $D=1.2/(2.5\times10^6)=4.8\times10^{-7}$ m$^2$\,s$^{-1}$. For the daily wave $\omega=7.27\times10^{-5}$ s$^{-1}$, so
+\par\noindent The diffusivity is \[D=1.2/(2.5\times10^6)=4.8\times10^{-7}\ \text{m$^2$\,s$^{-1}$}\]
+For the daily wave $\omega=7.27\times10^{-5}$ s$^{-1}$, so
 \[d_d=\sqrt{\frac{2\times4.8\times10^{-7}}{7.27\times10^{-5}}}=0.115\ \text{m}\quad\text{\finans}\]
-For the annual wave $\omega=1.99\times10^{-7}$ s$^{-1}$, so $d_d=\sqrt{2\times4.8\times10^{-7}/1.99\times10^{-7}}=2.2$ m \finans. The daily swing is felt only in the top 10 to 20 cm; the seasonal swing reaches several metres. This is why a sensor at 20 cm sees little of the day but all of the season.
+For the annual wave $\omega=1.99\times10^{-7}$ s$^{-1}$, so \[d_d=\sqrt{2\times4.8\times10^{-7}/1.99\times10^{-7}}=2.2\ \text{m}\quad\text{\finans}\]
+The daily swing is felt only in the top 10 to 20 cm; the seasonal swing reaches several metres. This is why a sensor at 20 cm sees little of the day but all of the season.
 
 \section{Freezing and thawing}
 Below zero, water in the soil turns to ice and releases heat (the box \emph{Freezing and thawing}). The release is large and slows the frost down.
 
 \exbox{The heat released when a layer freezes}{A layer 0.10 m thick has a water content $\theta=0.30$. Find the heat released when all its water freezes, and compare it with the heat released when the layer cools by 1 K. Take $L_f=334$ kJ\,kg$^{-1}$ and $C_h=2.5\times10^6$ J\,m$^{-3}$\,K$^{-1}$.}\sol \givenline{$\Delta z=0.10$ m ; $\theta=0.30$ ; $L_f=334$ kJ\,kg$^{-1}$ ; $C_h=2.5\times10^6$ J\,m$^{-3}$\,K$^{-1}$}
-\par\noindent The water in $1$ m$^2$ of the layer is $0.10\times0.30\times1000=30$ kg, so the heat released on freezing is $30\times334\,000=1.0\times10^{7}$ J, that is $10.0$ MJ\,m$^{-2}$ \finans. Cooling the layer by 1 K releases $C_h\,\Delta z\times1=2.5\times10^6\times0.10=0.25$ MJ\,m$^{-2}$. The ratio is
+\par\noindent The water in $1$ m$^2$ of the layer is $0.10\times0.30\times1000=30$ kg, so the heat released on freezing is $30\times334\,000=1.0\times10^{7}$ J, that is $10.0$ MJ\,m$^{-2}$ \finans. Cooling the layer by 1 K releases \[C_h\,\Delta z\times1=2.5\times10^6\times0.10=0.25\ \text{MJ\,m$^{-2}$}\]
+The ratio is
 \[\frac{10.0}{0.25}=40\ \text{K}\quad\text{\finans}\]
 Freezing the water of the layer releases as much heat as cooling the layer by 40 degrees. For this reason a wet soil cools to just below zero and then stays near zero for a long time while the water freezes layer by layer.
 

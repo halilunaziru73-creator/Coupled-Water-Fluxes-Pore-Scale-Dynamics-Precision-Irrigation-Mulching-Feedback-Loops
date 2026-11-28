@@ -50,7 +50,9 @@ This group holds 3 figures: Soil-independent trigger law (data collapse); Fate o
 \par\noindent\textbf{\color{khmag}\emph{How it is derived.}} The regime map colours the factor space by DI; non-additivity is the variance share left after an additive model of the main effects.
 \par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E11, E14; Daisy output used: E11 and E14 runs: soil\_evap\_mm, drainage\_1m\_mm, irrigation\_mm.
 \exbox{Root-zone depletion for the soil-independent trigger}{The two horizons of a soil are Ap (25 cm) and Bt (75 cm). Water contents at 100 cm suction (field capacity), at the trigger suction and at wilting are Ap: $0.30$, $0.24$, $0.12$; Bt: $0.34$, $0.30$, $0.20$. Find the depletion $f$ (illustrative values).}\sol \givenline{Ap: $0.30,\ 0.24,\ 0.12$ ; $\Delta z=25$ cm ; Bt: $0.34,\ 0.30,\ 0.20$ ; $\Delta z=75$ cm}
-\par\noindent Numerator: $(0.30-0.24)\times25+(0.34-0.30)\times75=1.5+3.0=4.5$. Denominator: $(0.30-0.12)\times25+(0.34-0.20)\times75=4.5+10.5=15.0$. Hence
+\par\noindent Numerator: \[(0.30-0.24)\times25+(0.34-0.30)\times75=1.5+3.0=4.5\]
+Denominator: \[(0.30-0.12)\times25+(0.34-0.20)\times75=4.5+10.5=15.0\]
+Hence
 \[f=\frac{4.5}{15.0}=0.30\quad\text{\finans}\]
 The root zone has used 30 per cent of its available water at that trigger. If the critical depletion is $f^\ast=0.45$, the trigger is still earlier than the yield needs.
 
@@ -122,7 +124,9 @@ This group holds 8 figures: Sensor suction time series; Trigger pressure respons
 \par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Count of the days on which Daisy started an irrigation.
 \par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E2 daily; Daisy output used: daily irrigation log.
 \exbox{The irrigation production function and its marginal value}{A crop follows $Y=y_0+a\,(1-e^{-I/b})$ with $y_0=3.0$ Mg\,ha$^{-1}$, $a=5.0$ Mg\,ha$^{-1}$ and $b=120$ mm. Find the yield at $I=150$ mm and the gain of yield per extra millimetre at that point (illustrative values).}\sol \givenline{$y_0=3.0$ ; $a=5.0$ ; $b=120$ mm ; $I=150$ mm}
-\par\noindent $e^{-I/b}=e^{-1.25}=0.2865$, so $Y=3.0+5.0\times0.7135=6.57$ Mg\,ha$^{-1}$ \finans. The slope is $\mathrm dY/\mathrm dI=(a/b)\,e^{-I/b}=(5.0/120)\times0.2865=0.0119$ Mg\,ha$^{-1}$\,mm$^{-1}$, that is $11.9$ kg\,ha$^{-1}$ per millimetre \finans. The curve is flattening: the first millimetres give $41.7$ kg\,ha$^{-1}$ each, the last ones less than a third of that.
+\par\noindent $e^{-I/b}=e^{-1.25}=0.2865$, so \[Y=3.0+5.0\times0.7135=6.57\ \text{Mg\,ha$^{-1}$}\quad\text{\finans}\]
+The slope is \[\mathrm dY/\mathrm dI=(a/b)\,e^{-I/b}=(5.0/120)\times0.2865=0.0119\ \text{Mg\,ha$^{-1}$\,mm$^{-1}$}\]
+that is $11.9$ kg\,ha$^{-1}$ per millimetre \finans. The curve is flattening: the first millimetres give $41.7$ kg\,ha$^{-1}$ each, the last ones less than a third of that.
 
 \section{Evaporation control and mulching}
 This group holds 7 figures: Mulch evaporation reduction $\times$ interception; Non-linearity of the mulch effect; Mulch $\times$ rain interaction; Interception loss vs capacity; Mulch--irrigation substitution; Soil evaporation factor response; Mulch benefit by soil. Each is set out in the order of the introduction to this chapter.
@@ -184,7 +188,9 @@ This group holds 7 figures: Mulch evaporation reduction $\times$ interception; N
 \par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Differences between the strongest mulch and the unmulched reference.
 \par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E7,E2; Daisy output used: E7 and E2 outputs.
 \exbox{Where the evaporation saved by a mulch goes}{A mulch reduces the evaporation of a season by $E_{saved}=60$ mm. The balance shows $\Delta T=+14$ mm of extra transpiration, $\Delta D=+9$ mm of extra drainage and $\Delta I=17$ mm less irrigation. Find the residual that goes to storage or runoff (illustrative values).}\sol \givenline{$E_{saved}=60$ ; $\Delta I=17$ ; $\Delta T=14$ ; $\Delta D=9$ (mm)}
-\par\noindent From $E_{saved}=\Delta I+\Delta T+\Delta D+\text{resid}$, $\text{resid}=60-17-14-9=20$ mm \finans. The shares are $28$ per cent less irrigation, $23$ per cent more transpiration, $15$ per cent more drainage and $33$ per cent residual. Only the first two are gains for the farmer; the drained share is the water that no longer helps and that carries nitrate with it.
+\par\noindent From \[E_{saved}=\Delta I+\Delta T+\Delta D+\text{resid}\]
+\[\text{resid}=60-17-14-9=20\ \text{mm}\quad\text{\finans}\]
+The shares are $28$ per cent less irrigation, $23$ per cent more transpiration, $15$ per cent more drainage and $33$ per cent residual. Only the first two are gains for the farmer; the drained share is the water that no longer helps and that carries nitrate with it.
 
 \section{The non-linear feedbacks}
 This group holds 7 figures: Temperature $\times$ rain response surfaces; Threshold detection; Elasticities; Two-way interaction plots; Rain intensity $\times$ starting moisture; Soil $\times$ initial moisture $\times$ rain; Feedback phase diagram. Each is set out in the order of the introduction to this chapter.
@@ -275,7 +281,8 @@ This group holds 3 figures: N rate $\times$ water strategy; Mediterranean pathwa
 \par\noindent\textbf{\color{khmag}\emph{How it is derived.}} Concentration against drainage on log axes with the EU drinking-water limit.
 \par\noindent\textbf{\color{khmag}\emph{The data.}} experiments and sources: E6,E13; Daisy output used: N\_leached\_kg\_ha, drainage\_1m\_mm (E6, E13).
 \exbox{The nitrate in the drainage water}{A field is given $N_{fert}=120$ kg\,N\,ha$^{-1}$, loses $N_{leach}=20$ kg\,N\,ha$^{-1}$ and drains $D=120$ mm. Find the leaching fraction NLF and the concentration of nitrogen in the drainage, and compare it with the drinking-water limit of 11.3 mg N per litre.}\sol \givenline{$N_{fert}=120$ ; $N_{leach}=20$ kg\,N\,ha$^{-1}$ ; $D=120$ mm}
-\par\noindent $\mathrm{NLF}=20/120=0.167$ \finans. The concentration is $c=N_{leach}/D\times100=20/120\times100=16.7$ mg\,N\,L$^{-1}$ \finans, which is $1.5$ times the limit of $11.3$ mg\,N\,L$^{-1}$ ($50$ mg nitrate per litre). One sixth of the fertiliser is lost, and the water that carries it is not fit to drink.
+\par\noindent $\mathrm{NLF}=20/120=0.167$ \finans. The concentration is \[c=N_{leach}/D\times100=20/120\times100=16.7\ \text{mg\,N\,L$^{-1}$}\quad\text{\finans}\]
+which is $1.5$ times the limit of $11.3$ mg\,N\,L$^{-1}$ ($50$ mg nitrate per litre). One sixth of the fertiliser is lost, and the water that carries it is not fit to drink.
 
 \section{The synthesis}
 This group holds 2 figures: Edge-case robustness and factor ranking; Trade-off (Pareto) front. Each is set out in the order of the introduction to this chapter.

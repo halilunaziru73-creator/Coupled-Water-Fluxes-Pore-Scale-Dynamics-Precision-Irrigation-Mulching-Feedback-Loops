@@ -2,9 +2,9 @@
 \exbox{Statistics and balance closure of a model run}{A model and a lysimeter gave eight daily evapotranspiration values. Compute the residuals, the bias, the RMSE, the Nash--Sutcliffe efficiency and the correlation, and audit a season's water balance (precipitation 412 mm, irrigation 180 mm, ET 371 mm, drainage 138 mm, storage change 79 mm).}\sol
 \ans Data (observed, modelled): (0.82, 0.75), (1.40, 1.55), (2.35, 2.20), (3.10, 3.30), (3.95, 3.80), (4.70, 4.95), (5.20, 5.00), (6.10, 6.30) mm\,d$^{-1}$
 \ans Residuals $e_i=M_i-O_i$: -0.07, 0.15, -0.15, 0.20, -0.15, 0.25, -0.20, 0.20
-\ans Bias $=\frac{1}{N}\sum e_i=0.029$ mm\,d$^{-1}$
-\ans $\sum e_i^2=0.255$, so $RMSE=\sqrt{\sum e_i^2/N}=0.179$ mm\,d$^{-1}$
-\ans Mean of the observations $\bar O=3.453$; $\sum(O_i-\bar O)^2=24.349$; Nash--Sutcliffe $NSE=1-\sum e_i^2/\sum(O_i-\bar O)^2=0.9895$
+\ans Bias \[=\frac{1}{N}\sum e_i=0.029\ \text{mm\,d$^{-1}$}\]
+\ans $\sum e_i^2=0.255$, so \[RMSE=\sqrt{\sum e_i^2/N}=0.179\ \text{mm\,d$^{-1}$}\]
+\ans Mean of the observations $\bar O=3.453$; $\sum(O_i-\bar O)^2=24.349$; Nash--Sutcliffe \[NSE=1-\sum e_i^2/\sum(O_i-\bar O)^2=0.9895\]
 \ans Correlation $r=0.9952$, coefficient of determination $r^2=0.9905$
 \ans Relative error $RMSE/\bar O=5.2$ per cent; a model with $NSE>0.9$ and a bias below 5 per cent of the mean is judged good for this purpose
 \ans Water-balance audit: inputs $P+I=592$ mm, outputs $ET+D+\Delta S=588$ mm, closure error $4$ mm ($0.7$ per cent of input) \finans

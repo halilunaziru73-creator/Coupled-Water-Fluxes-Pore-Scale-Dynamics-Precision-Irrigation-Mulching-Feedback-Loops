@@ -89,8 +89,9 @@ where $h$ is the capillary rise or suction (m), $\gamma=0.0728$ N\,m$^{-1}$ the 
 \end{tabular}\end{center}
 
 \exbox{The suction of a pore, and the pore of a suction}{(a) What is the suction at which a pore of radius 20 $\mu$m empties? (b) What is the radius of the largest pore that is still full of water in a soil at a suction of 300 cm?}\sol \givenline{(a) $r=20\ \mu\mathrm m=2\times10^{-3}$ cm ; (b) $h=300$ cm}
-\par\noindent \textbf{(a)} From Equation~(\ref{eq:pg-cap}), $h=0.149/(2\times10^{-3})=74.5$ cm \finans, that is pF $1.87$: such a pore drains before the field capacity of 100 cm is reached, so it belongs to the macropores.
-\par\noindent \textbf{(b)} $r=0.149/300=4.97\times10^{-4}$ cm $=4.97\ \mu$m \finans. At a trigger of 300 cm, all the pores wider than 5 $\mu$m are empty, and the water is held in the finer pores: the amount of water that is held depends on how much of the pore volume is below this size, which is read from the retention curve.
+\par\noindent \textbf{(a)} From Equation~(\ref{eq:pg-cap}), \[h=0.149/(2\times10^{-3})=74.5\ \text{cm}\quad\text{\finans}\]
+that is pF $1.87$: such a pore drains before the field capacity of 100 cm is reached, so it belongs to the macropores.
+\par\noindent \textbf{(b)} \[r=0.149/300=4.97\times10^{-4}\] cm $=4.97\ \mu$m \finans. At a trigger of 300 cm, all the pores wider than 5 $\mu$m are empty, and the water is held in the finer pores: the amount of water that is held depends on how much of the pore volume is below this size, which is read from the retention curve.
 
 \section{The pore-size distribution from the retention curve}\label{sec:psd}
 Because each suction corresponds to one pore radius, the retention curve is a measurement of the pore-size distribution. If $\theta(h)$ is the water content at suction $h$, then $\theta_s-\theta(h)$ is the volume of the pores wider than $r(h)$, and the volume of the pores whose radius lies between $r$ and $r+\mathrm dr$ follows by differentiation. It is usual to plot the density per decade of suction (per unit of pF),
@@ -100,7 +101,9 @@ where $f$ is the pore volume per unit volume of soil per decade of pore radius. 
 which has a single maximum, at the \kw{dominant pore size}. The pore-size curves of the ten soils are shown in Figure~\ref{fig:a19_7}: the coarse soils have a narrow, tall peak at small pF, and the clays a wide, low one at large pF.
 
 \exbox{The volume of each pore class in the loam}{For the loam with $\alpha=0.036$ cm$^{-1}$, $n=1.56$, $\theta_s=0.43$ and $\theta_r=0.08$, the retention curve gives $\theta(100)=0.243$ and $\theta(15\,849)=0.090$. Find the volumes of the macropores, the mesopores and the micropores.}\sol \givenline{$\theta_s=0.43$ ; $\theta(100)=0.243$ ; $\theta(15\,849)=0.090$}
-\par\noindent The macropores are the pores that are empty at field capacity: $\theta_s-\theta(100)=0.430-0.243=0.187$ \finans. The mesopores are emptied between field capacity and wilting: $\theta(100)-\theta(15\,849)=0.243-0.090=0.153$ \finans, which is $153$ mm of available water per metre of soil, the value of Chapter~\ref{chap:01}. The micropores hold $\theta(15\,849)=0.090$ \finans. The three add to $0.430$, the porosity, so the classes are complete. Almost half of the pore volume (43 per cent) is macropore space in this loam.
+\par\noindent The macropores are the pores that are empty at field capacity: \[\theta_s-\theta(100)=0.430-0.243=0.187\quad\text{\finans}\]
+The mesopores are emptied between field capacity and wilting: \[\theta(100)-\theta(15\,849)=0.243-0.090=0.153\quad\text{\finans}\]
+which is $153$ mm of available water per metre of soil, the value of Chapter~\ref{chap:01}. The micropores hold $\theta(15\,849)=0.090$ \finans. The three add to $0.430$, the porosity, so the classes are complete. Almost half of the pore volume (43 per cent) is macropore space in this loam.
 
 \begin{figure}[!htbp]\centering\Lfig{\includegraphics[width=0.84\textwidth]{fig/at/a21_02.jpg}}\caption{Pore-domain decomposition of the ten soils of the study from their retention curves (the same classes as Figure~\ref{fig:pg-dom}); the figure is described with its equation in Chapter~\ref{chap:21}.}\end{figure}
 
@@ -112,7 +115,8 @@ where $Q$ is the flow (m$^3$\,s$^{-1}$), $\mu=1.0\times10^{-3}$ Pa\,s the dynami
 \par\noindent \textbf{Notes:} 1. The flow depends on the \emph{fourth power} of the radius: a tube twice as wide carries sixteen times as much water. 2. The law holds for laminar flow, which is the case when the Reynolds number $Re=\rho\bar v\,2r/\mu$ is below about 2000; in soil pores $Re$ is much smaller than 1. 3. The viscosity of water falls as the temperature rises (it is 1.0 mPa\,s at 20 $^\circ$C and 1.8 at 0 $^\circ$C), so that the conductivity of a soil rises by about 2 per cent per degree.
 
 \exbox{The flow in one macropore}{A cylindrical pore of radius 0.5 mm, such as a worm channel, is full of water and drains under gravity (unit gradient). Find the mean velocity and the discharge.}\sol \givenline{$r=0.5\times10^{-3}$ m ; $\Delta p/L=\rho_wg=998\times9.81=9790$ Pa\,m$^{-1}$ ; $\mu=1.0\times10^{-3}$ Pa\,s}
-\par\noindent From Equation~(\ref{eq:pg-hp}), $\bar v=\dfrac{r^2\,(\Delta p/L)}{8\mu}=\dfrac{(0.5\times10^{-3})^2\times9790}{8\times10^{-3}}=0.306$ m\,s$^{-1}$ \finans, about 30 cm per second, which is fast. The discharge is $Q=\pi r^2\bar v=\pi\times(0.5\times10^{-3})^2\times0.306=2.40\times10^{-7}$ m$^3$\,s$^{-1}$ $=0.24$ mL\,s$^{-1}$, or $865$ mL per hour \finans. One such channel can pass nearly a litre of water per hour. Remember that the law assumes a smooth tube full of water; a real burrow is rough and partly filled, so the figure is an upper limit.
+\par\noindent From Equation~(\ref{eq:pg-hp}), \[\bar v=\dfrac{r^2\,(\Delta p/L)}{8\mu}=\dfrac{(0.5\times10^{-3})^2\times9790}{8\times10^{-3}}=0.306\ \text{m\,s$^{-1}$}\quad\text{\finans}\]
+about 30 cm per second, which is fast. The discharge is \[Q=\pi r^2\bar v=\pi\times(0.5\times10^{-3})^2\times0.306=2.40\times10^{-7}\] m$^3$\,s$^{-1}$ $=0.24$ mL\,s$^{-1}$, or $865$ mL per hour \finans. One such channel can pass nearly a litre of water per hour. Remember that the law assumes a smooth tube full of water; a real burrow is rough and partly filled, so the figure is an upper limit.
 
 \section{The bundle of capillaries and the conductivity}\label{sec:bundle}
 A porous medium is now represented by a bundle of straight, parallel capillaries. Let there be $N$ pores of radius $r$ per unit area of cross-section; the porosity is $\phi=N\pi r^2$ (the fraction of the area that is open). The volume of water that crosses a unit area in a unit time under the gradient $i=\Delta p/(\rho_wgL)$ is $q=N\,Q=N\pi r^4\rho_wg\,i/(8\mu)$. By Darcy's law $q=K_s\,i$, so that the saturated conductivity of the bundle is
@@ -122,8 +126,8 @@ where $k$ (m$^2$) is the \kw{intrinsic permeability} (a property of the pore geo
 \begin{figure}[!htbp]\centering\Lfig{\includegraphics[width=0.84\textwidth]{fig/pore_tort.png}}\caption{(a) A bundle of straight parallel capillaries; (b) a bundle of tortuous capillaries, in which the water follows a path longer than the sample.}\end{figure}
 
 \exbox{The conductivity of three bundles}{Find the saturated conductivity of a bundle of capillaries with porosity $\phi=0.40$ and radii $r=50\ \mu$m, $5\ \mu$m and $0.5\ \mu$m.}\sol \givenline{$\phi=0.40$ ; $r=50,\ 5,\ 0.5\ \mu$m ; $\rho_wg/(8\mu)=998\times9.81/(8\times10^{-3})=1.224\times10^{6}$ m$^{-1}$\,s$^{-1}$}
-\par\noindent From Equation~(\ref{eq:pg-bundle}), $K_s=1.224\times10^6\times\phi\,r^2$.
-\par\noindent For $r=50\times10^{-6}$ m: $K_s=1.224\times10^6\times0.40\times2.5\times10^{-9}=1.22\times10^{-3}$ m\,s$^{-1}$ $=1.06\times10^{4}$ cm\,d$^{-1}$ \finans.
+\par\noindent From Equation~(\ref{eq:pg-bundle}), \[K_s=1.224\times10^6\times\phi\,r^2\]
+\par\noindent For $r=50\times10^{-6}$ m: \[K_s=1.224\times10^6\times0.40\times2.5\times10^{-9}=1.22\times10^{-3}\] m\,s$^{-1}$ $=1.06\times10^{4}$ cm\,d$^{-1}$ \finans.
 \par\noindent For $r=5\ \mu$m: $K_s=1.22\times10^{-5}$ m\,s$^{-1}$ $=106$ cm\,d$^{-1}$ \finans.
 \par\noindent For $r=0.5\ \mu$m: $K_s=1.22\times10^{-7}$ m\,s$^{-1}$ $=1.06$ cm\,d$^{-1}$ \finans.
 \par\noindent Each tenfold reduction of the radius divides the conductivity by 100, so that the three bundles cover the range from a clean sand to a clay, although they have the same porosity. The values are larger than those measured on real soils of the same pore size, because a real pore is not straight, and the correction is the subject of the next sections.
@@ -136,7 +140,8 @@ which is smaller than the share of the pore volume $\Phi_V(r)=\phi(r)/\phi$ for 
 \par\noindent This distribution has an important consequence for the unsaturated soil. As the soil dries, the largest pores empty first, and with them the largest part of the conductivity: when the suction rises to 100 cm (the field capacity), all pores wider than 15 $\mu$m are empty and the conductivity has fallen by one or two orders of magnitude although more than half of the water is still there. This is the geometric reason for the curve of the conductivity in Chapter~\ref{chap:01} and for the failure of a dry soil to supply a root.
 
 \exbox{How many small pores equal one large pore?}{How many pores of radius 10 $\mu$m are needed to carry the same flow as one earthworm channel of radius 2 mm, under the same gradient?}\sol \givenline{$r_1=2000\ \mu$m ; $r_2=10\ \mu$m ; same $\Delta p/L$}
-\par\noindent From Equation~(\ref{eq:pg-hp}), the flow of a tube is proportional to $r^4$, so the number of small tubes is $N=(r_1/r_2)^4=(2000/10)^4=200^4=1.6\times10^{9}$ \finans. It takes 1.6 thousand million small pores to carry the water of one worm channel. A square metre of soil of porosity 0.3 that consisted of nothing but pores of radius 10 $\mu$m would hold $N=\phi/(\pi r^2)=0.3/(\pi\times10^{-10})=9.5\times10^{8}$ of them: fewer than the number needed to replace one worm channel. This explains why a few biopores, in a soil in which the matrix is slow, determine the rate at which the soil takes water in a heavy rain.
+\par\noindent From Equation~(\ref{eq:pg-hp}), the flow of a tube is proportional to $r^4$, so the number of small tubes is \[N=(r_1/r_2)^4=(2000/10)^4=200^4=1.6\times10^{9}\quad\text{\finans}\]
+It takes 1.6 thousand million small pores to carry the water of one worm channel. A square metre of soil of porosity 0.3 that consisted of nothing but pores of radius 10 $\mu$m would hold \[N=\phi/(\pi r^2)=0.3/(\pi\times10^{-10})=9.5\times10^{8}\] of them: fewer than the number needed to replace one worm channel. This explains why a few biopores, in a soil in which the matrix is slow, determine the rate at which the soil takes water in a heavy rain.
 
 \banner{Tortuosity, connection and the real conductivity}
 \section{Tortuosity}
@@ -147,7 +152,8 @@ is the \kw{tortuosity} (some authors use $\tau$ for the inverse, or its square; 
 Typical values for $\tau$ are 1.2 to 1.6 for sands, and 2 to 5 for aggregated soils and clays. The same factor applies to diffusion: the gas and solute diffusion coefficients in a soil are smaller than those of free water or air by $\phi/\tau^2$.
 
 \exbox{The effect of tortuosity}{Correct the conductivity of the bundle with $r=50\ \mu$m and $\phi=0.40$ found in the earlier example for a tortuosity of $\tau=1.5$.}\sol \givenline{$K_s=1.06\times10^4$ cm\,d$^{-1}$ ; $\tau=1.5$}
-\par\noindent $K_s=1.06\times10^4/1.5^2=1.06\times10^4/2.25=4.70\times10^3$ cm\,d$^{-1}$ \finans. A tortuosity of 1.5, which is only a modest bending of the path, halves the conductivity.
+\par\noindent \[K_s=1.06\times10^4/1.5^2=1.06\times10^4/2.25=4.70\times10^3\ \text{cm\,d$^{-1}$}\quad\text{\finans}\]
+A tortuosity of 1.5, which is only a modest bending of the path, halves the conductivity.
 
 \section{Connection of the pores: bodies and throats}
 A pore in a soil has a wide part (the \kw{body}) and a narrow passage to the next pore (the \kw{throat}). The flow is limited by the throats, and the retention (the emptying) is also limited by the throats during drying, but by the bodies during wetting. Thus a pore that is large but connected only through narrow throats behaves, for the flow, like a narrow pore: this is the cause of the hysteresis and of the fact that a conductivity calculated from the pore sizes of the retention curve is too high unless a connection factor is applied. The factor $\ell$ in the conductivity function of Mualem (Chapter~\ref{chap:01}) is such a connection and tortuosity factor, with a value of about $0.5$ for most soils.
@@ -166,9 +172,10 @@ Kozeny (1927) and Carman (1937) used the hydraulic radius and the tortuosity to 
 where $c_{KC}\approx5$ is the Kozeny constant (it contains the shape factor and the tortuosity), and $S_0=6/d_e$ for grains with an effective diameter $d_e$. The strong dependence of the conductivity on the porosity, as $\phi^3/(1-\phi)^2$, shows that a small change of the porosity gives a large change in the conductivity: a decrease of $\phi$ from 0.40 to 0.35 reduces $K_s$ by a factor of $(0.35/0.40)^3\,(0.60/0.65)^2=0.57$.
 
 \exbox{The conductivity of a sand and of a silt from the grain size}{Use the Kozeny--Carman equation to find the saturated conductivity of (a) a sand of effective grain diameter $d=0.5$ mm and (b) a silt of $d=0.05$ mm. Take $\phi=0.40$ and $c_{KC}=5$.}\sol \givenline{$\phi=0.40$ ; $c_{KC}=5$ ; (a) $d=0.5$ mm ; (b) $d=0.05$ mm ; $\rho_wg/\mu=9.79\times10^{6}$ m$^{-1}$\,s$^{-1}$}
-\par\noindent \textbf{(a)} $S_0=6/d=6/(0.5\times10^{-3})=1.2\times10^{4}$ m$^{-1}$. The permeability is
+\par\noindent \textbf{(a)} \[S_0=6/d=6/(0.5\times10^{-3})=1.2\times10^{4}\ \text{m$^{-1}$}\]
+The permeability is
 \[k=\frac{0.40^3}{5\times(1.2\times10^4)^2\times0.60^2}=\frac{0.064}{2.592\times10^{8}}=2.47\times10^{-10}\ \text{m}^2.\]
-Then $K_s=9.79\times10^{6}\times2.47\times10^{-10}=2.42\times10^{-3}$ m\,s$^{-1}$ $=2.1\times10^{4}$ cm\,d$^{-1}$ \finans, the order of magnitude of a clean medium sand.
+Then \[K_s=9.79\times10^{6}\times2.47\times10^{-10}=2.42\times10^{-3}\] m\,s$^{-1}$ $=2.1\times10^{4}$ cm\,d$^{-1}$ \finans, the order of magnitude of a clean medium sand.
 \par\noindent \textbf{(b)} The diameter is ten times smaller, $S_0$ ten times larger, so $k$ is a hundred times smaller: $K_s=209$ cm\,d$^{-1}$ \finans. The silt of ideal spheres still has a high conductivity because it has no aggregates and no clay; real silts have a lower value, since the grains are not equal and the flow paths are narrower.
 
 \banner{Models of the pore-size distribution}
@@ -183,7 +190,10 @@ where $\lambda$ is the \emph{pore-size index} (large for a narrow distribution, 
 \end{exlist}
 
 \exbox{The conductivity of a Brooks--Corey soil}{A soil has a pore-size index $\lambda=0.5$ and a saturated conductivity $K_s=10$ cm\,d$^{-1}$. Find its conductivity at an effective saturation $S_e=0.30$ and the ratio to $K_s$.}\sol \givenline{$\lambda=0.5$ ; $K_s=10$ cm\,d$^{-1}$ ; $S_e=0.30$}
-\par\noindent The exponent is $(2+3\lambda)/\lambda=(2+1.5)/0.5=7$. From Equation~(\ref{eq:pg-bc}), $K/K_s=0.30^7=2.19\times10^{-4}$ \finans, so $K=10\times2.19\times10^{-4}=2.2\times10^{-3}$ cm\,d$^{-1}$ \finans. The soil has lost 99.98 per cent of its conductivity when it has lost 70 per cent of its effective water: the large pores that carry the flow are the first to empty.
+\par\noindent The exponent is \[(2+3\lambda)/\lambda=(2+1.5)/0.5=7\]
+From Equation~(\ref{eq:pg-bc}), \[K/K_s=0.30^7=2.19\times10^{-4}\quad\text{\finans}\]
+so \[K=10\times2.19\times10^{-4}=2.2\times10^{-3}\ \text{cm\,d$^{-1}$}\quad\text{\finans}\]
+The soil has lost 99.98 per cent of its conductivity when it has lost 70 per cent of its effective water: the large pores that carry the flow are the first to empty.
 
 \section{The pores of aggregates: dual porosity}
 In a structured soil the pore space has two parts that behave differently: the \kw{matrix} (the pores inside the aggregates, small and well connected, in which the water is held strongly) and the \kw{macropores} between the aggregates and the biopores (large, with a different flow). In a \kw{dual-porosity} model each domain has its own retention curve and conductivity, and a transfer term between them; in Daisy the biopores are added to the matrix as a second system that takes the water above a given rate, and passes it to the drains. A soil with a dual porosity has a retention curve with \emph{two steps} (a large one at small suction for the inter-aggregate pores and a second one at large suction for the intra-aggregate pores), and a conductivity curve with a sudden drop near saturation.

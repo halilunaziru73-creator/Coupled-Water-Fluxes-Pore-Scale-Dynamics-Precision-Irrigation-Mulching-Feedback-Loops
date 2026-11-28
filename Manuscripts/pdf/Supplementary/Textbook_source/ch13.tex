@@ -15,7 +15,9 @@ The pressure head of the nozzle is $h=P/9.81$ (m, $P$ in kPa) and the discharge 
 
 The factor $6\times10^4$ converts m$^3$ s$^{-1}$ to L min$^{-1}$. Because $q\propto d^2\sqrt P$, doubling the nozzle diameter quadruples the discharge, and doubling the pressure raises it by only 41\%.
 
-\exbox{Discharge of one nozzle}{The default impact sprinkler has $d=4.4$ mm and $P=300$ kPa. Find $q$.}\sol \givenline{$d=4.4$ mm ; $P=300$ kPa}\ans $h=300/9.81=30.58$ m. $A_n=\pi(4.4/2000)^2=1.521\times10^{-5}$ m$^2$. $\sqrt{2gh}=\sqrt{2\times9.81\times30.58}=24.49$ m s$^{-1}$. So $q=0.95\times1.521\times10^{-5}\times24.49\times6\times10^4=21.23$ L min$^{-1}$ ($=1.274$ m$^3$ h$^{-1}$). \finans
+\exbox{Discharge of one nozzle}{The default impact sprinkler has $d=4.4$ mm and $P=300$ kPa. Find $q$.}\sol \givenline{$d=4.4$ mm ; $P=300$ kPa}\ans $h=300/9.81=30.58$ m. \[A_n=\pi(4.4/2000)^2=1.521\times10^{-5}\ \text{m$^2$}\]
+\[\sqrt{2gh}=\sqrt{2\times9.81\times30.58}=24.49\ \text{m s$^{-1}$}\]
+So \[q=0.95\times1.521\times10^{-5}\times24.49\times6\times10^4=21.23\] L min$^{-1}$ ($=1.274$ m$^3$ h$^{-1}$). \finans
 
 
 \begin{table}[!htbp]\centering\small\caption{Discharge $q$ (L min$^{-1}$) of an impact nozzle, Eq.~(13.2).}\label{tab:qnoz}
@@ -28,7 +30,7 @@ The factor $6\times10^4$ converts m$^3$ s$^{-1}$ to L min$^{-1}$. Because $q\pro
 5.0 & 22.4 & 25.0 & 27.4 & 31.7 & 35.4\\
 6.0 & 32.2 & 36.0 & 39.5 & 45.6 & 51.0\\\bottomrule\end{tabular}\end{table}
 
-\exbox{A lower discharge from the same nozzle}{Using Table~\ref{tab:qnoz}, a farmer wants to keep a 4.4 mm nozzle but cut the discharge by one quarter. What pressure is needed?}\sol  $q\propto\sqrt P$, so $q_2/q_1=\sqrt{P_2/P_1}=0.75$ gives $P_2/P_1=0.5625$, $P_2=0.5625\times300=169$ kPa. Check with the table: $q(4.4,169)$ is $15.92$ L min$^{-1}$, which is $75.0\%$ of 21.2. The price of the lower pressure is a smaller reach (next section) and a coarser drop. \finans
+\exbox{A lower discharge from the same nozzle}{Using Table~\ref{tab:qnoz}, a farmer wants to keep a 4.4 mm nozzle but cut the discharge by one quarter. What pressure is needed?}\sol  $q\propto\sqrt P$, so \[q_2/q_1=\sqrt{P_2/P_1}=0.75\] gives $P_2/P_1=0.5625$, $P_2=0.5625\times300=169$ kPa. Check with the table: $q(4.4,169)$ is $15.92$ L min$^{-1}$, which is $75.0\%$ of 21.2. The price of the lower pressure is a smaller reach (next section) and a coarser drop. \finans
 
 
 \section{Wetted radius}
@@ -44,7 +46,9 @@ Rotating spray & 3.2 & 170 & 6 & 6 & 0.80 & 1.6 & 8.5 & 6.0\\
 Micro-sprinkler & 1.3 & 180 & 3 & 3 & 0.70 & 0.7 & 1.4 & 3.4\\
 Big gun & 16.0 & 500 & 30 & 36 & 0.95 & 1.3 & 362.4 & 27.1\\\bottomrule\end{tabular}\end{table}
 
-\exbox{Reach and trajectory angle}{Find the radius of the default impact sprinkler at $\alpha=25^\circ$ and at $\alpha=15^\circ$, and say which angle is the better for reach.}\sol \givenline{$\alpha=25^\circ$ ; $\alpha=15^\circ$}\ans $h=30.58$ m, $\sqrt d=\sqrt{4.4}=2.098$, $\sqrt h=5.530$. At $25^\circ$: $\sin77.5^\circ=0.9763$ so $f_\alpha=1$ and $R=1.35\times2.098\times5.530=15.66$ m. At $15^\circ$: $\sin46.5^\circ=0.7254$; $f_\alpha=(0.7254/0.9763)^{0.45}=0.8749$, so $R=13.70$ m. At $29^\circ$: $\sin89.9^\circ=0.99999$, $f_\alpha=1.0109$, $R=15.83$ m. The angle changes the reach by only a few per cent between $20^\circ$ and $30^\circ$, which is why the default $25^\circ$ is near the optimum, and a flat jet (low $\alpha$) shortens the reach but also lowers the drift (next sections). \finans
+\exbox{Reach and trajectory angle}{Find the radius of the default impact sprinkler at $\alpha=25^\circ$ and at $\alpha=15^\circ$, and say which angle is the better for reach.}\sol \givenline{$\alpha=25^\circ$ ; $\alpha=15^\circ$}\ans $h=30.58$ m, $\sqrt d=\sqrt{4.4}=2.098$, $\sqrt h=5.530$. At $25^\circ$: $\sin77.5^\circ=0.9763$ so $f_\alpha=1$ and \[R=1.35\times2.098\times5.530=15.66\ \text{m}\]
+At $15^\circ$: $\sin46.5^\circ=0.7254$; \[f_\alpha=(0.7254/0.9763)^{0.45}=0.8749\]
+so $R=13.70$ m. At $29^\circ$: $\sin89.9^\circ=0.99999$, $f_\alpha=1.0109$, $R=15.83$ m. The angle changes the reach by only a few per cent between $20^\circ$ and $30^\circ$, which is why the default $25^\circ$ is near the optimum, and a flat jet (low $\alpha$) shortens the reach but also lowers the drift (next sections). \finans
 
 
 \begin{table}[!htbp]\centering\small\caption{Angle function, reach and drift of the impact sprinkler.}\label{tab:angle}
@@ -69,10 +73,15 @@ With $x=r/R_e$ the shape of the deposit is
 
 Wind stretches the radius downwind and moves the centre, $R_e(\theta)=R\,\mathrm{clip}\{1+0.022u\cos\theta;0.7,1.4\}$ and shift $=0.03uR$. The final pattern $p=s\hat p$ is scaled by a constant $s$ so that the volume deposited per minute equals the discharge, $\iint p\,dA=q$ (with $p$ in mm min$^{-1}$, since 1 mm over 1 m$^2$ is 1 L).
 
-\exbox{Peak rate of a single sprinkler}{For no wind, find the exact peak application rate of the impact pattern, check it against the 45$\times$45 grid used by the layer, and give the rate at half the radius.}\sol  Volume of $\hat p=1-x^{m}$: $\iint\hat p\,dA=2\pi R^2\int_0^1(1-x^{m})x\,dx=2\pi R^2\left(\tfrac12-\tfrac1{m+2}\right)$. With $m=1.3$: $\tfrac12-\tfrac1{3.3}=0.19697$. $R=15.66$ m, so volume $=2\pi\times245.2\times0.19697=303.5$ m$^2$. The peak rate is $s=q/V=21.23/303.5=0.0700$ mm min$^{-1}$ $=4.20$ mm h$^{-1}$. The numerical grid gives $s=0.0699$ mm min$^{-1}$, differing by -0.0\% (the 45$\times$45 grid places the centre at a corner of four cells). At $x=0.5$: $p=0.0700\times(1-0.5^{1.3})=0.0415$ mm min$^{-1}$, i.e.\ 2.49 mm h$^{-1}$. \finans
+\exbox{Peak rate of a single sprinkler}{For no wind, find the exact peak application rate of the impact pattern, check it against the 45$\times$45 grid used by the layer, and give the rate at half the radius.}\sol  Volume of $\hat p=1-x^{m}$: \[\iint\hat p\,dA=2\pi R^2\int_0^1(1-x^{m})x\,dx=2\pi R^2\left(\tfrac12-\tfrac1{m+2}\right)\]
+With $m=1.3$: $\tfrac12-\tfrac1{3.3}=0.19697$. $R=15.66$ m, so volume \[=2\pi\times245.2\times0.19697=303.5\ \text{m$^2$}\]
+The peak rate is $s=q/V=21.23/303.5=0.0700$ mm min$^{-1}$ $=4.20$ mm h$^{-1}$. The numerical grid gives $s=0.0699$ mm min$^{-1}$, differing by -0.0\% (the 45$\times$45 grid places the centre at a corner of four cells). At $x=0.5$: \[p=0.0700\times(1-0.5^{1.3})=0.0415\ \text{mm min$^{-1}$}\]
+i.e.\ 2.49 mm h$^{-1}$. \finans
 
 
-\exbox{Wind distortion of the reach}{At wind speed $u=6.0$ m s$^{-1}$ find the downwind, upwind and crosswind radii of the impact pattern and the shift of its centre.}\sol \givenline{$u=6.0$ m s$^{-1}$ find}\ans Downwind ($\theta=0$): $R_e=15.66\times(1+0.022\times6.0)=15.66\times1.132=17.73$ m. Upwind ($\theta=180^\circ$): $R_e=15.66\times0.868=13.59$ m. Crosswind ($\theta=90^\circ$): $R_e=R=15.66$ m. The shift of the centre is $0.03\times6.0\times15.66=2.82$ m downwind. The elongation is +13.2\% downwind and $-$13.2\% upwind; the clip (0.7 to 1.4) would act only above $13.6$ m s$^{-1}$ upwind and $18.2$ m s$^{-1}$ downwind. \finans
+\exbox{Wind distortion of the reach}{At wind speed $u=6.0$ m s$^{-1}$ find the downwind, upwind and crosswind radii of the impact pattern and the shift of its centre.}\sol \givenline{$u=6.0$ m s$^{-1}$ find}\ans Downwind ($\theta=0$): \[R_e=15.66\times(1+0.022\times6.0)=15.66\times1.132=17.73\ \text{m}\]
+Upwind ($\theta=180^\circ$): \[R_e=15.66\times0.868=13.59\ \text{m}\]
+Crosswind ($\theta=90^\circ$): $R_e=R=15.66$ m. The shift of the centre is $0.03\times6.0\times15.66=2.82$ m downwind. The elongation is +13.2\% downwind and $-$13.2\% upwind; the clip (0.7 to 1.4) would act only above $13.6$ m s$^{-1}$ upwind and $18.2$ m s$^{-1}$ downwind. \finans
 
 
 \section{Overlap and the coefficient of uniformity}\label{ch:cu}
@@ -82,7 +91,8 @@ On a grid with spacings $S_s$ along the lateral and $S_l$ between laterals the r
 
 Because every drop of the discharge lands somewhere in the repeating cell, the mean rate does not depend on the pattern at all: $\mathrm{AR}=60q/(S_sS_l)$.
 
-\exbox{Mean application rate}{Compute $\mathrm{AR}$ for the default impact layout ($12\times18$ m, $q=21.23$ L min$^{-1}$) and compare with the sum from the overlap grid.}\sol \givenline{$q=21.23$ L min$^{-1}$}\ans $\mathrm{AR}=60\times21.23/(12\times18)=5.897$ mm h$^{-1}$. The summed grid gives 5.898 mm h$^{-1}$ (wind 3 m s$^{-1}$), the same to within 0.1\%, which confirms the volume normalisation. The layer then compares this rate with the largest rate the soil allows (Section~\ref{sec:maxrate}). \finans
+\exbox{Mean application rate}{Compute $\mathrm{AR}$ for the default impact layout ($12\times18$ m, $q=21.23$ L min$^{-1}$) and compare with the sum from the overlap grid.}\sol \givenline{$q=21.23$ L min$^{-1}$}\ans \[\mathrm{AR}=60\times21.23/(12\times18)=5.897\ \text{mm h$^{-1}$}\]
+The summed grid gives 5.898 mm h$^{-1}$ (wind 3 m s$^{-1}$), the same to within 0.1\%, which confirms the volume normalisation. The layer then compares this rate with the largest rate the soil allows (Section~\ref{sec:maxrate}). \finans
 
 
 \begin{table}[!htbp]\centering\small\caption{Spacing along the lateral for the impact sprinkler ($S_l=18$ m, 3 m s$^{-1}$, $Z_n=30$ mm, loam).}\label{tab:ssweep}
@@ -121,7 +131,8 @@ In Table~\ref{tab:wind} the computed CU does \emph{not} fall as the wind rises: 
 \begin{equation}\boxed{w_d=\frac1{100}\mathrm{clip}\Big\{(1.2+0.5u+0.04u^2)\,F\left(\frac P{250}\right)^{0.7}\![1+0.025(T_a-20)]\Big[0.6+0.4\frac{\sin\alpha}{0.4226}\Big];0.5,45\Big\}}\end{equation}
 where $F$ is the type factor (impact 1.0, spray 1.6, micro 0.7, gun 1.3), $P$ in kPa, $u$ in m s$^{-1}$ and $T_a=24^\circ$C$+\Delta T$. The form is plausible (loss rises with wind, pressure and temperature, and falls with a flatter jet), but the coefficients are engineered, not fitted.
 
-\exbox{Drift loss}{Find $w_d$ for the default impact sprinkler at $u=3$ m s$^{-1}$, $T_a=24^\circ$C.}\sol \givenline{$u=3$ m s$^{-1}$ ; $T_a=24^\circ$ C}\ans Wind term $1.2+0.5\times3+0.04\times9=3.06$. Pressure term $(300/250)^{0.7}=1.1361$. Temperature term $1+0.025\times4=1.1$. Angle term $0.6+0.4\sin25^\circ/0.4226=0.6+0.4\times0.4226/0.4226=1.000$ (since $\sin25^\circ=0.4226$ the bracket is exactly 1). Then $3.06\times1.0\times1.1361\times1.1\times1=3.824$ per cent, within the clip, so $w_d=0.0382$ (3.82\%). Compare the same sprinkler at 9 m s$^{-1}$: $1.2+4.5+3.24=8.94$, $w_d=11.2\%$. \finans
+\exbox{Drift loss}{Find $w_d$ for the default impact sprinkler at $u=3$ m s$^{-1}$, $T_a=24^\circ$C.}\sol \givenline{$u=3$ m s$^{-1}$ ; $T_a=24^\circ$ C}\ans Wind term $1.2+0.5\times3+0.04\times9=3.06$. Pressure term $(300/250)^{0.7}=1.1361$. Temperature term $1+0.025\times4=1.1$. Angle term \[0.6+0.4\sin25^\circ/0.4226=0.6+0.4\times0.4226/0.4226=1.000\] (since $\sin25^\circ=0.4226$ the bracket is exactly 1). Then \[3.06\times1.0\times1.1361\times1.1\times1=3.824\ \text{per cent}\]
+within the clip, so $w_d=0.0382$ (3.82\%). Compare the same sprinkler at 9 m s$^{-1}$: $1.2+4.5+3.24=8.94$, $w_d=11.2\%$. \finans
 
 
 \begin{table}[!htbp]\centering\small\caption{Drift loss $w_d$ (\%) of the four types at their default pressures, $\alpha=25^\circ$, $T_a=24^\circ$C.}\label{tab:wd}
@@ -139,7 +150,9 @@ The soil takes water by the Kostiakov law $F=Kt^A$ with $K=1000k$ mm min$^{-A}$ 
 
 Surface storage is reduced by slope, $S_{d,\rm eff}=\max(0,S_d)/(1+0.25S)$ ($S$ in \%). The canopy and mulch keep $I_c=\min\{I,I_{\rm int}\}$, $I_{\rm int}=0.6\,\mathrm{CAP}[\text{mulch}]+1.2\,\mathrm{LAI}$, which evaporates and never reaches the soil. The depth that reaches the soil is $Z_k=I-I_c$.
 
-\exbox{Ponding time on the loam}{Conventional tillage gives $S_d=5$ mm on a 1\% slope. A loam under maize with LAI = 2.5 and no mulch is irrigated at the mean rate of the default impact layout. Find $S_{d,\rm eff}$, $I_{\rm int}$, the intake coefficients and the ponding time.}\sol \givenline{$S_d=5$ mm}\ans $S_{d,\rm eff}=5/(1+0.25\times1)=4.00$ mm. $I_{\rm int}=1.2\times2.5=3.0$ mm (no mulch term). The loam's Kostiakov law (Chapter~\ref{ch:surf}) has $k=0.001675$ m min$^{-A}$ and $A=0.694$, so $K=1.675$ mm min$^{-A}$. The applied rate is $a_e=0.0983\,(1-0.0382)=0.0945$ mm min$^{-1}$ ($5.67$ mm h$^{-1}$ after drift). Then $t_p=(0.0945/1.675)^{1/(0.694-1)}=0.0564^{-3.271}=12{,}118$ min. A set is about 371 min long, so $T<t_p$ and the whole supply infiltrates: RO = 0. The loam takes this sprinkler with a wide margin. \finans
+\exbox{Ponding time on the loam}{Conventional tillage gives $S_d=5$ mm on a 1\% slope. A loam under maize with LAI = 2.5 and no mulch is irrigated at the mean rate of the default impact layout. Find $S_{d,\rm eff}$, $I_{\rm int}$, the intake coefficients and the ponding time.}\sol \givenline{$S_d=5$ mm}\ans \[S_{d,\rm eff}=5/(1+0.25\times1)=4.00\ \text{mm}\]
+\[I_{\rm int}=1.2\times2.5=3.0\] mm (no mulch term). The loam's Kostiakov law (Chapter~\ref{ch:surf}) has $k=0.001675$ m min$^{-A}$ and $A=0.694$, so $K=1.675$ mm min$^{-A}$. The applied rate is \[a_e=0.0983\,(1-0.0382)=0.0945\] mm min$^{-1}$ ($5.67$ mm h$^{-1}$ after drift). Then \[t_p=(0.0945/1.675)^{1/(0.694-1)}=0.0564^{-3.271}=12{,}118\ \text{min}\]
+A set is about 371 min long, so $T<t_p$ and the whole supply infiltrates: RO = 0. The loam takes this sprinkler with a wide margin. \finans
 
 
 \begin{table}[!htbp]\centering\small\caption{Default impact and rotating-spray layouts on the ten soils ($Z_n=30$ mm, 1\% slope, $u=3$ m s$^{-1}$, $S_d=4$ mm effective, LAI 2.5). Max is the allowed rate of Table~\ref{tab:maxrate}.}\label{tab:sprsoils}
@@ -177,7 +190,9 @@ With $Z_k$ the depth reaching the soil at cell $k$ and $\mathrm{gross}=\bar aT$ 
 \begin{equation}E_a=\frac{\overline{\min(Z_k,Z_n)}}{\mathrm{gross}},\ E_s=\frac{\overline{\min(Z_k,Z_n)}}{Z_n},\ \mathrm{DU}=\frac{Z_{25}}{\bar Z},\ \mathrm{DP}=\frac{\overline{\max(Z_k-Z_n,0)}}{\mathrm{gross}},\ \mathrm{RO}=\frac{\overline{\mathrm{RO}_k}}{\mathrm{gross}},\ \mathrm{WD}=w_d+\frac{\overline{I_c}}{\mathrm{gross}},\end{equation}
 where $Z_{25}$ is the mean of the lowest quarter of $Z_k$. The automatic run time is the smallest $T\in[1,2400]$ min with $Z_{25}(T)\ge Z_n$, found by 18 bisection steps.
 
-\exbox{The water partition of the default layout}{For the default layout on the loam ($Z_n=30$ mm) the layer finds $T=371$ min. Verify the efficiencies by hand from the summary of the cells.}\sol \givenline{$Z_n=30$ mm ; $T=371$ min}\ans Gross depth $=\bar aT=0.0983\times371=36.51$ mm ($\bar a=5.90$ mm h$^{-1}$). After drift ($w_d=3.8\%$) the supply is $35.12$ mm and the canopy retains $I_c=3.0$ mm, leaving a mean $\bar Z=32.12$ mm at the soil. The lowest-quarter mean is $Z_{25}=30.00$ mm, equal to $Z_n$ as required by Eq.~(13.12), so the run was solved correctly. Then $\mathrm{DU}=30.00/32.12=93.4\%$. Because every cell receives at least about $Z_n$, $E_s=99.8\%$ and $E_a=\overline{\min}/\mathrm{gross}=82.0\%$. DP $=6.0\%$, WD $=3.8+3.0/36.51=12.0\%$ and RO $=0$. Sum: $82.0+6.0+0+12.0=100.0\%$. \finans
+\exbox{The water partition of the default layout}{For the default layout on the loam ($Z_n=30$ mm) the layer finds $T=371$ min. Verify the efficiencies by hand from the summary of the cells.}\sol \givenline{$Z_n=30$ mm ; $T=371$ min}\ans Gross depth \[=\bar aT=0.0983\times371=36.51\] mm ($\bar a=5.90$ mm h$^{-1}$). After drift ($w_d=3.8\%$) the supply is $35.12$ mm and the canopy retains $I_c=3.0$ mm, leaving a mean $\bar Z=32.12$ mm at the soil. The lowest-quarter mean is $Z_{25}=30.00$ mm, equal to $Z_n$ as required by Eq.~(13.12), so the run was solved correctly. Then \[\mathrm{DU}=30.00/32.12=93.4\%\]
+Because every cell receives at least about $Z_n$, $E_s=99.8\%$ and \[E_a=\overline{\min}/\mathrm{gross}=82.0\%\]
+DP $=6.0\%$, WD $=3.8+3.0/36.51=12.0\%$ and RO $=0$. Sum: $82.0+6.0+0+12.0=100.0\%$. \finans
 
 
 \begin{table}[!htbp]\centering\small\caption{The four sprinklers on the loam at their default settings ($Z_n=30$ mm, 3 m s$^{-1}$).}\label{tab:fourtypes}
@@ -225,7 +240,10 @@ With $h_s=P/9.81$, $q_h=0.06q$ (m$^3$ h$^{-1}$), $W=3.6u$ (km h$^{-1}$) and wind
 
 The program picks the smallest $n$ ($1\ldots4$ laterals at once) with $N_d\le T_{\rm int}$ and $Q_{\rm in}\le3.6Q_s$ (m$^3$ h$^{-1}$, $Q_s$ in L s$^{-1}$).
 
-\exbox{How many laterals run at once}{Farm: $A_f=5$ ha, $Q_s=40$ L s$^{-1}$, $L_L=150$ m, $h_{\rm op}=16$ h d$^{-1}$, $ET_{\rm pk}=6.4$ mm d$^{-1}$, $Z_n=30$ mm; default impact layout, $u=3$ m s$^{-1}$. Find the layout and the number of laterals to run at once.}\sol \givenline{$A_f=5$ ha ; $Q_s=40$ L s$^{-1}$ ; $L_L=150$ m ; $h_{\rm op}=16$ h d$^{-1}$ ; $ET_{\rm pk}=6.4$ mm d$^{-1}$ ; $Z_n=30$ mm; default impact layout ; $u=3$ m s$^{-1}$}\ans $h_s=30.58$ m, $q_h=0.06\times21.23=1.274$ m$^3$ h$^{-1}$, $W=10.8$ km h$^{-1}$ so $k=0.9$. Spacing: $S_s=12\le0.9\times15.66=14.1$ (OK) and $S_l=18\le1.5\times15.66=23.5$ (OK). $L_y=10^4\times5/150=333.3$ m; $N=\lfloor150/12\rfloor=12$ sprinklers per lateral; $N_m=\lfloor333.3/18\rfloor=18$ lateral positions. $t_{\rm set}=36.51/5.90=6.19$ h, so $n_{\rm sets/day}=\lfloor16/6.19\rfloor=2$; $T_{\rm int}=\lfloor30/6.4\rfloor=4$ d. Table~\ref{tab:nlat} gives $N_d$ and $Q_{\rm in}$; the supply limit is $3.6\times40=144$ m$^3$ h$^{-1}$. The smallest $n$ meeting both is $n=3$. \finans
+\exbox{How many laterals run at once}{Farm: $A_f=5$ ha, $Q_s=40$ L s$^{-1}$, $L_L=150$ m, $h_{\rm op}=16$ h d$^{-1}$, $ET_{\rm pk}=6.4$ mm d$^{-1}$, $Z_n=30$ mm; default impact layout, $u=3$ m s$^{-1}$. Find the layout and the number of laterals to run at once.}\sol \givenline{$A_f=5$ ha ; $Q_s=40$ L s$^{-1}$ ; $L_L=150$ m ; $h_{\rm op}=16$ h d$^{-1}$ ; $ET_{\rm pk}=6.4$ mm d$^{-1}$ ; $Z_n=30$ mm; default impact layout ; $u=3$ m s$^{-1}$}\ans $h_s=30.58$ m, $q_h=0.06\times21.23=1.274$ m$^3$ h$^{-1}$, $W=10.8$ km h$^{-1}$ so $k=0.9$. Spacing: \[S_s=12\le0.9\times15.66=14.1\] (OK) and \[S_l=18\le1.5\times15.66=23.5\] (OK). $L_y=10^4\times5/150=333.3$ m; $N=\lfloor150/12\rfloor=12$ sprinklers per lateral; \[N_m=\lfloor333.3/18\rfloor=18\] lateral positions. \[t_{\rm set}=36.51/5.90=6.19\ \text{h}\]
+so \[n_{\rm sets/day}=\lfloor16/6.19\rfloor=2\]
+\[T_{\rm int}=\lfloor30/6.4\rfloor=4\ \text{d}\]
+Table~\ref{tab:nlat} gives $N_d$ and $Q_{\rm in}$; the supply limit is $3.6\times40=144$ m$^3$ h$^{-1}$. The smallest $n$ meeting both is $n=3$. \finans
 
 
 \begin{table}[!htbp]\centering\small\caption{Laterals running together for the farm of the worked example.}\label{tab:nlat}
@@ -257,7 +275,12 @@ The mainline has $Q_m=nQ_L$ and length $L_y-S_l/2$ and takes the smallest diamet
 84.9 & 0.00683 & 0.44 & 1.4\\
 100.0 & 0.00314 & 0.20 & 0.7\\\bottomrule\end{tabular}\end{table}
 
-\exbox{Lateral, mainline and pump}{Size the lateral, mainline and pump of the farm above.}\sol  $Q_L=1000\times12\times1.274=15{,}285$ L h$^{-1}$. The Christiansen factor is $F=1/2.75+1/(2\times12)=0.4053$. The allowed loss is $0.2h_s=0.2\times30.58=6.12$ m. Table~\ref{tab:latD} shows the first diameter with $h_f\le6.12$ m is $D=58.0$ mm ($h_f=2.68$ m, 8.8\% of $h_s$). Mainline: $Q_m=3\times15{,}285=45{,}856$ L h$^{-1}$; the first diameter not below 58.0 mm with $J<0.05$ is $D=84.9$ mm ($J=0.04667$ m m$^{-1}$). Head: $H_{\rm man}=12+0.04667\times120+0.04667\times324.3+30.58+0.75\times2.68=65.33$ m. Pump: $P_{\rm CV}=1000\times(45{,}856/3.6\times10^6)\times65.33/(75\times0.75)=14.79$ CV $=10.88$ kW. \finans
+\exbox{Lateral, mainline and pump}{Size the lateral, mainline and pump of the farm above.}\sol  \[Q_L=1000\times12\times1.274=15{,}285\ \text{L h$^{-1}$}\]
+The Christiansen factor is \[F=1/2.75+1/(2\times12)=0.4053\]
+The allowed loss is \[0.2h_s=0.2\times30.58=6.12\ \text{m}\]
+Table~\ref{tab:latD} shows the first diameter with $h_f\le6.12$ m is $D=58.0$ mm ($h_f=2.68$ m, 8.8\% of $h_s$). Mainline: \[Q_m=3\times15{,}285=45{,}856\ \text{L h$^{-1}$}\]
+the first diameter not below 58.0 mm with $J<0.05$ is $D=84.9$ mm ($J=0.04667$ m m$^{-1}$). Head: \[H_{\rm man}=12+0.04667\times120+0.04667\times324.3+30.58+0.75\times2.68=65.33\ \text{m}\]
+Pump: \[P_{\rm CV}=1000\times(45{,}856/3.6\times10^6)\times65.33/(75\times0.75)=14.79\] CV $=10.88$ kW. \finans
 
 
 \section{The design table and sensitivity}
@@ -294,7 +317,10 @@ Slope (via $S_d$) & 0.50 & 82.0 & 1.50 & 82.0 & 0.0\\\bottomrule\end{tabular}\en
 \begin{keybox}
 In Table~\ref{tab:sens} the soil intake and the slope change nothing, because on the loam no point ponds, so runoff is zero in every case; the drivers are the spacings, the nozzle and the pressure (which change uniformity and the run time) and the depth $Z_n$ (a larger depth dilutes the fixed canopy loss). On a soil that ponds, intake and slope become the dominant inputs.
 \end{keybox}
-\exbox{Sets and water for the season}{The season of the loam at trigger $-300$ cm needs $I_y=211.68$ mm of irrigation (Manuscript~4, Fig.~3 data: 6.123 Mg ha$^{-1}$). For the 5 ha farm above, find the number of irrigations, the sprinklers, the sets, the round time and the gross water.}\sol \givenline{$I_y=211.68$ mm}\ans $n_{\rm ev}=I_y/Z_n=211.68/30=7.06\approx7$ irrigations. Sprinklers: $n_{\rm sp}=\mathrm{round}(10^4\times5/(12\times18))=231$. Total flow $Q_{\rm tot}=231\times21.23/60=81.7$ L s$^{-1}$; with $Q_s=40$ L s$^{-1}$ the farm needs $n_{\rm set}=\lceil81.7/40\rceil=3$ sets. Round time $t_{\rm round}=3\times371/60=18.6$ h. Gross depth per irrigation $=36.5$ mm; gross per season $=7.06\times36.5=258$ mm, i.e.\ $10\times258=2{,}576$ m$^3$ ha$^{-1}$. The gross is larger than the net $I_y$ because only $E_a=82.0\%$ of the discharge reaches the root zone usefully. \finans
+\exbox{Sets and water for the season}{The season of the loam at trigger $-300$ cm needs $I_y=211.68$ mm of irrigation (Manuscript~4, Fig.~3 data: 6.123 Mg ha$^{-1}$). For the 5 ha farm above, find the number of irrigations, the sprinklers, the sets, the round time and the gross water.}\sol \givenline{$I_y=211.68$ mm}\ans \[n_{\rm ev}=I_y/Z_n=211.68/30=7.06\approx7\] irrigations. Sprinklers: \[n_{\rm sp}=\mathrm{round}(10^4\times5/(12\times18))=231\]
+Total flow \[Q_{\rm tot}=231\times21.23/60=81.7\ \text{L s$^{-1}$}\]
+with $Q_s=40$ L s$^{-1}$ the farm needs \[n_{\rm set}=\lceil81.7/40\rceil=3\] sets. Round time \[t_{\rm round}=3\times371/60=18.6\ \text{h}\]
+Gross depth per irrigation $=36.5$ mm; gross per season $=7.06\times36.5=258$ mm, i.e.\ $10\times258=2{,}576$ m$^3$ ha$^{-1}$. The gross is larger than the net $I_y$ because only $E_a=82.0\%$ of the discharge reaches the root zone usefully. \finans
 
 
 \section{Kinds of system}

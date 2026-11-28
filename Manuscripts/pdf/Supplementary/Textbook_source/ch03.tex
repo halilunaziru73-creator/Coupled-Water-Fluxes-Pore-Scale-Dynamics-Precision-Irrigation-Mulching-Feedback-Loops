@@ -73,11 +73,12 @@ Define the reach-scaled trigger $x=h_t/\hc$. Plotting irrigation against $x$ ins
 
 \label{fig:reachscale}
 
-\exbox{}{Compute $\hc$ for $\alpha=0.03$ cm$^{-1}$, $n=1.7$ with $\kappa=3.5\times10^{-10}$ and $\ell=0.5$.}\sol \givenline{$\alpha=0.03$ cm$^{-1}$ ; $n=1.7$ ; $\kappa=3.5\times10^{-10}$ ; $\ell=0.5$}\ans $m=0.4118$, $E=2(1.7)+0.5(0.7)=3.75$, $\ln(m^2/\kappa)=20.00$, so $(m^2/\kappa)^{1/E}=e^{5.333}=207$ and $\hc=207/0.03\approx6{,}900$ cm. \finans
+\exbox{}{Compute $\hc$ for $\alpha=0.03$ cm$^{-1}$, $n=1.7$ with $\kappa=3.5\times10^{-10}$ and $\ell=0.5$.}\sol \givenline{$\alpha=0.03$ cm$^{-1}$ ; $n=1.7$ ; $\kappa=3.5\times10^{-10}$ ; $\ell=0.5$}\ans $m=0.4118$, $E=2(1.7)+0.5(0.7)=3.75$, $\ln(m^2/\kappa)=20.00$, so \[(m^2/\kappa)^{1/E}=e^{5.333}=207\] and $\hc=207/0.03\approx6{,}900$ cm. \finans
 
 \exbox{}{Derive Equation~(\ref{eq:asym}) from Equation~(\ref{eq:vgm}), step by step, stating each approximation.}\sol  See the derivation in Section 6.2. \finans
 
-\exbox{}{Derive Equation~(\ref{eq:sens}). Evaluate it at $n=1.5$ with $\kappa=3.5\times10^{-10}$ and $\ell=0.5$ and say whether the reach rises or falls with $n$.}\sol \givenline{$n=1.5$ ; $\kappa=3.5\times10^{-10}$ ; $\ell=0.5$}\ans At $n=1.5$: $m=0.3333$, $E=3.25$, $\ln(m^2/\kappa)=19.57$; first term $2/(0.3333\cdot2.25\cdot3.25)=0.820$; second $2.5\cdot19.57/10.56=4.633$; derivative $-3.81$: the reach falls steeply with $n$. \finans
+\exbox{}{Derive Equation~(\ref{eq:sens}). Evaluate it at $n=1.5$ with $\kappa=3.5\times10^{-10}$ and $\ell=0.5$ and say whether the reach rises or falls with $n$.}\sol \givenline{$n=1.5$ ; $\kappa=3.5\times10^{-10}$ ; $\ell=0.5$}\ans At $n=1.5$: $m=0.3333$, $E=3.25$, $\ln(m^2/\kappa)=19.57$; first term \[2/(0.3333\cdot2.25\cdot3.25)=0.820\]
+second $2.5\cdot19.57/10.56=4.633$; derivative $-3.81$: the reach falls steeply with $n$. \finans
 
 \exbox{}{For the soil of the worked example, by what factor does the reach change if $\kappa$ is $3.5\times10^{-9}$ instead of $3.5\times10^{-10}$?}\sol  A factor of $10^{1/E}=10^{1/4.5}=1.67$ shorter for $\kappa$ ten times larger ($1{,}856\to1{,}113$ cm). \finans
 
@@ -138,7 +139,8 @@ The drained share rises with the dose $d$ applied per event and levels off. A si
 For each soil and each run of E10 (dose 1 to 30 mm applied in 12 h, ten irrigation windows), the annual drainage at 1 m is read from the Daisy log and subtracted from the drainage of the rainfed twin in E0. Pooling gives $\eta_D$ per soil and dose. Equation~(\ref{eq:dose}) is then fitted per soil by nonlinear least squares for $\eta_\infty$ and $d_D$. Methods come from E4 (surface, overhead, subsurface on each soil) and from E15 (method crossed with rate, dose and rooting depth in coarse loam). All shares sum to one by construction, so the fifth is obtained as a check, not fitted.
 \end{daisybox}
 
-\exbox{}{A run has $I=150$ mm and differences from its twin of $T$: $+45$, $E_s$: $+40$, $E_o$: $+30$, $D$: $+30$. Find $\eta_S$ and all five shares.}\sol \givenline{$I=150$ mm}\ans $\eta_S=150-(45+40+30+30)=5$ mm, so shares $0.30,\ 0.267,\ 0.20,\ 0.20,\ 0.033$. \finans
+\exbox{}{A run has $I=150$ mm and differences from its twin of $T$: $+45$, $E_s$: $+40$, $E_o$: $+30$, $D$: $+30$. Find $\eta_S$ and all five shares.}\sol \givenline{$I=150$ mm}\ans \[\eta_S=150-(45+40+30+30)=5\ \text{mm}\]
+so shares $0.30,\ 0.267,\ 0.20,\ 0.20,\ 0.033$. \finans
 
 \exbox{}{Show that a negative $\eta_T$ is possible when the added water is intercepted and evaporated.}\sol  If the added water is intercepted and evaporates, canopy evaporation of the irrigation can exceed what the crop would otherwise take up, so the change of $T$ can be below zero. \finans
 
@@ -201,7 +203,9 @@ Leave-one-soil-out prediction compares four soil predictors (total available wat
 
 \exbox{}{Four cells have $\bar R=(5,15,25,35)$ and $E_s=(20,22,24,26)$ in one rain level. Compute $\phi_{E_s}$.}\sol \givenline{$\bar R=(5,15,25,35)$ ; $E_s=(20,22,24,26)$}\ans Deviations $(-15,-5,5,15)$ and $(-3,-1,1,3)$: numerator $45+5+5+45=100$, denominator $500$, $\phi_{E_s}=0.20$. \finans
 
-\exbox{}{Derive Equation~(\ref{eq:comp}) from the two first-order sinks, showing the integral.}\sol  $dS/dt=-(k_D+k_W)S\Rightarrow S=S_0e^{-(k_D+k_W)t}$; $\int_0^\infty k_DS\,dt=k_DS_0/(k_D+k_W)$; with $k_D\propto\Ks$ and $k_W\propto q^*$ the factor $L$ cancels. \finans
+\exbox{}{Derive Equation~(\ref{eq:comp}) from the two first-order sinks, showing the integral.}\sol  \[dS/dt=-(k_D+k_W)S\Rightarrow S=S_0e^{-(k_D+k_W)t}\]
+\[\int_0^\infty k_DS\,dt=k_DS_0/(k_D+k_W)\]
+with $k_D\propto\Ks$ and $k_W\propto q^*$ the factor $L$ cancels. \finans
 
 \exbox{}{If $q^*=1.5$ cm\,d$^{-1}$ (a hypothetical value) find $\phi_D$ for $\Ks=0.5$, $5$ and $50$ cm\,d$^{-1}$.}\sol \givenline{$q^*=1.5$ cm\,d$^{-1}$ ; $\Ks=0.5$}\ans $\phi_D=0.25,\ 0.77,\ 0.97$ for $\Ks=0.5,\ 5,\ 50$ (with $q^*=1.5$). \finans
 
@@ -215,7 +219,7 @@ A simulated tensiometer records the suction $h$ at the sensor depth every day. F
 \par\noindent where $N_y(h_T)$ is the number of days of year $y$ on which the suction $h_d$ exceeds the trigger $h_T$ (cm), $\bar N_{\rm irr}$ and $\bar N_{\rm rainfed}$ the means over the 20 years for the irrigated and the rainfed runs, and $X$ the percentage reduction of the days beyond the trigger. \finans
 
 
-\exbox{Days beyond the trigger}{The layer prints: ``Irrigated: 85 of 183 days beyond 300 cm. Rainfed: 168 of 183 days beyond. Irrigation removes 39 \%.'' The 39 per cent is a 20-year mean while 85 and 168 are for the year drawn. (a) Verify the arithmetic for the year drawn. (b) If the rainfed 20-year mean is $\bar N_{\rm rainfed}=168$, what is the irrigated mean?}\sol \givenline{$\bar N_{\rm rainfed}=168$}\ans (a) For the year drawn, $X=100(1-85/168)=49.4$ per cent, which differs from the printed 39 per cent because $X$ uses the 20-year means, not one year. (b) $39=100(1-\bar N_{\rm irr}/168)$ gives $\bar N_{\rm irr}=168\times0.61=102.5$ days. So in an average year the irrigated sensor is beyond the trigger on 102 of 183 days against 168 rainfed. The year drawn is wetter than average for the irrigated trace by $102.5-85=17.5$ days. \finans
+\exbox{Days beyond the trigger}{The layer prints: ``Irrigated: 85 of 183 days beyond 300 cm. Rainfed: 168 of 183 days beyond. Irrigation removes 39 \%.'' The 39 per cent is a 20-year mean while 85 and 168 are for the year drawn. (a) Verify the arithmetic for the year drawn. (b) If the rainfed 20-year mean is $\bar N_{\rm rainfed}=168$, what is the irrigated mean?}\sol \givenline{$\bar N_{\rm rainfed}=168$}\ans {\bfseries\itshape\color{khmag}(a)}\ For the year drawn, $X=100(1-85/168)=49.4$ per cent, which differs from the printed 39 per cent because $X$ uses the 20-year means, not one year. (b) $39=100(1-\bar N_{\rm irr}/168)$ gives \[\bar N_{\rm irr}=168\times0.61=102.5\] days. So in an average year the irrigated sensor is beyond the trigger on 102 of 183 days against 168 rainfed. The year drawn is wetter than average for the irrigated trace by $102.5-85=17.5$ days. \finans
 
 \subhd{Reading.} A trigger of $-300$ cm does not mean ``never beyond 300 cm'': irrigation starts \emph{after} the sensor crosses the trigger, the dose is applied once per event, and the suction rises again between events.
 
@@ -224,7 +228,8 @@ A simulated tensiometer records the suction $h$ at the sensor depth every day. F
 \begin{equation}\boxed{h^{\rm x}_d=h_{\rm soil}\Bigl(f_{\rm ref}(h^{\rm rec}_d)+\frac17\sum_{q=-3}^{3}\bigl[f^{\rm set}_{d+q}-f^{\rm std}_{d+q}\bigr]\Bigr).}\end{equation}
 \par\noindent where $h^{\rm x}_d$ is the suction predicted for day $d$ (cm), $h_{\rm soil}$ the scale of the soil (cm), $f_{\rm ref}$ the reference depletion curve evaluated at the recorded suction $h^{\rm rec}_d$, and $f^{\rm set}$, $f^{\rm std}$ the depletion fractions of the chosen set and of the standard set, averaged over the seven days $d-3,\ldots,d+3$.
 
-Suppose on day $d$ the stored record has $h^{\rm rec}=100$ cm in the reference soil (Coarse loam, depletion $f_{\rm ref}=f(100)$ in that soil) and the target soil is the loam S06. The seven-day differences $f^{\rm set}-f^{\rm std}$ of the sensor layer (the daily model run at your settings minus at standard settings) are $0.02,0.03,0.05,0.06,0.04,0.03,0.02$. Compute the moved suction. (Assume that the stored record is at $f_{\rm ref}=0.30$.)}\sol \givenline{$h^{\rm rec}=100$ cm ; $f_{\rm ref}=f(100)$ ; $f_{\rm ref}=0.30$}\ans The mean difference is $(0.02+0.03+0.05+0.06+0.04+0.03+0.02)/7=0.25/7=0.0357$. The new depletion is $0.30+0.0357=0.3357$. Convert it to a suction in the loam by inverting Equation~(\ref{eq:fdep}) by bisection: $h^{\rm x}=208$ cm. The same depletion $0.30$ would be $h=190$ cm in the loam. The settings therefore raise the suction at the sensor from 190 to 208 cm, an increase of 9 per cent for a depletion change of 0.036. Because suction is steep in depletion, a small change in depletion is a large change in suction. \finans
+Suppose on day $d$ the stored record has $h^{\rm rec}=100$ cm in the reference soil (Coarse loam, depletion $f_{\rm ref}=f(100)$ in that soil) and the target soil is the loam S06. The seven-day differences $f^{\rm set}-f^{\rm std}$ of the sensor layer (the daily model run at your settings minus at standard settings) are $0.02,0.03,0.05,0.06,0.04,0.03,0.02$. Compute the moved suction. (Assume that the stored record is at $f_{\rm ref}=0.30$.)}\sol \givenline{$h^{\rm rec}=100$ cm ; $f_{\rm ref}=f(100)$ ; $f_{\rm ref}=0.30$}\ans The mean difference is \[(0.02+0.03+0.05+0.06+0.04+0.03+0.02)/7=0.25/7=0.0357\]
+The new depletion is $0.30+0.0357=0.3357$. Convert it to a suction in the loam by inverting Equation~(\ref{eq:fdep}) by bisection: $h^{\rm x}=208$ cm. The same depletion $0.30$ would be $h=190$ cm in the loam. The settings therefore raise the suction at the sensor from 190 to 208 cm, an increase of 9 per cent for a depletion change of 0.036. Because suction is steep in depletion, a small change in depletion is a large change in suction. \finans
 
 
 \begin{kfig}{Relative yield against trigger depletion: yield stays near its maximum for small depletions and then falls; the largest trigger with $Y_{rel}\ge0.95$ is read from the dashed lines.}
@@ -275,7 +280,9 @@ Loam: the largest trigger with $Y_{\rm rel}\ge0.95$ is 200 cm, $f=0.32$. Sand: t
 \begin{equation}\boxed{r_s=\frac{ET_c}{\mathrm{TAW}_s},\quad\mathrm{TAW}_s=\mathrm{AWC}_sz_r,\quad t_{{\rm trig},s}=\frac{f_{{\rm trig},s}}{r_s}.}\end{equation}
 \par\noindent where $r_s$ is the depletion rate of soil $s$ (fraction of TAW per day), $ET_c$ the crop evapotranspiration (mm\,d$^{-1}$), ${\rm TAW}_s$ the total available water of the soil (mm), ${\rm AWC}_s$ its available water capacity (mm\,cm$^{-1}$), $z_r$ the rooting depth (cm), $f_{{\rm trig},s}$ the depletion fraction at which the trigger fires and $t_{{\rm trig},s}$ the time to the trigger (d).
 
-Take $ET_c=3.5$ mm d$^{-1}$ (assumed peak-season value), $z_r=90$ cm and $f_{\rm trig}=0.45$. Compute $r_s$ in per cent per day and the days to the trigger for the ten soils.}\sol \givenline{$ET_c=3.5$ mm d$^{-1}$ ; $z_r=90$ cm ; $f_{\rm trig}=0.45$}\ans For the sand, $\mathrm{TAW}=0.6\times90=54$ mm, $r=3.5/54=0.0648$, that is $6.5$ per cent per day, and $t=0.45/0.0648=6.9$ days. For the coarse loam, $\mathrm{TAW}=1.5\times90=135$ mm, $r=2.6$ per cent per day and $t=17.4$ days. These agree with the application text (about 7 days for sand and 18 days for coarse loam). Table~\ref{tab:dry} gives all ten soils.\begin{table}[!htbp]\centering\small\caption{Speed of depletion and days from field capacity to the trigger $f=0.45$ (assumed $ET_c=3.5$ mm d$^{-1}$, $z_r=90$ cm).}\label{tab:dry}
+Take $ET_c=3.5$ mm d$^{-1}$ (assumed peak-season value), $z_r=90$ cm and $f_{\rm trig}=0.45$. Compute $r_s$ in per cent per day and the days to the trigger for the ten soils.}\sol \givenline{$ET_c=3.5$ mm d$^{-1}$ ; $z_r=90$ cm ; $f_{\rm trig}=0.45$}\ans For the sand, \[\mathrm{TAW}=0.6\times90=54\ \text{mm}\]
+$r=3.5/54=0.0648$, that is $6.5$ per cent per day, and $t=0.45/0.0648=6.9$ days. For the coarse loam, \[\mathrm{TAW}=1.5\times90=135\ \text{mm}\]
+$r=2.6$ per cent per day and $t=17.4$ days. These agree with the application text (about 7 days for sand and 18 days for coarse loam). Table~\ref{tab:dry} gives all ten soils.\begin{table}[!htbp]\centering\small\caption{Speed of depletion and days from field capacity to the trigger $f=0.45$ (assumed $ET_c=3.5$ mm d$^{-1}$, $z_r=90$ cm).}\label{tab:dry}
 \begin{tabular}{lrrrrr}\toprule
 \hd{ID} & \hd{Soil} & \hd{AWC} & \hd{TAW (mm)} & \hd{$100r_s$ (\%/d)} & \hd{Days to trigger}\\\midrule
 S01 & Coarse loam & 1.5 & 135 & 2.6 & 17.4\\

@@ -2,10 +2,10 @@
 \exbox{Registration by SVD and voxel volume}{A box 2 $\times$ 3 $\times$ 4 cm is scanned in a second pose. Recover the rigid motion by the SVD method, check the residual, and find the volume by voxel counting.}\sol
 \ans Eight corner points $P_i$ of a box 2 $\times$ 3 $\times$ 4 cm are scanned in a second pose $Q_i=RP_i+t$ with $R$ a rotation of 25$^\circ$ about $z$ and $t=(1.5,-0.7,0.4)$
 \ans Centroids: $\bar P=(1.00, 1.50, 2.00)$, $\bar Q=(1.772, 1.082, 2.400)$
-\ans Cross-covariance $H=\sum(P_i-\bar P)(Q_i-\bar Q)^{T}$ has singular values $32.00, 18.00, 8.00$
-\ans Rotation from the SVD $H=U\Sigma V^T$: $R=VU^T$ gives an angle $\arctan(R_{21}/R_{11})=25.000^\circ$ (true $25^\circ$) and $\det R=1.000$
-\ans Translation $t=\bar Q-R\bar P=(1.500, -0.700, 0.400)$
-\ans Residual of the registration $\sqrt{\frac{1}{N}\sum|RP_i+t-Q_i|^2}=3.2e-16$ cm
+\ans Cross-covariance \[H=\sum(P_i-\bar P)(Q_i-\bar Q)^{T}\] has singular values $32.00, 18.00, 8.00$
+\ans Rotation from the SVD $H=U\Sigma V^T$: $R=VU^T$ gives an angle \[\arctan(R_{21}/R_{11})=25.000^\circ\] (true $25^\circ$) and $\det R=1.000$
+\ans Translation \[t=\bar Q-R\bar P=(1.500, -0.700, 0.400)\]
+\ans Residual of the registration \[\sqrt{\frac{1}{N}\sum|RP_i+t-Q_i|^2}=3.2\times10^{-16}\ \text{cm}\]
 \ans Voxel volume: with voxels of 0.5 cm, the box contains $4\times6\times8=192$ voxels of 0.125 cm$^3$, giving $192\times0.125=24$ cm$^3$ (true 24 cm$^3$) \finans
 
 

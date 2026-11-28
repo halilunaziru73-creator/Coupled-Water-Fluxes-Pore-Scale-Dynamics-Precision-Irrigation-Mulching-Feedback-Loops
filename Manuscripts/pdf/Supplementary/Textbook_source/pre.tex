@@ -35,7 +35,7 @@
 \newcommand{\subhd}[1]{\par\vspace{3pt}\noindent{\bfseries\itshape\color{khblue}#1}\ }
 \newcommand{\kw}[1]{{\bfseries\itshape\color{khmag}#1}}
 \newcommand{\hd}[1]{{\bfseries\itshape\color{khmag}#1}}
-\newcommand{\sol}{\par\nobreak\vspace{2pt}\nobreak\noindent{\bfseries\color{khblue}Solution.}\ }
+\newcommand{\sol}{\par\nobreak\vspace{2pt}\nobreak\noindent\hspace*{1.5em}{\bfseries\color{khmag}Solution.}\ }
 \newcommand{\ans}{\par\indent\ignorespaces}
 \newcommand{\finans}{\ {\bfseries\color{khmag}Ans.}}
 \newcommand{\givenline}[1]{Given\,: #1}
@@ -106,13 +106,24 @@
 % ---------------------------------------------------------------- worked examples: statement in a peach panel, then the solution
 \newcounter{ex}[chapter]\renewcommand{\theex}{\thechapter.\arabic{ex}}
 \newcommand{\exbox}[2]{\par\Needspace{9\baselineskip}\vspace{7pt}\refstepcounter{ex}\noindent\begin{tcolorbox}[enhanced jigsaw,colback=khex,colframe=khex,boxrule=0pt,arc=0pt,left=5pt,right=5pt,top=3pt,bottom=3pt,breakable,before skip=0pt,after skip=3pt]%
-  {\bfseries\itshape\color{khmag}Example \theex.}\ \ifx\relax#1\relax\else{\bfseries\itshape\color{khblue}#1.}\ \fi\itshape #2\end{tcolorbox}\par\nobreak\noindent\ignorespaces}
+  {\bfseries\color{khmag}Example \theex.}\ \itshape #2\end{tcolorbox}\par\nobreak\noindent\ignorespaces}
 \newtcolorbox{daisybox}[1]{enhanced jigsaw,colback=khfeat,colframe=khsalmon,boxrule=0.5pt,arc=0pt,left=5pt,right=5pt,top=8pt,bottom=4pt,breakable,before skip=10pt,after skip=8pt,
   title={\sfb\fontsize{9.5}{11}\selectfont From the Daisy outputs --- #1},coltitle=khblue,colbacktitle=khfeat,fonttitle=\bfseries,attach boxed title to top left={yshift=-3mm,xshift=3mm},boxed title style={colback=white,colframe=white,boxrule=0pt,arc=0pt,left=2pt,right=2pt,top=0pt,bottom=0pt}}
 \newtcolorbox{keybox}{enhanced jigsaw,colback=khpeach,colframe=khsalmon,boxrule=0.5pt,arc=0pt,left=5pt,right=5pt,top=8pt,bottom=4pt,breakable,before skip=10pt,after skip=8pt,
   title={\sfb\fontsize{9.5}{11}\selectfont Key result},coltitle=khmag,colbacktitle=khpeach,attach boxed title to top left={yshift=-3mm,xshift=3mm},boxed title style={colback=white,colframe=white,boxrule=0pt,arc=0pt,left=2pt,right=2pt,top=0pt,bottom=0pt}}
 \newcounter{exr}[chapter]\renewcommand{\theexr}{\thechapter.\arabic{exr}}
 \newenvironment{exercise}{\par\refstepcounter{exr}\noindent\textbf{\color{khmag}Exercise \theexr.}\ }{\par}
+
+% ---------------------------------------------------------------- the working of a solution, in the manner of the classic textbooks
+\newcommand{\sh}[1]{\par\vspace{2pt}\noindent{\bfseries\itshape\color{khmag}#1}\par\nobreak}          % magenta sub-heading of a part
+\newcommand{\wkt}{\par\indent We know that}                                                          % "We know that ..."
+\newcommand{\rfi}[1]{{\bfseries\itshape\color{khmag}(#1)}}                                         % reference to a local equation (i)
+\newcommand{\ti}[1]{\tag*{\color{khmag}\itshape\ldots\,(#1)}}                                      % local equation number ...(i)
+\newcommand{\tb}[1]{\tag*{\small\ldots\,(#1)}}                                                    % justification ...( since ...)
+\newcommand{\kb}[1]{\colorbox{khpeach}{$\displaystyle #1$}}                                         % a key line in a peach box
+\newcommand{\letdef}[2]{\par\noindent\hspace*{1.5em}\makebox[0.24\textwidth][l]{Let}\ $#1$\ =\ #2}  % Let  x = meaning
+\newcommand{\anddef}[2]{\par\noindent\hspace*{1.5em}\makebox[0.24\textwidth][l]{}\ $#1$\ =\ #2}
+\newcommand{\Ans}{\quad\text{\bfseries\color{khmag}Ans.}}
 % ---------------------------------------------------------------- figures: pale green L-mark at the left, magenta label
 \DeclareCaptionLabelFormat{kh}{Fig.~#2.}
 \DeclareCaptionLabelFormat{khtab}{Table~#2.}

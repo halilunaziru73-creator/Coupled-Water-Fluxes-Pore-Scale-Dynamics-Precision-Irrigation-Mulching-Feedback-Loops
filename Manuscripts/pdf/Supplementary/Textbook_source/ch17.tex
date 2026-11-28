@@ -44,7 +44,9 @@ where $t_{1/2}$ is the half-life of the pool (d).
 So in ten days a quarter of the residue carbon has become microbial biomass and a quarter has left the soil as carbon dioxide.
 
 \exbox{The effect of temperature on the half-life}{The same pool decays in a cold soil at $5$ $^\circ$C. Take $T_{ref}=20$ $^\circ$C and $Q_{10}=2$, and ignore the water factor. Find the temperature factor, the new rate and the half-life, and compare it with the warm soil.}\sol \givenline{$k=0.0700$ d$^{-1}$ ; $T=5$ $^\circ$C ; $T_{ref}=20$ $^\circ$C ; $Q_{10}=2$}
-\par\noindent From Equation~(\ref{eq:dm-q10}), $f_T=2^{(5-20)/10}=2^{-1.5}=0.354$. The rate is $kf_T=0.0700\times0.354=0.0248$ d$^{-1}$ \finans, and from Equation~(\ref{eq:dm-exp}),
+\par\noindent From Equation~(\ref{eq:dm-q10}), \[f_T=2^{(5-20)/10}=2^{-1.5}=0.354\]
+The rate is \[kf_T=0.0700\times0.354=0.0248\ \text{d$^{-1}$}\quad\text{\finans}\]
+and from Equation~(\ref{eq:dm-exp}),
 \[t_{1/2}=\frac{\ln2}{0.0248}=28\ \text{days}\quad\text{\finans}\]
 against $\ln2/0.0700=9.9$ days in the warm soil. A residue that is gone in a fortnight in summer lasts a month in a cold spring, so the nitrogen in it is released much later.
 
@@ -72,7 +74,8 @@ Ammonium is oxidised to nitrate by bacteria (the box \emph{Nitrification}). The 
 \exbox{Nitrification of an ammonium fertiliser}{A soil solution holds $[\mathrm{NH_4^+}]=2$ mg\,N\,L$^{-1}$. The constants are $V_{\max}=1.2$ mg\,N\,L$^{-1}$\,d$^{-1}$ and $K_m=3$ mg\,N\,L$^{-1}$ (illustrative values), with $f_T=0.8$ and $f_\theta=0.9$. Find the rate, and the rate after the concentration is raised to $20$ mg\,N\,L$^{-1}$ by a fertiliser.}\sol \givenline{$V_{\max}=1.2$ ; $K_m=3$ ; $f_T=0.8$ ; $f_\theta=0.9$ ; $[\mathrm{NH_4^+}]=2,\ 20$}
 \par\noindent At 2 mg\,N\,L$^{-1}$, from Equation~(\ref{eq:dm-nit}),
 \[r_{nit}=0.8\times0.9\times\frac{1.2\times2}{3+2}=0.72\times0.48=0.346\ \text{mg\,N\,L}^{-1}\,\text{d}^{-1}\quad\text{\finans}\]
-At 20 mg\,N\,L$^{-1}$: $r_{nit}=0.72\times\dfrac{1.2\times20}{3+20}=0.72\times1.043=0.751$ \finans. The concentration is ten times higher but the rate only $2.2$ times: the bacteria are close to saturation, so a large dose of ammonium is nitrified more slowly than a small one, and the ammonium stays in the soil for longer. Ammonium is also held on the clay (the box \emph{Ammonium sorption}), which holds it back from leaching until it is nitrified.
+At 20 mg\,N\,L$^{-1}$: \[r_{nit}=0.72\times\dfrac{1.2\times20}{3+20}=0.72\times1.043=0.751\quad\text{\finans}\]
+The concentration is ten times higher but the rate only $2.2$ times: the bacteria are close to saturation, so a large dose of ammonium is nitrified more slowly than a small one, and the ammonium stays in the soil for longer. Ammonium is also held on the clay (the box \emph{Ammonium sorption}), which holds it back from leaching until it is nitrified.
 
 \section{Nitrate leaching}
 Nitrate is not held by the soil. It moves with the water by convection and dispersion, and leaves the profile with the drainage (the box \emph{Leaching}). The loss of nitrogen over a period is the sum, over the days, of the concentration of nitrate in the drainage water times the drainage.
@@ -88,11 +91,14 @@ In wet soil that is rich in carbon, the microbes use nitrate instead of oxygen, 
 \par\noindent where $r_{act}$ and $r_{pot}$ are the actual and the potential rates of nitrate reduction (kg\,N\,ha$^{-1}$\,d$^{-1}$), $f_w$ the factor for the water-filled pore space (0 below 40 per cent and rising to 1 at 90 per cent), $K_d[\mathrm{NO_3^-}]$ the rate that the nitrate present can support, and $f_r=\mathrm{N_2/N_2O}$ the ratio of the two gases. The ratio falls when nitrate is plentiful and rises with the carbon dioxide and the wetness.
 
 \exbox{Denitrification after heavy rain}{After rain the soil has a water content $\theta=0.33$ and a porosity $\phi=0.47$. The potential rate is $r_{pot}=0.80$ kg\,N\,ha$^{-1}$\,d$^{-1}$ and the nitrate supports $0.90$ kg\,N\,ha$^{-1}$\,d$^{-1}$. The ratio of the gases is $f_r=9$. Find the water-filled pore space, the factor $f_w$, the actual rate and the two gases.}\sol \givenline{$\theta=0.33$ ; $\phi=0.47$ ; $r_{pot}=0.80$ ; $K_d[\mathrm{NO_3^-}]=0.90$ ; $f_r=9$}
-\par\noindent The water-filled pore space is $\mathrm{WFPS}=\theta/\phi=0.33/0.47=0.702$, or $70$ per cent \finans. The factor rises linearly from 0 at 0.40 to 1 at 0.90:
+\par\noindent The water-filled pore space is \[\mathrm{WFPS}=\theta/\phi=0.33/0.47=0.702\]
+or $70$ per cent \finans. The factor rises linearly from 0 at 0.40 to 1 at 0.90:
 \[f_w=\frac{0.702-0.40}{0.90-0.40}=0.604\quad\text{\finans}\]
-From Equation~(\ref{eq:dm-deni}), $f_wr_{pot}=0.604\times0.80=0.483$, which is less than $0.90$, so
+From Equation~(\ref{eq:dm-deni}), \[f_wr_{pot}=0.604\times0.80=0.483\]
+which is less than $0.90$, so
 \[r_{act}=0.48\ \text{kg\,N\,ha}^{-1}\,\text{d}^{-1}\quad\text{\finans}\]
-The gases are $\mathrm{N_2O}=0.483/(1+9)=0.048$ and $\mathrm{N_2}=0.483/(1+1/9)=0.435$ kg\,N\,ha$^{-1}$\,d$^{-1}$ \finans. A tenth of the nitrate that is lost goes into the air as the greenhouse gas. The water, not the nitrate, limits the rate in this example; in a drier soil ($\theta=0.25$, $\mathrm{WFPS}=0.53$) the factor would be only $0.26$.
+The gases are \[\mathrm{N_2O}=0.483/(1+9)=0.048\] and \[\mathrm{N_2}=0.483/(1+1/9)=0.435\ \text{kg\,N\,ha$^{-1}$\,d$^{-1}$}\quad\text{\finans}\]
+A tenth of the nitrate that is lost goes into the air as the greenhouse gas. The water, not the nitrate, limits the rate in this example; in a drier soil ($\theta=0.25$, $\mathrm{WFPS}=0.53$) the factor would be only $0.26$.
 
 \section{Fertilisation, deposition, fixation, volatilisation and uptake}
 The other boxes of the nitrogen cycle are inputs and outputs of the mineral pools. Fertiliser and manure add nitrate, ammonium and organic nitrogen (\emph{Fertilization + atmospheric deposition}); the air adds a smaller amount in the rain and as dry deposition. Legumes fix nitrogen from the air in their nodules (\emph{Symbiotic fixation}). Part of the ammonium of manure and fertiliser leaves the surface as ammonia gas (\emph{Volatilization}). The roots take up nitrate and ammonium with the water, at a rate set by the demand of the growing organs (\emph{Uptake} and \emph{Plant-N}) and the supply of the soil.
@@ -116,7 +122,8 @@ A chemical is held on the soil by a linear, a Freundlich or a Langmuir isotherm.
 \par\noindent where $R$ is the retardation factor ($\geq1$), $\rho_b$ the bulk density (kg\,L$^{-1}$), $K_d$ the distribution coefficient (L\,kg$^{-1}$) and $\theta$ the volumetric water content. The chemical moves at the pore-water velocity divided by $R$.
 
 \exbox{How fast does a pesticide move compared with nitrate?}{Water drains through a soil at a flux $q=2$ mm\,d$^{-1}$, with $\theta=0.30$ and $\rho_b=1.4$ kg\,L$^{-1}$. A pesticide has $K_{OC}=100$ L\,kg$^{-1}$ and the soil has $f_{OC}=0.02$. Find the retardation factor and the time that nitrate and the pesticide need to travel 1 m.}\sol \givenline{$q=2$ mm\,d$^{-1}$ ; $\theta=0.30$ ; $\rho_b=1.4$ ; $K_{OC}=100$ ; $f_{OC}=0.02$ ; $L=1000$ mm}
-\par\noindent The distribution coefficient is $K_d=K_{OC}f_{OC}=100\times0.02=2$ L\,kg$^{-1}$. From Equation~(\ref{eq:dm-ret}),
+\par\noindent The distribution coefficient is \[K_d=K_{OC}f_{OC}=100\times0.02=2\ \text{L\,kg$^{-1}$}\]
+From Equation~(\ref{eq:dm-ret}),
 \[R=1+\frac{1.4\times2}{0.30}=10.3\quad\text{\finans}\]
 The pore-water velocity is $v=q/\theta=2/0.30=6.67$ mm\,d$^{-1}$. Nitrate, with $R=1$, travels 1 m in $1000/6.67=150$ days \finans. The pesticide moves at $v/R=0.65$ mm\,d$^{-1}$ and needs $1000/0.65=1550$ days, more than four years \finans. Its half-life is much shorter than that, so it decays before it reaches the depth.
 
@@ -124,7 +131,8 @@ The pore-water velocity is $v=q/\theta=2/0.30=6.67$ mm\,d$^{-1}$. Nitrate, with 
 A chemical decays with a half-life that depends on the temperature and on the water. The law is the first-order form of Equation~(\ref{eq:dm-exp}), $c(t)=c_0e^{-\mu t}$, with $\mu=\ln2/t_{1/2}$.
 
 \exbox{How much of a pesticide is left?}{A pesticide has a half-life of $30$ days. What fraction is left after 90 days? After how many days is 5 per cent left?}\sol \givenline{$t_{1/2}=30$ d}
-\par\noindent The decay constant is $\mu=\ln2/30=0.0231$ d$^{-1}$. After $90$ days the fraction is $e^{-0.0231\times90}=e^{-2.079}=0.125$ \finans, that is $(1/2)^3$: three half-lives. For $5$ per cent, $e^{-0.0231\,t}=0.05$, so $t=\ln20/0.0231=130$ days \finans.
+\par\noindent The decay constant is $\mu=\ln2/30=0.0231$ d$^{-1}$. After $90$ days the fraction is \[e^{-0.0231\times90}=e^{-2.079}=0.125\quad\text{\finans}\]
+that is $(1/2)^3$: three half-lives. For $5$ per cent, $e^{-0.0231\,t}=0.05$, so $t=\ln20/0.0231=130$ days \finans.
 
 The remaining boxes of the group are variants of these laws: the \emph{reactions and equilibria} between chemicals, the \emph{solute uptake} by roots, the \emph{colloids and filtering} (colloids are released by the rain, carried by the water and held back by the soil as by a filter), and the \emph{PFAS} and other substances that have their own parameter sets.
 

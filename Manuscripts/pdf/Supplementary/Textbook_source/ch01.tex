@@ -42,11 +42,13 @@ $R$ & unattributed evaporative term & mm\,yr$^{-1}$\\\bottomrule
 \section{Three ways of knowing, and which this book uses}
 A \emph{measurement} tells you what happened in a field. A \emph{model} tells you what follows from stated equations. A \emph{simulation ensemble} varies a model over many soils and conditions, so that the response of the model to each factor can be separated from the others. This book is about the third: the Daisy model is run 10,190 times, and the equations of the book are either derived from physics and checked against the ensemble, or fitted to the ensemble and tested on soils left out of the fit. The limits of this approach are stated in the last chapter.
 
-\exbox{}{A root zone receives $P=480$ mm and $I=0$ in a rainfed year, with $T=210$, $E_s=170$, $E_o=60$, $Q=0$ and $D=55$. Find $\Delta S$.}\sol \givenline{$P=480$ mm ; $I=0$ ; $T=210$ ; $E_s=170$ ; $E_o=60$ ; $Q=0$ ; $D=55$}\ans $\Delta S=480-(210+170+60+0+55)=-15$ mm: the store lost 15 mm. \finans
+\exbox{}{A root zone receives $P=480$ mm and $I=0$ in a rainfed year, with $T=210$, $E_s=170$, $E_o=60$, $Q=0$ and $D=55$. Find $\Delta S$.}\sol \givenline{$P=480$ mm ; $I=0$ ; $T=210$ ; $E_s=170$ ; $E_o=60$ ; $Q=0$ ; $D=55$}\ans \[\Delta S=480-(210+170+60+0+55)=-15\ \text{mm}\]
+the store lost 15 mm. \finans
 
 \exbox{}{Explain in two sentences why lowering $E_s$ by 50 mm does not necessarily raise $T$ by 50 mm.}\sol  Lowering $E_s$ leaves energy and water that may go to drainage, to storage or to transpiration; how much of each depends on the soil (Chapter 8). \finans
 
-\exbox{}{Using Equation~(\ref{eq:bal}), write the balance of the rainfed twin of an irrigated run and subtract the two. Show that dividing by $I$ gives five shares that sum to one.}\sol  Subtracting the two balances gives $I=(T-T_0)+(E_s-E_{s,0})+(E_o-E_{o,0})+(D-D_0)+(\Delta S-\Delta S_0+Q-Q_0)$; divide by $I$.
+\exbox{}{Using Equation~(\ref{eq:bal}), write the balance of the rainfed twin of an irrigated run and subtract the two. Show that dividing by $I$ gives five shares that sum to one.}\sol  Subtracting the two balances gives \[I=(T-T_0)+(E_s-E_{s,0})+(E_o-E_{o,0})+(D-D_0)+(\Delta S-\Delta S_0+Q-Q_0)\]
+divide by $I$.
 \banner{Foundations in plain words}
 \section{The soil as three parts: solids, water and air}
 Before any equation of this book can be used, one must be able to picture what a soil sample is made of. Take a small undisturbed core of soil. It contains three parts. The \kw{solids} are the mineral grains and the organic matter. The \kw{water} fills part of the space between the grains. The \kw{air} fills the rest. The space between the grains, which holds the water and the air, is called the \kw{pore space}.
@@ -73,7 +75,8 @@ so that $\theta=0.28$ in a layer 300 mm thick means $0.28\times300=84$ mm of wat
 \[M_w=168-140=28\ \text{g}.\]
 We know that the gravimetric water content is the mass of water divided by the mass of dry soil, so
 \[w=\frac{M_w}{M_s}=\frac{28}{140}=0.20\ \text{g\,g}^{-1}.\]
-The dry bulk density is $\rho_b=M_s/V_t=140/100=1.40$ g\,cm$^{-3}$. From Equation~(\ref{eq:fd-theta}),
+The dry bulk density is \[\rho_b=M_s/V_t=140/100=1.40\ \text{g\,cm$^{-3}$}\]
+From Equation~(\ref{eq:fd-theta}),
 \[\theta=w\frac{\rho_b}{\rho_w}=0.20\times\frac{1.40}{1.00}=0.28\ \text{m}^3\,\text{m}^{-3}\quad\text{\finans}\]
 \par\noindent\textbf{(b) Porosity.}
 \[\phi=1-\frac{\rho_b}{\rho_s}=1-\frac{1.40}{2.65}=0.472\quad\text{\finans}\]
@@ -99,14 +102,17 @@ The depletion fraction runs from 0 (field capacity) to 1 (wilting point). Chapte
 \exbox{Available water and depletion of a loam}{The loam S06 has $\alpha=0.036$ cm$^{-1}$ and $n=1.56$. Take $\theta_r=0.08$ and $\theta_s=0.43$ m$^3$\,m$^{-3}$ (illustrative values for this example). (a) Find $\theta_{fc}$ and $\theta_{wp}$. (b) Find the total available water of a root zone 1.0 m deep. (c) A sensor reads a suction of 300 cm. Find the depletion fraction and the depth of water already used.}\sol \givenline{$\alpha=0.036$ cm$^{-1}$ ; $n=1.56$ ; $\theta_r=0.08$ ; $\theta_s=0.43$ ; $Z_r=1.0$ m ; $h=300$ cm}
 \par\noindent\textbf{(a) Water content at the two reference states.} The shape parameter is $m=1-1/n=1-1/1.56=0.359$. From the van Genuchten curve, Equation~(\ref{eq:vg}), at field capacity ($h=100$ cm):
 \[\alpha h=0.036\times100=3.6,\quad(\alpha h)^n=3.6^{1.56}=7.38,\quad \Se=(1+7.38)^{-0.359}=0.466 .\]
-Rearranging Equation~(\ref{eq:Se}), $\theta=\theta_r+(\theta_s-\theta_r)\Se$, so
+Rearranging Equation~(\ref{eq:Se}), \[\theta=\theta_r+(\theta_s-\theta_r)\Se\]
+so
 \[\theta_{fc}=0.08+(0.43-0.08)\times0.466=0.243 .\]
-At the wilting point ($h=15{,}849$ cm): $\alpha h=570.6$, $(\alpha h)^n=1.99\times10^{4}$, $\Se=(1+1.99\times10^4)^{-0.359}=0.0286$, so
+At the wilting point ($h=15{,}849$ cm): $\alpha h=570.6$, $(\alpha h)^n=1.99\times10^{4}$, \[\Se=(1+1.99\times10^4)^{-0.359}=0.0286\]
+so
 \[\theta_{wp}=0.08+0.35\times0.0286=0.090\quad\text{\finans}\]
 \par\noindent\textbf{(b) Total available water.} From Equation~(\ref{eq:fd-taw}),
 \[\mathrm{TAW}=1000\,(0.243-0.090)\times1.0=153\ \text{mm}\quad\text{\finans}\]
 This agrees with the 150 mm listed for the loam in Table~\ref{tab:soils}.
-\par\noindent\textbf{(c) Depletion at 300 cm.} At $h=300$ cm, $\alpha h=10.8$, $(\alpha h)^n=10.8^{1.56}=41.2$ and $\Se=(1+41.2)^{-0.359}=0.262$. Then
+\par\noindent\textbf{(c) Depletion at 300 cm.} At $h=300$ cm, $\alpha h=10.8$, \[(\alpha h)^n=10.8^{1.56}=41.2\] and \[\Se=(1+41.2)^{-0.359}=0.262\]
+Then
 \[\theta=0.08+0.35\times0.262=0.172 .\]
 From Equation~(\ref{eq:fd-f}),
 \[f=\frac{0.243-0.172}{0.243-0.090}=\frac{0.071}{0.153}=0.47\quad\text{\finans}\]
@@ -223,7 +229,7 @@ S01&Coarse loam&0.0961&1.353&130&0.029\\S02&Coarse sand&0.0536&1.600&105&0.265\\
 
 \exbox{}{Show that Equation~(\ref{eq:vginv}) is the inverse of Equation~(\ref{eq:vg}).}\sol  Put $\Se=[1+(\alpha h)^n]^{-m}$; then $\Se^{-1/m}=1+(\alpha h)^n$, so $h=\alpha^{-1}(\Se^{-1/m}-1)^{1/n}$. \finans
 
-\exbox{}{Compute the radius of the largest water-filled pore at $h=1000$ cm and at $h=15{,}000$ cm (the permanent wilting point is often taken at 15,000 cm).}\sol \givenline{$h=1000$ cm ; $h=15{,}000$ cm}\ans $r=0.1456\times10^{-3}/(998\cdot9.81\cdot h)$ with $h$ in metres: $1.49\ \mu$m at 1000 cm and $0.099\ \mu$m at 15,000 cm. \finans
+\exbox{}{Compute the radius of the largest water-filled pore at $h=1000$ cm and at $h=15{,}000$ cm (the permanent wilting point is often taken at 15,000 cm).}\sol \givenline{$h=1000$ cm ; $h=15{,}000$ cm}\ans \[r=0.1456\times10^{-3}/(998\cdot9.81\cdot h)\] with $h$ in metres: $1.49\ \mu$m at 1000 cm and $0.099\ \mu$m at 15,000 cm. \finans
 
 \exbox{}{Soil A has $n=2.5$ and soil B has $n=1.3$, with the same $\alpha$. Which one releases more water between 100 and 300 cm? Justify your answer with Equation~(\ref{eq:vg}).}\sol \givenline{$n=2.5$ ; $n=1.3$}\ans Soil B (the broad one) releases more. With $\alpha=0.05$: $\Se(100)=0.089$ and $\Se(300)=0.017$ for $n=2.5$ (change 0.072); $0.601$ and $0.441$ for $n=1.3$ (change 0.160). The broad-pore soil has a flatter curve, so it gives up more water over this band.
 \banner{Hydraulic conductivity}
@@ -277,9 +283,10 @@ with $\ell=0.5$, the value Mualem found as the average of many soils.
 Daisy solves the Richards equation with these functions, so the model's conductivity at each suction follows Equation~(\ref{eq:vgm}), with its own saturated conductivity $\Ks$ per soil. Eight of the ten soils have literature values of $\Ks$ (Carsel and Parrish, 1988); the reach law of Chapter~\ref{ch:reach} will use only $\Kr$, that is, it does not need $\Ks$.
 \end{daisybox}
 
-\exbox{}{Verify Equation~(\ref{eq:int2}) by differentiating the right-hand side with respect to $\Se$.}\sol  Differentiate: $\frac{d}{d\Se}\alpha[1-(1-\Se^{1/m})^m]=\alpha(1-y)^{m-1}\Se^{1/m-1}$ with $y=\Se^{1/m}$. The integrand is $1/h=\alpha(\Se^{-1/m}-1)^{-1/n}=\alpha\,y^{1/n}(1-y)^{-1/n}$. Since $-1/n=m-1$ and $\Se^{1/m-1}=\Se^{1/(n-1)}=y^{1/n}$ (because $mn=n-1$), the two agree. \finans
+\exbox{}{Verify Equation~(\ref{eq:int2}) by differentiating the right-hand side with respect to $\Se$.}\sol  Differentiate: \[\frac{d}{d\Se}\alpha[1-(1-\Se^{1/m})^m]=\alpha(1-y)^{m-1}\Se^{1/m-1}\] with $y=\Se^{1/m}$. The integrand is \[1/h=\alpha(\Se^{-1/m}-1)^{-1/n}=\alpha\,y^{1/n}(1-y)^{-1/n}\]
+Since $-1/n=m-1$ and \[\Se^{1/m-1}=\Se^{1/(n-1)}=y^{1/n}\] (because $mn=n-1$), the two agree. \finans
 
-\exbox{}{Compute $\Kr$ for the loam S06 at $h=300$ cm.}\sol \givenline{$h=300$ cm}\ans $\Kr(S06,300\text{ cm})=3.8\times10^{-5}$. \finans
+\exbox{}{Compute $\Kr$ for the loam S06 at $h=300$ cm.}\sol \givenline{$h=300$ cm}\ans \[\Kr(S06,300\text{ cm})=3.8\times10^{-5}\quad\text{\finans}\]
 
 \exbox{}{Show that $\Kr\to1$ as $\Se\to1$ and $\Kr\to0$ as $\Se\to0$.}\sol  At $\Se=1$ the bracket is $1-0=1$; at $\Se\to0$, $\Se^\ell\to0$ and the bracket $\to0$. \finans
 
