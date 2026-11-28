@@ -1,0 +1,39 @@
+panel,panel_title,x_label,y_label,kind,series,i,x,x_category,y,y_category,y_low,y_high,x_scale,y_scale
+1,,van Genuchten $n$,$\phi_D$ (E9),scatter,,0,1.353,,0.029124407,,,,linear,linear
+1,,van Genuchten $n$,$\phi_D$ (E9),scatter,,0,1.6,,0.26498534,,,,linear,linear
+1,,van Genuchten $n$,$\phi_D$ (E9),scatter,,0,2.68,,0.84550569,,,,linear,linear
+1,,van Genuchten $n$,$\phi_D$ (E9),scatter,,0,2.28,,0.74087127,,,,linear,linear
+1,,van Genuchten $n$,$\phi_D$ (E9),scatter,,0,1.89,,0.64302727,,,,linear,linear
+1,,van Genuchten $n$,$\phi_D$ (E9),scatter,,0,1.56,,0.28921732,,,,linear,linear
+1,,van Genuchten $n$,$\phi_D$ (E9),scatter,,0,1.41,,0.14728909,,,,linear,linear
+1,,van Genuchten $n$,$\phi_D$ (E9),scatter,,0,1.48,,0.2851579,,,,linear,linear
+1,,van Genuchten $n$,$\phi_D$ (E9),scatter,,0,1.31,,0.087024068,,,,linear,linear
+1,,van Genuchten $n$,$\phi_D$ (E9),scatter,,0,1.23,,0.02197365,,,,linear,linear
+2,,"$\log_{10}K_s$ (cm d$^{-1}$, 8 soils)",$\phi_D$ (E9),scatter,,0,2.8529677,,0.84550569,,,,linear,linear
+2,,"$\log_{10}K_s$ (cm d$^{-1}$, 8 soils)",$\phi_D$ (E9),scatter,,0,2.5443161,,0.74087127,,,,linear,linear
+2,,"$\log_{10}K_s$ (cm d$^{-1}$, 8 soils)",$\phi_D$ (E9),scatter,,0,2.0257154,,0.64302727,,,,linear,linear
+2,,"$\log_{10}K_s$ (cm d$^{-1}$, 8 soils)",$\phi_D$ (E9),scatter,,0,1.3972446,,0.28921732,,,,linear,linear
+2,,"$\log_{10}K_s$ (cm d$^{-1}$, 8 soils)",$\phi_D$ (E9),scatter,,0,0.79518459,,0.14728909,,,,linear,linear
+2,,"$\log_{10}K_s$ (cm d$^{-1}$, 8 soils)",$\phi_D$ (E9),scatter,,0,1.4974825,,0.2851579,,,,linear,linear
+2,,"$\log_{10}K_s$ (cm d$^{-1}$, 8 soils)",$\phi_D$ (E9),scatter,,0,0.79518459,,0.087024068,,,,linear,linear
+2,,"$\log_{10}K_s$ (cm d$^{-1}$, 8 soils)",$\phi_D$ (E9),scatter,,0,0.22530928,,0.02197365,,,,linear,linear
+3,,TAW$_{100}$ (mm),$\phi_D$ (E9),scatter,,0,130,,0.029124407,,,,linear,linear
+3,,TAW$_{100}$ (mm),$\phi_D$ (E9),scatter,,0,105,,0.26498534,,,,linear,linear
+3,,TAW$_{100}$ (mm),$\phi_D$ (E9),scatter,,0,60,,0.84550569,,,,linear,linear
+3,,TAW$_{100}$ (mm),$\phi_D$ (E9),scatter,,0,75,,0.74087127,,,,linear,linear
+3,,TAW$_{100}$ (mm),$\phi_D$ (E9),scatter,,0,95,,0.64302727,,,,linear,linear
+3,,TAW$_{100}$ (mm),$\phi_D$ (E9),scatter,,0,150,,0.28921732,,,,linear,linear
+3,,TAW$_{100}$ (mm),$\phi_D$ (E9),scatter,,0,220,,0.14728909,,,,linear,linear
+3,,TAW$_{100}$ (mm),$\phi_D$ (E9),scatter,,0,160,,0.2851579,,,,linear,linear
+3,,TAW$_{100}$ (mm),$\phi_D$ (E9),scatter,,0,175,,0.087024068,,,,linear,linear
+3,,TAW$_{100}$ (mm),$\phi_D$ (E9),scatter,,0,195,,0.02197365,,,,linear,linear
+4,,$S_e$ at 100 cm,$\phi_D$ (E9),scatter,,0,0.4445439,,0.029124407,,,,linear,linear
+4,,$S_e$ at 100 cm,$\phi_D$ (E9),scatter,,0,0.35626006,,0.26498534,,,,linear,linear
+4,,$S_e$ at 100 cm,$\phi_D$ (E9),scatter,,0,0.011186435,,0.84550569,,,,linear,linear
+4,,$S_e$ at 100 cm,$\phi_D$ (E9),scatter,,0,0.039777544,,0.74087127,,,,linear,linear
+4,,$S_e$ at 100 cm,$\phi_D$ (E9),scatter,,0,0.16470519,,0.64302727,,,,linear,linear
+4,,$S_e$ at 100 cm,$\phi_D$ (E9),scatter,,0,0.46628348,,0.28921732,,,,linear,linear
+4,,$S_e$ at 100 cm,$\phi_D$ (E9),scatter,,0,0.68586969,,0.14728909,,,,linear,linear
+4,,$S_e$ at 100 cm,$\phi_D$ (E9),scatter,,0,0.41702175,,0.2851579,,,,linear,linear
+4,,$S_e$ at 100 cm,$\phi_D$ (E9),scatter,,0,0.75288784,,0.087024068,,,,linear,linear
+4,,$S_e$ at 100 cm,$\phi_D$ (E9),scatter,,0,0.87843542,,0.02197365,,,,linear,linear

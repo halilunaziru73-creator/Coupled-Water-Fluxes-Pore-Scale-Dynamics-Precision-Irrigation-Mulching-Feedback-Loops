@@ -1,0 +1,6 @@
+,Ensemble and Engine 1,Compact experiment (workbench),Own live run
+Soil and weather,"ten soils, one weather record, the design of the study","as chosen in the workbench (library or own soil, bundled or own weather)",own soil table and weather
+Time,microseconds per scenario,about 0.2 to 4 hours per experiment,minutes per run
+Needs Daisy,no,yes (Windows),yes (Windows)
+Answers,"ranking of options, response curves, regime maps within the design",the shape of a response for the chosen conditions,"the budget of one set-up, for the layers of the suite"
+Main limit,fixed design; offset of absolute levels,coarse levels (workbench),"one run, one set-up"

@@ -1,0 +1,18 @@
+ID,Name,Valid runs,Factors varied (per soil unless noted)
+E0,Baselines,10,One baseline per soil
+E1,Doses,189,Irrigation dose
+E2,TriggerPressure,197,Trigger suction
+E3,SensorDepth,200,Sensor depth
+E4,Methods,96,"Surface, overhead, subsurface drip"
+E5,SHP_Dynamics,300,Time-varying soil hydraulic properties
+E6,Mediterranean_Pollution,193,Climate/N scenarios
+E7^*,Mulching,200,"Mulch vapour-flux factor (VFF) × mulch storage capacity (CAP), 20 cells"
+E8,Rain_Intensity_Moisture,1000,Rain intensity × initial moisture (S01)
+E9^*,Soil_Moisture_Rain,987,Initial suction h_0 (10 levels) × rain scale P (10 levels)
+E10,Amount_Timing_Soil,954,Irrigation amount and timing
+E11,Temp_Evap_Rain,1000,Temperature shift × evaporation factor × rain (S01)
+E12,Sensor_Trigger_Rain,1000,Depth × trigger × rain (S01)
+E13,N_Water_Soil,975,Nitrogen rate × water
+E14,Mulch_Rain,1000,Mulch cover × capacity × rain (S01)
+E15,Method_Depth_Amount,1000,Method × depth × amount (S01)
+E16^*,Edge_Cases,740,"2^6 factorial per soil (P, T, h, D, N, E_p) and 13 further edge cases per soil"

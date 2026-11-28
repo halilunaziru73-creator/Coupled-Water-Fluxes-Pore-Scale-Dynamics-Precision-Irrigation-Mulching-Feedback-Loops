@@ -1,0 +1,231 @@
+panel,panel_title,x_label,y_label,kind,series,i,x,x_category,y,y_category,y_low,y_high,x_scale,y_scale
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",0,0.63095734,,0.0087516515,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",1,0.65551542,,0.0090891867,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",2,0.68102935,,0.0094396159,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",3,0.70753633,,0.0098034222,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",4,0.73507501,,0.010181105,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",5,0.76368555,,0.010573184,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",6,0.79340967,,0.010980194,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",7,0.8242907,,0.011402691,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",8,0.85637369,,0.011841251,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",9,0.88970541,,0.012296468,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",10,0.92433446,,0.012768959,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",11,0.96031135,,0.013259362,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",12,0.99768852,,0.013768336,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",13,1.0365205,,0.014296565,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",14,1.0768639,,0.014844754,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",15,1.1187775,,0.015413635,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",16,1.1623225,,0.016003962,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",17,1.2075623,,0.016616517,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",18,1.254563,,0.017252106,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",19,1.303393,,0.017911564,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",20,1.3541236,,0.018595753,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",21,1.4068287,,0.019305562,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",22,1.4615851,,0.020041913,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",23,1.5184729,,0.020805753,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",24,1.5775748,,0.021598062,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",25,1.638977,,0.022419854,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",26,1.7027692,,0.02327217,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",27,1.7690442,,0.024156087,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",28,1.8378989,,0.025072715,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",29,1.9094334,,0.026023199,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",30,1.9837523,,0.027008715,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",31,2.0609637,,0.02803048,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",32,2.1411804,,0.029089744,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",33,2.2245193,,0.030187793,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",34,2.3111019,,0.031325954,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",35,2.4010545,,0.032505587,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",36,2.4945081,,0.033728095,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",37,2.5915992,,0.034994918,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",38,2.6924693,,0.036307534,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",39,2.7972654,,0.037667464,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",40,2.9061403,,0.039076265,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",41,3.0192529,,0.040535537,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",42,3.1367681,,0.04204692,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",43,3.2588572,,0.043612094,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",44,3.3856982,,0.04523278,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",45,3.5174761,,0.046910739,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",46,3.6543831,,0.048647771,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",47,3.7966187,,0.050445719,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",48,3.9443905,,0.052306464,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",49,4.0979138,,0.054231923,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",50,4.2574125,,0.056224056,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",51,4.4231192,,0.058284857,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",52,4.5952755,,0.060416358,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",53,4.7741325,,0.062620626,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",54,4.959951,,0.064899761,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",55,5.1530019,,0.067255895,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",56,5.3535667,,0.069691191,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",57,5.5619378,,0.072207842,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",58,5.7784192,,0.074808065,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",59,6.0033264,,0.077494102,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",60,6.2369875,,0.080268216,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",61,6.4797431,,0.083132687,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",62,6.7319472,,0.086089812,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",63,6.9939676,,0.089141899,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",64,7.2661864,,0.092291263,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",65,7.5490004,,0.095540222,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",66,7.8428221,,0.098891094,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",67,8.1480799,,0.10234619,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",68,8.4652189,,0.10590782,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",69,8.7947015,,0.10957826,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",70,9.1370083,,0.11335978,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",71,9.4926383,,0.11725461,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",72,9.8621102,,0.12126496,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",73,10.245963,,0.12539299,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",74,10.644755,,0.12964081,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",75,11.05907,,0.13401048,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",76,11.48951,,0.138504,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",77,11.936704,,0.14312329,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",78,12.401304,,0.14787019,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",79,12.883986,,0.15274647,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",80,13.385456,,0.15775378,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",81,13.906444,,0.16289368,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",82,14.447709,,0.16816761,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",83,15.010042,,0.17357689,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",84,15.594262,,0.17912269,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",85,16.201221,,0.18480606,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",86,16.831804,,0.19062789,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",87,17.48693,,0.19658888,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",88,18.167555,,0.20268959,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",89,18.874671,,0.2089304,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",90,19.60931,,0.21531147,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",91,20.372542,,0.22183277,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",92,21.165481,,0.22849408,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",93,21.989282,,0.23529493,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",94,22.845148,,0.24223464,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",95,23.734325,,0.24931231,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",96,24.658111,,0.25652676,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",97,25.617852,,0.2638766,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",98,26.614948,,0.27136016,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",99,27.650854,,0.27897552,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",100,28.727078,,0.2867205,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",101,29.845192,,0.29459264,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",102,31.006824,,0.30258923,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",103,32.21367,,0.31070728,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",104,33.467488,,0.31894352,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",105,34.770107,,0.32729442,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",106,36.123427,,0.33575618,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",107,37.529421,,0.34432472,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",108,38.990138,,0.35299573,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",109,40.50771,,0.36176463,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",110,42.084348,,0.37062657,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",111,43.722352,,0.37957649,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",112,45.424111,,0.38860909,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",113,47.192105,,0.39771884,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",114,49.028913,,0.40690002,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",115,50.937213,,0.4161467,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",116,52.919787,,0.42545278,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",117,54.979528,,0.43481198,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",118,57.119437,,0.44421788,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",119,59.342636,,0.45366393,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",120,61.652366,,0.46314346,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",121,64.051995,,0.47264971,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",122,66.545023,,0.48217583,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",123,69.135084,,0.49171492,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",124,71.825955,,0.50126006,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",125,74.62156,,0.51080427,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",126,77.525975,,0.52034061,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",127,80.543436,,0.52986216,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",128,83.678342,,0.53936201,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",129,86.935265,,0.54883336,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",130,90.318953,,0.55826945,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",131,93.834341,,0.56766366,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",132,97.486555,,0.57700945,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",133,101.28092,,0.58630045,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",134,105.22297,,0.59553042,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",135,109.31845,,0.60469331,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",136,113.57334,,0.61378325,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",137,117.99383,,0.62279455,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",138,122.58638,,0.63172175,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",139,127.35768,,0.64055961,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",140,132.31468,,0.64930312,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",141,137.46463,,0.65794751,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",142,142.81501,,0.66648828,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",143,148.37365,,0.67492115,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",144,154.14864,,0.68324214,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",145,160.1484,,0.69144751,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",146,166.38169,,0.69953379,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",147,172.85759,,0.70749781,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",148,179.58554,,0.71533664,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",149,186.57535,,0.72304763,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",150,193.83723,,0.73062839,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",151,201.38175,,0.73807682,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",152,209.21991,,0.74539107,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",153,217.36316,,0.75256954,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",154,225.82335,,0.75961089,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",155,234.61283,,0.76651402,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",156,243.74442,,0.77327809,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",157,253.23142,,0.77990247,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",158,263.08767,,0.78638677,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",159,273.32756,,0.7927308,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",160,283.96599,,0.79893459,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",161,295.0185,,0.80499838,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",162,306.50119,,0.81092257,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",163,318.43081,,0.81670776,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",164,330.82475,,0.82235472,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",165,343.70109,,0.82786438,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",166,357.0786,,0.8332378,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",167,370.97679,,0.83847622,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",168,385.41592,,0.84358097,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",169,400.41705,,0.84855353,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",170,416.00206,,0.85339549,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",171,432.19366,,0.85810853,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",172,449.01547,,0.86269443,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",173,466.49202,,0.86715506,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",174,484.64879,,0.87149237,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",175,503.51226,,0.87570836,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",176,523.10993,,0.87980512,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",177,543.47038,,0.88378476,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",178,564.6233,,0.88764946,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",179,586.59953,,0.89140144,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",180,609.43111,,0.89504293,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",181,633.15135,,0.89857621,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",182,657.79482,,0.90200357,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",183,683.39747,,0.90532731,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",184,709.99662,,0.90854975,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",185,737.63106,,0.91167321,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",186,766.34109,,0.9147,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",187,796.16856,,0.91763244,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",188,827.15698,,0.92047284,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",189,859.35153,,0.92322348,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",190,892.79915,,0.92588664,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",191,927.54862,,0.92846458,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",192,963.6506,,0.93095954,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",193,1001.1577,,0.93337373,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",194,1040.1247,,0.93570932,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",195,1080.6084,,0.93796849,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",196,1122.6678,,0.94015334,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",197,1166.3642,,0.94226598,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",198,1211.7613,,0.94430846,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,line,"$\phi_D=K_s/(K_s+q^*)$, $q^*$=71 cm d$^{-1}$",199,1258.9254,,0.9462828,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,scatter,,0,712.8,,0.84550569,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,scatter,,0,350.2,,0.74087127,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,scatter,,0,106.1,,0.64302727,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,scatter,,0,24.96,,0.28921732,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,scatter,,0,6.24,,0.14728909,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,scatter,,0,31.44,,0.2851579,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,scatter,,0,6.24,,0.087024068,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,scatter,,0,1.68,,0.02197365,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,scatter,,0,2.1,,0.029124407,,,,log,linear
+1,,$K_s$ (cm d$^{-1}$),$\phi_D$,scatter,,0,25.8,,0.26498534,,,,log,linear
+2,,Observed $\phi_D$,Leave-one-soil-out prediction,line,,0,0,,0,,,,linear,linear
+2,,Observed $\phi_D$,Leave-one-soil-out prediction,line,,1,1,,1,,,,linear,linear
+2,,Observed $\phi_D$,Leave-one-soil-out prediction,scatter,,0,0.84550569,,0.91155588,,,,linear,linear
+2,,Observed $\phi_D$,Leave-one-soil-out prediction,scatter,,0,0.74087127,,0.8417643,,,,linear,linear
+2,,Observed $\phi_D$,Leave-one-soil-out prediction,scatter,,0,0.64302727,,0.57022181,,,,linear,linear
+2,,Observed $\phi_D$,Leave-one-soil-out prediction,scatter,,0,0.28921732,,0.25019619,,,,linear,linear
+2,,Observed $\phi_D$,Leave-one-soil-out prediction,scatter,,0,0.14728909,,0.078044768,,,,linear,linear
+2,,Observed $\phi_D$,Leave-one-soil-out prediction,scatter,,0,0.2851579,,0.31356536,,,,linear,linear
+2,,Observed $\phi_D$,Leave-one-soil-out prediction,scatter,,0,0.087024068,,0.080069907,,,,linear,linear
+2,,Observed $\phi_D$,Leave-one-soil-out prediction,scatter,,0,0.02197365,,0.022971257,,,,linear,linear
+3,,LOSO RMSE of $\phi_D$,,bar (y = height; low/high = bottom/top),,0,0.091265999,,0.8,,-0.4,0.4,linear,linear
+3,,LOSO RMSE of $\phi_D$,,bar (y = height; low/high = bottom/top),,1,0.067888094,,0.8,,0.6,1.4,linear,linear
+3,,LOSO RMSE of $\phi_D$,,bar (y = height; low/high = bottom/top),,2,0.048579267,,0.8,,1.6,2.4,linear,linear
+3,,LOSO RMSE of $\phi_D$,,bar (y = height; low/high = bottom/top),,3,0.029056213,,0.8,,2.6,3.4,linear,linear
+3,,LOSO RMSE of $\phi_D$,,bar (y = height; low/high = bottom/top),,4,0.158891,,0.8,,3.6,4.4,linear,linear
+3,,LOSO RMSE of $\phi_D$,,barh (x = length; low/high = left/right end),,0,0.182532,,0,TAW,0,0.182532,linear,linear
+3,,LOSO RMSE of $\phi_D$,,barh (x = length; low/high = left/right end),,1,0.13577619,,1,$S_e$(100),0,0.13577619,linear,linear
+3,,LOSO RMSE of $\phi_D$,,barh (x = length; low/high = left/right end),,2,0.097158534,,2,$n$,0,0.097158534,linear,linear
+3,,LOSO RMSE of $\phi_D$,,barh (x = length; low/high = left/right end),,3,0.058112426,,3,$\log K_s$*,0,0.058112426,linear,linear
+3,,LOSO RMSE of $\phi_D$,,barh (x = length; low/high = left/right end),,4,0.31778201,,4,mean only,0,0.31778201,linear,linear

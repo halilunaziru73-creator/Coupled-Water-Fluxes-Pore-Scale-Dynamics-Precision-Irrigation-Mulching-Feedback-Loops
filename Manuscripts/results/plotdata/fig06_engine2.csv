@@ -1,0 +1,245 @@
+panel,panel_title,x_label,y_label,kind,series,i,x,x_category,y,y_category,y_low,y_high,x_scale,y_scale
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),bar (y = height; low/high = bottom/top),,0,0.038027033,,17,,0,17,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),bar (y = height; low/high = bottom/top),,1,0.07206496,,10,,0,10,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),bar (y = height; low/high = bottom/top),,2,0.10610289,,12,,0,12,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),bar (y = height; low/high = bottom/top),,3,0.14014081,,7,,0,7,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),bar (y = height; low/high = bottom/top),,4,0.17417874,,0,,0,0,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),bar (y = height; low/high = bottom/top),,5,0.20821667,,3,,0,3,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),bar (y = height; low/high = bottom/top),,6,0.2422546,,2,,0,2,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),bar (y = height; low/high = bottom/top),,7,0.27629252,,0,,0,0,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),bar (y = height; low/high = bottom/top),,8,0.31033045,,1,,0,1,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),bar (y = height; low/high = bottom/top),,9,0.34436838,,2,,0,2,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),bar (y = height; low/high = bottom/top),,10,0.3784063,,2,,0,2,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),bar (y = height; low/high = bottom/top),,11,0.41244423,,1,,0,1,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),bar (y = height; low/high = bottom/top),,12,0.44648216,,1,,0,1,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),bar (y = height; low/high = bottom/top),,13,0.48052009,,0,,0,0,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),bar (y = height; low/high = bottom/top),,14,0.51455801,,0,,0,0,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),bar (y = height; low/high = bottom/top),,15,0.54859594,,1,,0,1,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),bar (y = height; low/high = bottom/top),,16,0.58263387,,0,,0,0,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),bar (y = height; low/high = bottom/top),,17,0.6166718,,0,,0,0,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),bar (y = height; low/high = bottom/top),,18,0.65070972,,0,,0,0,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),bar (y = height; low/high = bottom/top),,19,0.68474765,,1,,0,1,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),histogram,,0,0.038027033,,17,,,,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),histogram,,1,0.07206496,,10,,,,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),histogram,,2,0.10610289,,12,,,,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),histogram,,3,0.14014081,,7,,,,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),histogram,,4,0.17417874,,0,,,,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),histogram,,5,0.20821667,,3,,,,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),histogram,,6,0.2422546,,2,,,,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),histogram,,7,0.27629252,,0,,,,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),histogram,,8,0.31033045,,1,,,,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),histogram,,9,0.34436838,,2,,,,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),histogram,,10,0.3784063,,2,,,,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),histogram,,11,0.41244423,,1,,,,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),histogram,,12,0.44648216,,1,,,,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),histogram,,13,0.48052009,,0,,,,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),histogram,,14,0.51455801,,0,,,,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),histogram,,15,0.54859594,,1,,,,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),histogram,,16,0.58263387,,0,,,,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),histogram,,17,0.6166718,,0,,,,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),histogram,,18,0.65070972,,0,,,,linear,linear
+1,,Daily-core closure residual (% of inflow),Scenarios (n=60),histogram,,19,0.68474765,,1,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,0,284.52,,277.407,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,1,284.52,,277.407,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,2,278.16,,285.114,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,3,278.16,,285.114,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,4,278.16,,285.114,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,5,278.16,,285.114,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,6,278.16,,0,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,7,278.16,,0,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,8,278.16,,0,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,9,278.16,,0,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,10,415.92,,411.25,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,11,415.92,,411.25,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,12,309.84,,308.2908,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,13,309.84,,308.2908,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,14,293.04,,291.5748,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,15,293.04,,291.5748,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,16,293.04,,336.996,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,17,293.04,,336.996,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,18,293.04,,0,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,19,293.04,,0,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,20,537.9863,,516.25,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,21,564.3036,,516.25,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,22,372.68952,,369.25,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,23,390.9208,,393.75,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,24,298.32,,295.3368,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,25,312.91326,,316.0424,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,26,168.66446,,171.19443,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,27,176.91521,,176.03064,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,28,14.916,,8.25,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,29,15.645663,,10.5,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,30,441.658,,411.25,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,31,441.27126,,411.25,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,32,429.82249,,446.25,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,33,429.44611,,435.75,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,34,413.76,,423.5,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,35,413.39769,,409.5,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,36,381.63503,,402.5,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,37,381.30084,,385,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,38,343.22998,,350.09458,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,39,342.92943,,348.07337,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,40,366.73412,,367.5,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,41,366.34889,,341.25,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,42,313.81412,,318.52133,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,43,313.48448,,310.34964,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,44,282.24,,283.6512,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,45,281.94353,,286.17268,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,46,249.92471,,254.9232,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,47,249.66218,,257.15205,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,48,208.41882,,216.75558,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,49,208.1999,,213.40489,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,50,493.53952,,455,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,51,489.06297,,455,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,52,366.5219,,360.5,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,53,363.19744,,362.25,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,54,301.56,,307.5912,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,55,298.82476,,303.30713,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,56,246.51333,,251.4436,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,57,244.27738,,252.82709,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,58,165.4819,,172.92859,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,59,163.98094,,168.90036,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,60,425.94199,,411.25,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,61,425.18977,,411.25,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,62,350.16503,,351.75,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,63,349.54664,,349.54664,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,64,305.4,,320.67,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,65,304.86066,,315.53079,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,66,245.66834,,265.32181,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,67,245.23449,,257.49622,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,68,187.5547,,205.3724,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,69,187.22348,,204.07359,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,70,459.61759,,455,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,71,457.02577,,455,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,72,343.68308,,341.96467,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,73,341.74502,,345.16247,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,74,298.92,,303.4038,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,75,297.23436,,300.2067,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,76,247.41436,,252.36265,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,77,246.01917,,250.93955,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,78,170.62414,,174.03662,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,79,169.66197,,173.05521,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,80,406.37477,,411.25,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,81,403.45121,,367.5,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,82,344.25728,,345.97857,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,83,341.78061,,353.74293,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,84,305.64,,319.3938,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,85,303.44115,,312.54439,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,86,254.10448,,271.89179,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,87,252.27639,,266.15159,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,88,199.8204,,215.80603,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,89,198.38284,,210.28581,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,90,377.74293,,367.5,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,91,377.25447,,367.5,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,92,333.30259,,354.96725,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,93,332.87159,,337.86467,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,94,303.24,,313.8534,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,95,302.84788,,307.3906,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,96,263.11298,,269.69081,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,97,262.77275,,274.59752,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,98,207.30114,,214.55668,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),scatter,,99,207.03308,,221.52539,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),line,,0,0,,0,,,,linear,linear
+2,,Engine 1 annual irrigation (mm),Engine 2 mean irrigation (mm),line,,1,550,,550,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,0,77.01,,130.62329,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,1,77.01,,130.62329,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,2,76.52,,27.953095,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,3,76.52,,27.953095,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,4,76.52,,5.1497546,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,5,76.52,,5.1497546,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,6,76.52,,2.1978497,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,7,76.52,,2.1978497,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,8,76.52,,2.1978497,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,9,76.52,,2.1978497,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,10,75.78,,232.58458,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,11,75.78,,232.58458,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,12,70.98,,3.7917908,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,13,70.98,,3.7917908,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,14,70.14,,0,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,15,70.14,,0,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,16,70.14,,0,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,17,70.14,,0,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,18,70.14,,0,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,19,70.14,,0,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,20,75.45,,274.15019,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,21,76.67,,336.88672,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,22,63.66,,10.119391,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,23,64.88,,6.7138585,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,24,57.78,,0,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,25,59,,0,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,26,52.78,,2.4040431,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,27,54,,0,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,28,51.42,,16.266461,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,29,52.64,,6.6807381,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,30,189.81,,261.42314,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,31,190.28,,321.60333,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,32,178.47,,326.34194,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,33,178.94,,292.92805,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,34,163.62,,258.96757,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,35,164.09,,224.47999,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,36,137.3,,189.46481,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,37,137.77,,158.32732,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,38,114.38,,109.80214,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,39,114.85,,74.656241,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,40,54.31,,166.10061,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,41,55.42,,166.56838,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,42,36.1,,85.392639,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,43,37.21,,52.653999,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,44,27.62,,7.3343427,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,45,28.73,,0.059699011,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,46,20.51,,2.5432471,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,47,21.62,,0,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,48,15.74,,5.1198177,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,49,16.85,,0,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,50,100.74,,212.13784,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,51,103.11,,291.43566,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,52,58.59,,25.72867,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,53,60.96,,10.2736,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,54,50.36,,1.6074377,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,55,52.73,,0,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,56,40.04,,1.8392045,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,57,42.41,,0,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,58,28.17,,4.0675659,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,59,30.54,,1.092174,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,60,131.5,,200.90475,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,61,133.64,,252.64013,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,62,71.99,,67.924349,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,63,74.13,,41.959725,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,64,52.15,,2.7916122,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,65,54.29,,0,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,66,35.87,,1.7692276,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,67,38.01,,0,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,68,22.35,,3.568394,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,69,24.49,,0.33661504,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,70,72.28,,216.06643,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,71,74.22,,291.97845,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,72,55.75,,77.373479,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,73,57.69,,62.617159,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,74,49.98,,0.79631056,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,75,51.92,,0,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,76,40.13,,0.16960876,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,77,42.07,,0,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,78,32.39,,0.82089485,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,79,34.33,,0,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,80,109.52,,215.35799,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,81,111.02,,220.50127,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,82,69.03,,141.23292,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,83,70.53,,116.0655,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,84,54.02,,25.029804,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,85,55.52,,2.6745163,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,86,40.78,,3.460686,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,87,42.28,,0,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,88,26.8,,4.4506036,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,89,28.3,,0,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,90,97.97,,177.27116,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,91,99.78,,218.93543,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,92,65.84,,190.47959,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,93,67.65,,144.97492,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,94,51.68,,72.363229,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,95,53.49,,39.887272,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,96,38.86,,2.2363535,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,97,40.67,,0,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,98,23.9,,1.7274794,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),scatter,,99,25.71,,0,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),line,,0,0,,0,,,,linear,linear
+3,,Engine 1 annual drainage (mm),Engine 2 unscaled drainage (mm),line,,1,300,,300,,,,linear,linear

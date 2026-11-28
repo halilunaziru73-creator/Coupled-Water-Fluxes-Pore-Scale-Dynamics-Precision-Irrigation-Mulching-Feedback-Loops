@@ -22,7 +22,7 @@ Suction triggers decide when most sensor-scheduled fields are irrigated, and the
 \begin{highlights}
 \item A closed form gives the reach of a suction trigger from van Genuchten parameters
 \item It predicted the reach of held-out soils within a factor of 2.3
-\item Common 300 cm triggers never fired on sand and loamy sand, leaving crops rainfed
+\item The shape of K(h), not its saturated level, sets where a trigger stops firing
 \item Of each irrigation millimetre, 38\% was transpired, 44\% evaporated, 16\% drained
 \item The drained share rose with dose on a soil-independent scale of about 4 mm
 \end{highlights}
@@ -153,12 +153,19 @@ Scale of the retention curve only, $155/\alpha$ & 0.48 & 1 & 7.1\\
 \end{tabular}
 \end{table}
 
-The minimum of the fitting error is wide. With $\kappa=10^{-11}$, $10^{-10}$, $3.5\times10^{-10}$, $10^{-9}$ and $10^{-8}$ the root-mean-square error of the ten reaches was 0.32, 0.17, 0.14, 0.16 and 0.31 in $\log_{10}$ (fitted on all ten soils): a whole decade of $\kappa$ ($10^{-10}$ to $10^{-9}$) is within a factor of 1.25 of the optimum, which is why the bootstrap interval, the leave-one-soil-out range and the range for other firing thresholds all enclose it. A choice of $10^{-10}$ or $10^{-9}$ changes no conclusion of this study.
+How $\kappa$ is found is shown in \cref{fig:kappa}: every trial value moves the predicted reach of all ten soils together (\cref{fig:kappa}a), and the summed squared distance in $\log_{10}$ to the observed intervals has its minimum, 0.196\,decades$^2$, at $\kappa=3.47\times10^{-10}$ (\cref{fig:kappa}b). The minimum of the fitting error is wide. With $\kappa=10^{-11}$, $10^{-10}$, $3.5\times10^{-10}$, $10^{-9}$ and $10^{-8}$ the root-mean-square error of the ten reaches was 0.32, 0.17, 0.14, 0.16 and 0.31 in $\log_{10}$ (fitted on all ten soils): a whole decade of $\kappa$ ($10^{-10}$ to $10^{-9}$) is within a factor of 1.25 of the optimum, which is why the bootstrap interval, the leave-one-soil-out range and the range for other firing thresholds all enclose it. A choice of $10^{-10}$ or $10^{-9}$ changes no conclusion of this study.
 
 \begin{figure}[!htbp]\centering
 \includegraphics[width=\textwidth]{\figdir/paper4/fig3_trigger_reach.pdf}
 \caption{The reach of a suction trigger in experiment E2 (197 runs). (a) Irrigation against the trigger. (b) The same runs against the reach-scaled trigger $\htr/\hc$, irrigation divided by its soil maximum: every soil stops at $\htr/\hc\approx0.5$ to 1. (c) Predicted reach (\cref{eq:hc}) against the observed interval (bars; arrows: only a lower bound); grey band: within a factor of 2. (d) Yield against the trigger: beyond the reach the crop is rainfed.}
 \label{fig:trigger}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{\figdir/paper4/fig6_kappa.pdf}
+\caption{Determination of the constant $\kappa$ of \cref{eq:hc} from experiment E2. (a)~Predicted reach of each soil against the trial value of $\kappa$; at the right, the reach observed in Daisy (bars: interval between the last firing and the first non-firing trigger; arrows: only a lower bound is known, five soils); dashed line: the fitted value, $\log_{10}\kappa=-9.46$. (b)~The misfit, the squared distance in $\log_{10}$ between predicted reach and observed interval summed over the soils (zero inside the interval), with its minimum 0.196 at $\kappa=3.47\times10^{-10}$; dashed: the misfit with sand, loamy sand or sandy loam left out; grey: bootstrap 95\,\% interval over soils. Data: \texttt{p4\_fig6a\_reach\_vs\_kappa.csv}, \texttt{p4\_fig6b\_misfit.csv}.}
+\label{fig:kappa}
 \end{figure}
 
 \subsection{One axis for all soils}

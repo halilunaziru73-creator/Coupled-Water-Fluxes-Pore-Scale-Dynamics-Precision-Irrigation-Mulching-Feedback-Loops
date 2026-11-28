@@ -1,0 +1,4 @@
+Soil group,Memory φ_D and ρ_R,Evaporation-saving practice (e.g.\ mulch),Where the saved water goes
+"Sand, loamy sand, sandy loam (S03–S05)",high φ_D (0.64–0.85); ρ_R≤0.42,small irrigation benefit; ψ_I^E7≈0,mainly deep drainage
+"Loam, sandy clay loam, coarse sand (S06, S08, S02)",intermediate (≈0.26–0.29),moderate; ψ_D^E7=0.52–0.61,split between drainage and irrigation
+"Silt loam, coarse loam, clay loam, silty clay loam (S07, S01, S09, S10)",low (0.02–0.15); ρ_R≈0.64–0.71,largest irrigation benefit; ψ_I^E7=0.58–0.63,retained in root zone; irrigation and transpiration

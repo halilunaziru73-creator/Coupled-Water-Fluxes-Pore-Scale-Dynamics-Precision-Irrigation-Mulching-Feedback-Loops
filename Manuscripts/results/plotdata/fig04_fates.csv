@@ -1,0 +1,101 @@
+panel,panel_title,x_label,y_label,kind,series,i,x,x_category,y,y_category,y_low,y_high,x_scale,y_scale
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Drainage,0,0,S03,0.84550569,,0,0.84550569,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Drainage,1,1,S04,0.74087127,,0,0.74087127,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Drainage,2,2,S05,0.64302727,,0,0.64302727,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Drainage,3,3,S02,0.26498534,,0,0.26498534,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Drainage,4,4,S06,0.28921732,,0,0.28921732,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Drainage,5,5,S08,0.2851579,,0,0.2851579,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Drainage,6,6,S07,0.14728909,,0,0.14728909,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Drainage,7,7,S01,0.029124407,,0,0.029124407,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Drainage,8,8,S09,0.087024068,,0,0.087024068,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Drainage,9,9,S10,0.02197365,,0,0.02197365,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Transpiration,0,0,S03,0.079817106,,0.84550569,0.9253228,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Transpiration,1,1,S04,0.15347915,,0.74087127,0.89435042,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Transpiration,2,2,S05,0.20432904,,0.64302727,0.84735631,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Transpiration,3,3,S02,0.41869042,,0.26498534,0.68367576,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Transpiration,4,4,S06,0.58248294,,0.28921732,0.87170026,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Transpiration,5,5,S08,0.5547441,,0.2851579,0.839902,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Transpiration,6,6,S07,0.71554712,,0.14728909,0.86283621,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Transpiration,7,7,S01,0.74996502,,0.029124407,0.77908943,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Transpiration,8,8,S09,0.77439714,,0.087024068,0.86142121,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Transpiration,9,9,S10,0.8415849,,0.02197365,0.86355855,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Soil evaporation,0,0,S03,0.074031845,,0.9253228,0.99935464,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Soil evaporation,1,1,S04,0.099922995,,0.89435042,0.99427341,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Soil evaporation,2,2,S05,0.12771962,,0.84735631,0.97507593,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Soil evaporation,3,3,S02,0.19269701,,0.68367576,0.87637277,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Soil evaporation,4,4,S06,0.0401933,,0.87170026,0.91189356,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Soil evaporation,5,5,S08,0.07846418,,0.839902,0.91836618,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Soil evaporation,6,6,S07,0.041508076,,0.86283621,0.90434428,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Soil evaporation,7,7,S01,0.14514617,,0.77908943,0.9242356,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Soil evaporation,8,8,S09,0.02717088,,0.86142121,0.88859209,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Soil evaporation,9,9,S10,0.024892506,,0.86355855,0.88845106,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Other evaporation,0,0,S03,0.00064535663,,0.99935464,1,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Other evaporation,1,1,S04,0.0057265877,,0.99427341,1,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Other evaporation,2,2,S05,0.024924065,,0.97507593,1,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Other evaporation,3,3,S02,0.12362723,,0.87637277,1,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Other evaporation,4,4,S06,0.088106443,,0.91189356,1,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Other evaporation,5,5,S08,0.081633819,,0.91836618,1,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Other evaporation,6,6,S07,0.095655718,,0.90434428,1,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Other evaporation,7,7,S01,0.0757644,,0.9242356,1,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Other evaporation,8,8,S09,0.11140791,,0.88859209,1,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),bar (y = height; low/high = bottom/top),Other evaporation,9,9,S10,0.11154894,,0.88845106,1,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),errorbar,,0,0,S03,0.84550569,,0.79592058,0.88997881,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),errorbar,,1,1,S04,0.74087127,,0.70080472,0.76550297,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),errorbar,,2,2,S05,0.64302727,,0.59872256,0.67228725,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),errorbar,,3,3,S02,0.26498534,,0.19818895,0.31299016,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),errorbar,,4,4,S06,0.28921732,,0.23896105,0.32422903,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),errorbar,,5,5,S08,0.2851579,,0.24266358,0.31876694,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),errorbar,,6,6,S07,0.14728909,,0.11236575,0.17536005,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),errorbar,,7,7,S01,0.029124407,,0.02449336,0.032555404,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),errorbar,,8,8,S09,0.087024068,,0.064041973,0.10818532,linear,linear
+1,E9: fate of antecedent storage,,Share of released storage ($\phi$),errorbar,,9,9,S10,0.02197365,,0.013361022,0.030716738,linear,linear
+2,E16: evaporation-factor contrast,,Fate per mm of extra evaporation,bar (y = height; low/high = bottom/top),Drainage $\psi_D$,0,-0.19,,1.2098465,,0,1.2098465,linear,linear
+2,E16: evaporation-factor contrast,,Fate per mm of extra evaporation,bar (y = height; low/high = bottom/top),Drainage $\psi_D$,1,0.81,,0.79926921,,0,0.79926921,linear,linear
+2,E16: evaporation-factor contrast,,Fate per mm of extra evaporation,bar (y = height; low/high = bottom/top),Drainage $\psi_D$,2,1.81,,0.58207794,,0,0.58207794,linear,linear
+2,E16: evaporation-factor contrast,,Fate per mm of extra evaporation,bar (y = height; low/high = bottom/top),Drainage $\psi_D$,3,2.81,,0.19304373,,0,0.19304373,linear,linear
+2,E16: evaporation-factor contrast,,Fate per mm of extra evaporation,bar (y = height; low/high = bottom/top),Drainage $\psi_D$,4,3.81,,0.46899314,,0,0.46899314,linear,linear
+2,E16: evaporation-factor contrast,,Fate per mm of extra evaporation,bar (y = height; low/high = bottom/top),Drainage $\psi_D$,5,4.81,,0.53303508,,0,0.53303508,linear,linear
+2,E16: evaporation-factor contrast,,Fate per mm of extra evaporation,bar (y = height; low/high = bottom/top),Drainage $\psi_D$,6,5.81,,0.3624835,,0,0.3624835,linear,linear
+2,E16: evaporation-factor contrast,,Fate per mm of extra evaporation,bar (y = height; low/high = bottom/top),Drainage $\psi_D$,7,6.81,,0.29456019,,0,0.29456019,linear,linear
+2,E16: evaporation-factor contrast,,Fate per mm of extra evaporation,bar (y = height; low/high = bottom/top),Drainage $\psi_D$,8,7.81,,0.31174882,,0,0.31174882,linear,linear
+2,E16: evaporation-factor contrast,,Fate per mm of extra evaporation,bar (y = height; low/high = bottom/top),Drainage $\psi_D$,9,8.81,,0.31025772,,0,0.31025772,linear,linear
+2,E16: evaporation-factor contrast,,Fate per mm of extra evaporation,bar (y = height; low/high = bottom/top),Irrigation $\psi_I$,0,0.19,,-0.3839038,,0,-0.3839038,linear,linear
+2,E16: evaporation-factor contrast,,Fate per mm of extra evaporation,bar (y = height; low/high = bottom/top),Irrigation $\psi_I$,1,1.19,,0.21894317,,0,0.21894317,linear,linear
+2,E16: evaporation-factor contrast,,Fate per mm of extra evaporation,bar (y = height; low/high = bottom/top),Irrigation $\psi_I$,2,2.19,,0.41459317,,0,0.41459317,linear,linear
+2,E16: evaporation-factor contrast,,Fate per mm of extra evaporation,bar (y = height; low/high = bottom/top),Irrigation $\psi_I$,3,3.19,,0.65778523,,0,0.65778523,linear,linear
+2,E16: evaporation-factor contrast,,Fate per mm of extra evaporation,bar (y = height; low/high = bottom/top),Irrigation $\psi_I$,4,4.19,,0.4334123,,0,0.4334123,linear,linear
+2,E16: evaporation-factor contrast,,Fate per mm of extra evaporation,bar (y = height; low/high = bottom/top),Irrigation $\psi_I$,5,5.19,,0.38574647,,0,0.38574647,linear,linear
+2,E16: evaporation-factor contrast,,Fate per mm of extra evaporation,bar (y = height; low/high = bottom/top),Irrigation $\psi_I$,6,6.19,,0.52776708,,0,0.52776708,linear,linear
+2,E16: evaporation-factor contrast,,Fate per mm of extra evaporation,bar (y = height; low/high = bottom/top),Irrigation $\psi_I$,7,7.19,,0.61891454,,0,0.61891454,linear,linear
+2,E16: evaporation-factor contrast,,Fate per mm of extra evaporation,bar (y = height; low/high = bottom/top),Irrigation $\psi_I$,8,8.19,,0.64501809,,0,0.64501809,linear,linear
+2,E16: evaporation-factor contrast,,Fate per mm of extra evaporation,bar (y = height; low/high = bottom/top),Irrigation $\psi_I$,9,9.19,,0.83800783,,0,0.83800783,linear,linear
+2,E16: evaporation-factor contrast,,Fate per mm of extra evaporation,errorbar,,0,-0.19,,1.2098465,,0.95495477,1.45976,linear,linear
+2,E16: evaporation-factor contrast,,Fate per mm of extra evaporation,errorbar,,1,0.81,,0.79926921,,0.66905537,0.91578705,linear,linear
+2,E16: evaporation-factor contrast,,Fate per mm of extra evaporation,errorbar,,2,1.81,,0.58207794,,0.45655409,0.69656207,linear,linear
+2,E16: evaporation-factor contrast,,Fate per mm of extra evaporation,errorbar,,3,2.81,,0.19304373,,0.13891344,0.24385031,linear,linear
+2,E16: evaporation-factor contrast,,Fate per mm of extra evaporation,errorbar,,4,3.81,,0.46899314,,0.36259847,0.59916982,linear,linear
+2,E16: evaporation-factor contrast,,Fate per mm of extra evaporation,errorbar,,5,4.81,,0.53303508,,0.40925654,0.66075523,linear,linear
+2,E16: evaporation-factor contrast,,Fate per mm of extra evaporation,errorbar,,6,5.81,,0.3624835,,0.25971693,0.48521448,linear,linear
+2,E16: evaporation-factor contrast,,Fate per mm of extra evaporation,errorbar,,7,6.81,,0.29456019,,0.19429863,0.39184425,linear,linear
+2,E16: evaporation-factor contrast,,Fate per mm of extra evaporation,errorbar,,8,7.81,,0.31174882,,0.19794609,0.4445225,linear,linear
+2,E16: evaporation-factor contrast,,Fate per mm of extra evaporation,errorbar,,9,8.81,,0.31025772,,0.21696889,0.41264444,linear,linear
+3,E7: mulch contrast,,Drainage share of mulch saving ($\psi_D$),bar (y = height; low/high = bottom/top),,0,0,S03,0.70615743,,0,0.70615743,linear,linear
+3,E7: mulch contrast,,Drainage share of mulch saving ($\psi_D$),bar (y = height; low/high = bottom/top),,1,1,S04,0.68674225,,0,0.68674225,linear,linear
+3,E7: mulch contrast,,Drainage share of mulch saving ($\psi_D$),bar (y = height; low/high = bottom/top),,2,2,S05,0.66281199,,0,0.66281199,linear,linear
+3,E7: mulch contrast,,Drainage share of mulch saving ($\psi_D$),bar (y = height; low/high = bottom/top),,3,3,S02,0.60733634,,0,0.60733634,linear,linear
+3,E7: mulch contrast,,Drainage share of mulch saving ($\psi_D$),bar (y = height; low/high = bottom/top),,4,4,S06,0.52122593,,0,0.52122593,linear,linear
+3,E7: mulch contrast,,Drainage share of mulch saving ($\psi_D$),bar (y = height; low/high = bottom/top),,5,5,S08,0.54888329,,0,0.54888329,linear,linear
+3,E7: mulch contrast,,Drainage share of mulch saving ($\psi_D$),bar (y = height; low/high = bottom/top),,6,6,S07,0.39551206,,0,0.39551206,linear,linear
+3,E7: mulch contrast,,Drainage share of mulch saving ($\psi_D$),bar (y = height; low/high = bottom/top),,7,7,S01,0.2975487,,0,0.2975487,linear,linear
+3,E7: mulch contrast,,Drainage share of mulch saving ($\psi_D$),bar (y = height; low/high = bottom/top),,8,8,S09,0.42565699,,0,0.42565699,linear,linear
+3,E7: mulch contrast,,Drainage share of mulch saving ($\psi_D$),bar (y = height; low/high = bottom/top),,9,9,S10,0.41373551,,0,0.41373551,linear,linear
+3,E7: mulch contrast,,Drainage share of mulch saving ($\psi_D$),errorbar,,0,0,S03,0.70615743,,0.63684114,0.76849433,linear,linear
+3,E7: mulch contrast,,Drainage share of mulch saving ($\psi_D$),errorbar,,1,1,S04,0.68674225,,0.59572128,0.74886363,linear,linear
+3,E7: mulch contrast,,Drainage share of mulch saving ($\psi_D$),errorbar,,2,2,S05,0.66281199,,0.58026903,0.7093016,linear,linear
+3,E7: mulch contrast,,Drainage share of mulch saving ($\psi_D$),errorbar,,3,3,S02,0.60733634,,0.59993872,0.61805068,linear,linear
+3,E7: mulch contrast,,Drainage share of mulch saving ($\psi_D$),errorbar,,4,4,S06,0.52122593,,0.45020842,0.55277543,linear,linear
+3,E7: mulch contrast,,Drainage share of mulch saving ($\psi_D$),errorbar,,5,5,S08,0.54888329,,0.48796062,0.58546878,linear,linear
+3,E7: mulch contrast,,Drainage share of mulch saving ($\psi_D$),errorbar,,6,6,S07,0.39551206,,0.36222797,0.41502258,linear,linear
+3,E7: mulch contrast,,Drainage share of mulch saving ($\psi_D$),errorbar,,7,7,S01,0.2975487,,0.23546252,0.33747299,linear,linear
+3,E7: mulch contrast,,Drainage share of mulch saving ($\psi_D$),errorbar,,8,8,S09,0.42565699,,0.38538374,0.44828609,linear,linear
+3,E7: mulch contrast,,Drainage share of mulch saving ($\psi_D$),errorbar,,9,9,S10,0.41373551,,0.38643308,0.42916192,linear,linear

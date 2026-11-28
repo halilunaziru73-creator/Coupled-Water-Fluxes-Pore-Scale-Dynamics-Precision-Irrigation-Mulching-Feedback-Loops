@@ -1,0 +1,123 @@
+panel,panel_title,x_label,y_label,kind,series,i,x,x_category,y,y_category,y_low,y_high,x_scale,y_scale
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,0,3.4432618,,3.4403341,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,1,0.016815251,,0.016815251,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,2,0.34985802,,0.34985791,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,3,0.17758338,,0.17758338,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,4,0.0098373503,,0.0098373503,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,5,3.9077025,,3.295466,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,6,0.22883557,,0.22883556,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,7,0.49480144,,0.49480055,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,8,1.0947126,,1.0946901,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,9,0.16871815,,0.16871815,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,10,0.31941807,,0.31941805,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,11,2.8243548,,2.7792487,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,12,0.11622292,,0.11622292,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,13,0.14657965,,0.14657965,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,14,2.0792235,,2.0788859,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,15,1.5445398,,1.5445063,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,16,0.22801272,,0.22801271,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,17,1.3272918,,1.3271149,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,18,5.1040119,,3.8878897,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,19,0.4408873,,0.44088712,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,20,0.069923351,,0.069923351,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,21,12.10521,,2.561637,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,22,1.7544149,,1.7543282,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,23,8.4734015,,6.2238023,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,24,0.3578649,,0.35786489,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,25,0.1810468,,0.1810468,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,26,1.1810301,,1.1809753,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,27,0.12314881,,0.12314881,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,28,2.0412383,,2.0411051,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,29,1.5656146,,1.5653433,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,30,2.1658361,,2.1616598,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,31,0.49206809,,0.49206799,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,32,1.8172366,,1.8160376,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,33,2.9506012,,2.9479391,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,34,0.036707858,,0.036707858,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,35,0.039090279,,0.039090279,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,36,1.0574851,,1.0573388,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,37,0.61071901,,0.61070847,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,38,4.6519588,,3.7805933,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,39,2.5286876,,2.4994348,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,40,3.1964324,,3.1849156,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,41,0.024388034,,0.024388034,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,42,0.5023042,,0.50230408,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,43,0.029399303,,0.029399303,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,44,2.6293747,,2.6269501,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,45,0.25357713,,0.25357713,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,46,2.333014,,2.3319472,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,47,1.520037,,1.5199349,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,48,10.124272,,5.1770878,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,49,0.29931152,,0.29931151,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,50,0.46624181,,0.46624097,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,51,0.41471885,,0.41471812,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,52,0.16300263,,0.16300262,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,53,2.0217228,,2.0191403,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,54,2.1080888,,2.1077056,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,55,0.29915288,,0.29915266,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,56,4.2959674,,4.0534962,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,57,0.57915452,,0.57914694,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,58,0.76738513,,0.76737802,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,59,1.1440177,,1.1439768,,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,0,0.01,$\mathdefault{10^{-2}}$,0.01,$\mathdefault{10^{-2}}$,,,log,log
+1,,Independent converged solver $h_f$ (m),SWAFL lateral solver $h_f$ (m),line,,1,12,,12,,,,log,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,0,0.18005134,,0.085026903,,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,1,0.0019053226,,0.0001,$\mathdefault{10^{-4}}$,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,2,0.024005508,,0.0001,$\mathdefault{10^{-4}}$,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,3,0.012972426,,0.0001,$\mathdefault{10^{-4}}$,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,4,0.00057902031,,0.0001,$\mathdefault{10^{-4}}$,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,5,0.41286714,,15.667427,,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,6,0.014802592,,0.0001,$\mathdefault{10^{-4}}$,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,7,0.044223192,,0.00018093768,,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,8,0.066184755,,0.0020518053,,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,9,0.013441783,,0.0001,$\mathdefault{10^{-4}}$,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,10,0.016769109,,0.0001,$\mathdefault{10^{-4}}$,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,11,0.27845986,,1.5970426,,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,12,0.0080063542,,0.0001,$\mathdefault{10^{-4}}$,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,13,0.0093598816,,0.0001,$\mathdefault{10^{-4}}$,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,14,0.10670171,,0.016235985,,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,15,0.079630999,,0.0021718529,,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,16,0.012729715,,0.0001,$\mathdefault{10^{-4}}$,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,17,0.10203661,,0.01332806,,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,18,0.48825144,,23.826789,,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,19,0.030860381,,0.0001,$\mathdefault{10^{-4}}$,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,20,0.0041114629,,0.0001,$\mathdefault{10^{-4}}$,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,21,0.80593294,,78.838558,,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,22,0.096260583,,0.0049441519,,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,23,0.44753272,,26.548951,,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,24,0.018056827,,0.0001,$\mathdefault{10^{-4}}$,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,25,0.009159021,,0.0001,$\mathdefault{10^{-4}}$,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,26,0.080079784,,0.0046392468,,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,27,0.012802064,,0.0001,$\mathdefault{10^{-4}}$,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,28,0.10253226,,0.0065208418,,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,29,0.10828304,,0.017329183,,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,30,0.21316966,,0.1928238,,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,31,0.025973266,,0.0001,$\mathdefault{10^{-4}}$,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,32,0.14562522,,0.065982941,,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,33,0.18230644,,0.090221502,,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,34,0.0024143751,,0.0001,$\mathdefault{10^{-4}}$,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,35,0.0020094982,,0.0001,$\mathdefault{10^{-4}}$,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,36,0.12145309,,0.013832068,,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,37,0.075479051,,0.0017256049,,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,38,0.42449122,,18.731153,,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,39,0.30106107,,1.1568361,,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,40,0.24143471,,0.36029915,,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,41,0.001720654,,0.0001,$\mathdefault{10^{-4}}$,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,42,0.027391466,,0.0001,$\mathdefault{10^{-4}}$,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,43,0.0028348133,,0.0001,$\mathdefault{10^{-4}}$,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,44,0.15654209,,0.092212521,,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,45,0.013428757,,0.0001,$\mathdefault{10^{-4}}$,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,46,0.15782706,,0.04572626,,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,47,0.087238046,,0.0067185705,,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,48,0.9357535,,48.864592,,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,49,0.017895236,,0.0001,$\mathdefault{10^{-4}}$,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,50,0.037026087,,0.00018003498,,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,51,0.04392227,,0.00017589364,,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,52,0.016146864,,0.0001,$\mathdefault{10^{-4}}$,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,53,0.16781982,,0.12773518,,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,54,0.12904942,,0.018176522,,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,55,0.035640961,,0.0001,$\mathdefault{10^{-4}}$,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,56,0.34920294,,5.6441585,,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,57,0.070745402,,0.0013083397,,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,58,0.065238868,,0.00092656112,,,,linear,log
+2,,$h_f/H_0$,Relative difference in $h_f$ (%),line,,59,0.075362335,,0.0035730976,,,,linear,log

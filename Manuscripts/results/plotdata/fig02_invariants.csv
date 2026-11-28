@@ -1,0 +1,359 @@
+panel,panel_title,x_label,y_label,kind,series,i,x,x_category,y,y_category,y_low,y_high,x_scale,y_scale
+1,,Singular-value index,Singular value,line,real flux matrix,0,1,,240.25012,,,,linear,log
+1,,Singular-value index,Singular value,line,real flux matrix,1,2,,82.59874,,,,linear,log
+1,,Singular-value index,Singular value,line,real flux matrix,2,3,,57.945459,,,,linear,log
+1,,Singular-value index,Singular value,line,real flux matrix,3,4,,39.368821,,,,linear,log
+1,,Singular-value index,Singular value,line,real flux matrix,4,5,,21.837543,,,,linear,log
+1,,Singular-value index,Singular value,line,real flux matrix,5,6,,18.16709,,,,linear,log
+1,,Singular-value index,Singular value,line,real flux matrix,6,7,,5.4612601,,,,linear,log
+1,,Singular-value index,Singular value,line,columns permuted,0,1,,226.8678,,,,linear,log
+1,,Singular-value index,Singular value,line,columns permuted,1,2,,85.672642,,,,linear,log
+1,,Singular-value index,Singular value,line,columns permuted,2,3,,69.935212,,,,linear,log
+1,,Singular-value index,Singular value,line,columns permuted,3,4,,48.048991,,,,linear,log
+1,,Singular-value index,Singular value,line,columns permuted,4,5,,41.736353,,,,linear,log
+1,,Singular-value index,Singular value,line,columns permuted,5,6,,37.646595,,,,linear,log
+1,,Singular-value index,Singular value,line,columns permuted,6,7,,33.45699,,,,linear,log
+2,,Coefficient of the smallest right singular vector (scaled so that $c_{ET}=-1$),,errorbar,,0,1.0373651,,0,Rain,,,linear,linear
+2,,Coefficient of the smallest right singular vector (scaled so that $c_{ET}=-1$),,errorbar,,1,0.95746354,,1,Irrigation,,,linear,linear
+2,,Coefficient of the smallest right singular vector (scaled so that $c_{ET}=-1$),,errorbar,,2,-1,,2,ET,,,linear,linear
+2,,Coefficient of the smallest right singular vector (scaled so that $c_{ET}=-1$),,errorbar,,3,-1.0359135,,3,Drainage,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,1,E0,-0.025054696,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,1,E0,-0.028984633,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,1,E0,-0.01360835,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,1,E0,-0.008656629,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,0.85,,-0.028984633,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,1.15,,-0.028984633,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,0.85,,-0.008656629,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,1.15,,-0.008656629,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,0.7,,-0.020582104,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,1.3,,-0.020582104,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,2,E1,-0.0066241118,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,2,E1,-0.011703676,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,2,E1,-0.00091624432,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,2,E1,0.0071278564,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,1.85,,-0.011703676,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,2.15,,-0.011703676,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,1.85,,0.0071278564,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,2.15,,0.0071278564,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,1.7,,-0.0012408133,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,2.3,,-0.0012408133,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,3,E2,-0.012992156,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,3,E2,-0.02636778,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,3,E2,-0.0037630242,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,3,E2,0.0057519138,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,2.85,,-0.02636778,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,3.15,,-0.02636778,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,2.85,,0.0057519138,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,3.15,,0.0057519138,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,2.7,,-0.008656629,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,3.3,,-0.008656629,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,4,E3,-0.011703676,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,4,E3,-0.023185528,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,4,E3,-0.0037399975,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,4,E3,0.0012628741,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,3.85,,-0.023185528,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,4.15,,-0.023185528,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,3.85,,0.0012628741,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,4.15,,0.0012628741,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,3.7,,-0.008656629,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,4.3,,-0.008656629,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,5,E4,-0.008656629,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,5,E4,-0.019121271,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,5,E4,-0.0014465069,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,5,E4,0.0034157321,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,4.85,,-0.019121271,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,5.15,,-0.019121271,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,4.85,,0.0034157321,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,5.15,,0.0034157321,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,4.7,,-0.0033412944,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,5.3,,-0.0033412944,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,6,E5,-0.016354999,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,6,E5,-0.020110512,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,6,E5,-0.0052621945,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,6,E5,-0.0017143837,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,5.85,,-0.020110512,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,6.15,,-0.020110512,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,5.85,,-0.0017143837,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,6.15,,-0.0017143837,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,5.7,,-0.0074134824,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,6.3,,-0.0074134824,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,7,E6,-0.01575618,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,7,E6,-0.031416302,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,7,E6,0.00074161939,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,7,E6,0.003983754,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,6.85,,-0.031416302,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,7.15,,-0.031416302,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,6.85,,0.003983754,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,7.15,,0.003983754,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,6.7,,-0.011911273,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,7.3,,-0.011911273,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,8,E7,-0.0081307452,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,8,E7,-0.013916522,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,8,E7,-0.0024363046,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,8,E7,0.0040392999,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,7.85,,-0.013916522,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,8.15,,-0.013916522,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,7.85,,0.0040392999,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,8.15,,0.0040392999,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,7.7,,-0.0056668169,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,8.3,,-0.0056668169,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,9,E8,-0.40149272,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,9,E8,-0.9561766,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,9,E8,0.015953246,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,9,E8,0.2245215,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,8.85,,-0.9561766,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,9.15,,-0.9561766,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,8.85,,0.2245215,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,9.15,,0.2245215,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,8.7,,-0.13349305,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,9.3,,-0.13349305,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,10,E9,-0.34116458,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,10,E9,-1.042042,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,10,E9,0.12681833,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,10,E9,0.28317768,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,9.85,,-1.042042,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,10.15,,-1.042042,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,9.85,,0.28317768,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,10.15,,0.28317768,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,9.7,,-0.01399314,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,10.3,,-0.01399314,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,11,E10,-0.016646878,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,11,E10,-0.033083954,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,11,E10,-0.003568707,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,11,E10,0.008764463,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,10.85,,-0.033083954,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,11.15,,-0.033083954,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,10.85,,0.008764463,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,11.15,,0.008764463,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,10.7,,-0.01077998,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,11.3,,-0.01077998,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,12,E11,-0.012981696,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,12,E11,-0.029250822,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,12,E11,-0.0020212142,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,12,E11,0.010890074,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,11.85,,-0.029250822,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,12.15,,-0.029250822,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,11.85,,0.010890074,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,12.15,,0.010890074,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,11.7,,-0.0093386041,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,12.3,,-0.0093386041,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,13,E12,-0.012882326,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,13,E12,-0.022347267,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,13,E12,0.0010284991,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,13,E12,0.0083637703,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,12.85,,-0.022347267,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,13.15,,-0.022347267,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,12.85,,0.0083637703,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,13.15,,0.0083637703,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,12.7,,-0.0082435263,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,13.3,,-0.0082435263,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,14,E13,-0.011703676,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,14,E13,-0.023284609,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,14,E13,-0.0026904769,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,14,E13,0.00526492,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,13.85,,-0.023284609,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,14.15,,-0.023284609,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,13.85,,0.00526492,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,14.15,,0.00526492,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,13.7,,-0.0063629551,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,14.3,,-0.0063629551,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,15,E14,-0.0085667899,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,15,E14,-0.015959005,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,15,E14,0.0032805467,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,15,E14,0.008861847,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,14.85,,-0.015959005,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,15.15,,-0.015959005,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,14.85,,0.008861847,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,15.15,,0.008861847,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,14.7,,0.00089580132,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,15.3,,0.00089580132,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,16,E15,0.0032512972,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,16,E15,0.0030292853,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,16,E15,0.0034324227,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,16,E15,0.0036976871,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,15.85,,0.0030292853,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,16.15,,0.0030292853,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,15.85,,0.0036976871,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,16.15,,0.0036976871,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,15.7,,0.0033547371,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,16.3,,0.0033547371,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,17,E16,-0.018519647,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,17,E16,-0.042178235,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,17,E16,-0.0025861999,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,17,E16,0.017159471,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,16.85,,-0.042178235,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,17.15,,-0.042178235,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,16.85,,0.017159471,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,17.15,,0.017159471,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,0,16.7,,-0.010084494,,,,linear,linear
+3,,,Storage residual $\Delta S/W$,line,,1,17.3,,-0.010084494,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,1,E0,0.22908754,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,1,E0,0.22719969,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,1,E0,0.27526521,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,1,E0,0.34210652,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,0.85,,0.22719969,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,1.15,,0.22719969,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,0.85,,0.34210652,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,1.15,,0.34210652,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,0.7,,0.23978506,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,1.3,,0.23978506,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,2,E1,0.1811494,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,2,E1,0.15457913,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,2,E1,0.2997799,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,2,E1,0.39111614,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,1.85,,0.15457913,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,2.15,,0.15457913,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,1.85,,0.39111614,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,2.15,,0.39111614,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,1.7,,0.21230434,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,2.3,,0.21230434,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,3,E2,0.27600309,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,3,E2,0.23560616,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,3,E2,0.34255336,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,3,E2,0.39847838,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,2.85,,0.23560616,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,3.15,,0.23560616,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,2.85,,0.39847838,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,3.15,,0.39847838,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,2.7,,0.29792092,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,3.3,,0.29792092,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,4,E3,0.30016451,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,4,E3,0.27678585,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,4,E3,0.34210652,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,4,E3,0.39111614,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,3.85,,0.27678585,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,4.15,,0.27678585,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,3.85,,0.39111614,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,4.15,,0.39111614,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,3.7,,0.32126105,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,4.3,,0.32126105,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,5,E4,0.1639081,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,5,E4,0.14266676,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,5,E4,0.29838567,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,5,E4,0.39111614,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,4.85,,0.14266676,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,5.15,,0.14266676,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,4.85,,0.39111614,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,5.15,,0.39111614,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,4.7,,0.18634294,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,5.3,,0.18634294,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,6,E5,0.2395001,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,6,E5,0.22776279,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,6,E5,0.31083282,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,6,E5,0.38028442,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,5.85,,0.22776279,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,6.15,,0.22776279,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,5.85,,0.38028442,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,6.15,,0.38028442,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,5.7,,0.28815237,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,6.3,,0.28815237,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,7,E6,0.10315746,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,7,E6,0.083327605,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,7,E6,0.16431158,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,7,E6,0.23604333,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,6.85,,0.083327605,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,7.15,,0.083327605,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,6.85,,0.23604333,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,7.15,,0.23604333,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,6.7,,0.14347013,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,7.3,,0.14347013,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,8,E7,0.36844174,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,8,E7,0.32848667,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,8,E7,0.45993284,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,8,E7,0.5967517,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,7.85,,0.32848667,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,8.15,,0.32848667,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,7.85,,0.5967517,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,8.15,,0.5967517,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,7.7,,0.40907725,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,8.3,,0.40907725,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,9,E8,0.078369831,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,9,E8,0.020777215,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,9,E8,0.25246704,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,9,E8,0.50096084,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,8.85,,0.020777215,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,9.15,,0.020777215,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,8.85,,0.50096084,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,9.15,,0.50096084,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,8.7,,0.14384666,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,9.3,,0.14384666,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,10,E9,0.25009405,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,10,E9,0.13224106,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,10,E9,0.47552649,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,10,E9,0.69505324,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,9.85,,0.13224106,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,10.15,,0.13224106,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,9.85,,0.69505324,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,10.15,,0.69505324,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,9.7,,0.37357186,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,10.3,,0.37357186,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,11,E10,0.18939928,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,11,E10,0.15811471,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,11,E10,0.30516355,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,11,E10,0.39111614,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,10.85,,0.15811471,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,11.15,,0.15811471,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,10.85,,0.39111614,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,11.15,,0.39111614,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,10.7,,0.2294873,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,11.3,,0.2294873,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,12,E11,0.29018243,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,12,E11,0.17392112,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,12,E11,0.48487823,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,12,E11,0.77201095,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,11.85,,0.17392112,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,12.15,,0.17392112,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,11.85,,0.77201095,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,12.15,,0.77201095,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,11.7,,0.37511805,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,12.3,,0.37511805,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,13,E12,0.27657237,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,13,E12,0.19579367,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,13,E12,0.36397267,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,13,E12,0.48319421,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,12.85,,0.19579367,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,13.15,,0.19579367,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,12.85,,0.48319421,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,13.15,,0.48319421,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,12.7,,0.31862897,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,13.3,,0.31862897,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,14,E13,0.23450627,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,14,E13,0.1481099,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,14,E13,0.34210652,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,14,E13,0.4341427,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,13.85,,0.1481099,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,14.15,,0.1481099,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,13.85,,0.4341427,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,14.15,,0.4341427,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,13.7,,0.28402349,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,14.3,,0.28402349,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,15,E14,0.36472627,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,15,E14,0.2659997,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,15,E14,0.44834302,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,15,E14,0.55631889,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,14.85,,0.2659997,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,15.15,,0.2659997,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,14.85,,0.55631889,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,15.15,,0.55631889,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,14.7,,0.40903284,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,15.3,,0.40903284,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,16,E15,0.16670967,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,16,E15,0.16086385,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,16,E15,0.17719995,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,16,E15,0.19289655,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,15.85,,0.16086385,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,16.15,,0.16086385,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,15.85,,0.19289655,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,16.15,,0.19289655,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,15.7,,0.16887706,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,16.3,,0.16887706,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,17,E16,0.18361539,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,17,E16,0.080495928,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,17,E16,0.45395702,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,17,E16,0.8538375,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,16.85,,0.080495928,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,17.15,,0.080495928,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,16.85,,0.8538375,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,17.15,,0.8538375,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,0,16.7,,0.29642079,,,,linear,linear
+4,,,"Unattributed share of ET, $R/ET$",line,,1,17.3,,0.29642079,,,,linear,linear

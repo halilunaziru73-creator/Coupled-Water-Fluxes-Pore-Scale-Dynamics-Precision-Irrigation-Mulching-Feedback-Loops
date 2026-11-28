@@ -1,0 +1,6 @@
+Law,Form,Fitted,LOSO RMSE,Inside,Worst
+,,,(log_10),(of 10),factor
+"Mualem asymptote, Eq. (4)",K_r(h_c)=κ,κ=3.5×10^-10,0.18,5,2.3
+Power law,αh_c=A(n-1)^-B,"A=68, B=3.1",0.14,4,2.4
+Fixed saturation,S_e(h_c)=S_c,S_c=0.032,0.23,4,3.2
+Absolute conductivity,K(h_c)=q_c,–,μlticolumn3lnot supported (spans 3.6 decades)

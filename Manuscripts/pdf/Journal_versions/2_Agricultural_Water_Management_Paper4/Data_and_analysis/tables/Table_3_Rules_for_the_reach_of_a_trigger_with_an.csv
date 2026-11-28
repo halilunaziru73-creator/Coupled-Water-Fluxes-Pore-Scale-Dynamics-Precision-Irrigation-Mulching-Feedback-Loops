@@ -1,0 +1,6 @@
+Rule,RMSE (log_10),Inside (of 10),Worst factor
+"Reach at the wilting point, 15 000 cm, every soil",0.93,5,100
+One suction for every soil (best: 3 140 cm),0.67,0,21
+"Scale of the retention curve only, 155/α",0.48,1,7.1
+"Eq. (4), κ=3.5×10^-10, fitted on all soils",0.14,5,1.9
+"Eq. (4), each soil left out in turn",0.18,5,2.3

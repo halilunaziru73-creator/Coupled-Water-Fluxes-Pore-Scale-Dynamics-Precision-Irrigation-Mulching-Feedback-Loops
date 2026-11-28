@@ -1,0 +1,11 @@
+Predictor,Soils,LOSO RMSE,Model
+Mean only,10,0.318,constant
+Mean only,8,0.338,constant
+,8,0.088,"linear, clipped"
+(100),8,0.064,"linear, clipped"
+n,8,0.100,"linear, clipped"
+,10,0.183,"linear, clipped"
+(100),10,0.136,"linear, clipped"
+n,10,0.097,"linear, clipped"
+log_10K_s (linear),8,0.062,"linear, clipped"
+K_s/(K_s+q^*),8,0.058,"Eq. (8), q^*=71.5"

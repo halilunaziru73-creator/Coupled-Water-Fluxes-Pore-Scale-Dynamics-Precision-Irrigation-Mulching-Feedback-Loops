@@ -1,0 +1,21 @@
+panel,panel_title,x_label,y_label,kind,series,i,x,x_category,y,y_category,y_low,y_high,x_scale,y_scale
+1,,,mm per 100 mm of water retained (E9 basis),bar (y = height; low/high = bottom/top),Retained in root zone / transpired / irrigation avoided,0,0,S03,15.449431,,0,15.449431,linear,linear
+1,,,mm per 100 mm of water retained (E9 basis),bar (y = height; low/high = bottom/top),Retained in root zone / transpired / irrigation avoided,1,1,S04,25.912873,,0,25.912873,linear,linear
+1,,,mm per 100 mm of water retained (E9 basis),bar (y = height; low/high = bottom/top),Retained in root zone / transpired / irrigation avoided,2,2,S05,35.697273,,0,35.697273,linear,linear
+1,,,mm per 100 mm of water retained (E9 basis),bar (y = height; low/high = bottom/top),Retained in root zone / transpired / irrigation avoided,3,3,S02,73.501466,,0,73.501466,linear,linear
+1,,,mm per 100 mm of water retained (E9 basis),bar (y = height; low/high = bottom/top),Retained in root zone / transpired / irrigation avoided,4,4,S06,71.078268,,0,71.078268,linear,linear
+1,,,mm per 100 mm of water retained (E9 basis),bar (y = height; low/high = bottom/top),Retained in root zone / transpired / irrigation avoided,5,5,S08,71.48421,,0,71.48421,linear,linear
+1,,,mm per 100 mm of water retained (E9 basis),bar (y = height; low/high = bottom/top),Retained in root zone / transpired / irrigation avoided,6,6,S07,85.271091,,0,85.271091,linear,linear
+1,,,mm per 100 mm of water retained (E9 basis),bar (y = height; low/high = bottom/top),Retained in root zone / transpired / irrigation avoided,7,7,S01,97.087559,,0,97.087559,linear,linear
+1,,,mm per 100 mm of water retained (E9 basis),bar (y = height; low/high = bottom/top),Retained in root zone / transpired / irrigation avoided,8,8,S09,91.297593,,0,91.297593,linear,linear
+1,,,mm per 100 mm of water retained (E9 basis),bar (y = height; low/high = bottom/top),Retained in root zone / transpired / irrigation avoided,9,9,S10,97.802635,,0,97.802635,linear,linear
+1,,,mm per 100 mm of water retained (E9 basis),bar (y = height; low/high = bottom/top),Lost to drainage,0,0,S03,84.550569,,15.449431,100,linear,linear
+1,,,mm per 100 mm of water retained (E9 basis),bar (y = height; low/high = bottom/top),Lost to drainage,1,1,S04,74.087127,,25.912873,100,linear,linear
+1,,,mm per 100 mm of water retained (E9 basis),bar (y = height; low/high = bottom/top),Lost to drainage,2,2,S05,64.302727,,35.697273,100,linear,linear
+1,,,mm per 100 mm of water retained (E9 basis),bar (y = height; low/high = bottom/top),Lost to drainage,3,3,S02,26.498534,,73.501466,100,linear,linear
+1,,,mm per 100 mm of water retained (E9 basis),bar (y = height; low/high = bottom/top),Lost to drainage,4,4,S06,28.921732,,71.078268,100,linear,linear
+1,,,mm per 100 mm of water retained (E9 basis),bar (y = height; low/high = bottom/top),Lost to drainage,5,5,S08,28.51579,,71.48421,100,linear,linear
+1,,,mm per 100 mm of water retained (E9 basis),bar (y = height; low/high = bottom/top),Lost to drainage,6,6,S07,14.728909,,85.271091,100,linear,linear
+1,,,mm per 100 mm of water retained (E9 basis),bar (y = height; low/high = bottom/top),Lost to drainage,7,7,S01,2.9124407,,97.087559,100,linear,linear
+1,,,mm per 100 mm of water retained (E9 basis),bar (y = height; low/high = bottom/top),Lost to drainage,8,8,S09,8.7024068,,91.297593,100,linear,linear
+1,,,mm per 100 mm of water retained (E9 basis),bar (y = height; low/high = bottom/top),Lost to drainage,9,9,S10,2.197365,,97.802635,100,linear,linear

@@ -1,0 +1,35 @@
+panel,panel_title,x_label,y_label,kind,series,i,x,x_category,y,y_category,y_low,y_high,x_scale,y_scale
+1,,Published advance time $t_L$ (min),SWAFL (min),line,,0,80.2,,81.654646,,,,log,log
+1,,Published advance time $t_L$ (min),SWAFL (min),line,,1,198.6,,198.67363,,,,log,log
+1,,Published advance time $t_L$ (min),SWAFL (min),line,,2,441.6,,442.27193,,,,log,log
+1,,Published advance time $t_L$ (min),SWAFL (min),line,,3,26.2,,26.158984,,,,log,log
+1,,Published advance time $t_L$ (min),SWAFL (min),line,,4,36,,36.049177,,,,log,log
+1,,Published advance time $t_L$ (min),SWAFL (min),line,,5,46.3,,46.351943,,,,log,log
+1,,Published advance time $t_L$ (min),SWAFL (min),line,,6,68.2,,68.230549,,,,log,log
+1,,Published advance time $t_L$ (min),SWAFL (min),line,,7,143.5,,143.64006,,,,log,log
+1,,Published advance time $t_L$ (min),SWAFL (min),line,,0,20,,20,,,,log,log
+1,,Published advance time $t_L$ (min),SWAFL (min),line,,1,500,,500,,,,log,log
+2,,Published $E_a$ (%),SWAFL (%),line,,0,65.4,,65.162516,,,,linear,linear
+2,,Published $E_a$ (%),SWAFL (%),line,,1,69.3,,69.275302,,,,linear,linear
+2,,Published $E_a$ (%),SWAFL (%),line,,2,58.5,,58.464954,,,,linear,linear
+2,,Published $E_a$ (%),SWAFL (%),line,,3,44.2,,44.220009,,,,linear,linear
+2,,Published $E_a$ (%),SWAFL (%),line,,4,64.1,,64.051291,,,,linear,linear
+2,,Published $E_a$ (%),SWAFL (%),line,,5,79.1,,79.038983,,,,linear,linear
+2,,Published $E_a$ (%),SWAFL (%),line,,0,40,,40,,,,linear,linear
+2,,Published $E_a$ (%),SWAFL (%),line,,1,85,,85,,,,linear,linear
+3,,Published quantities (n=16),Relative difference (%),bar (y = height; low/high = bottom/top),,0,0,,0.00072139877,,0,0.00072139877,linear,linear
+3,,Published quantities (n=16),Relative difference (%),bar (y = height; low/high = bottom/top),,1,1,,1.8137726,,0,1.8137726,linear,linear
+3,,Published quantities (n=16),Relative difference (%),bar (y = height; low/high = bottom/top),,2,2,,-0.36312496,,0,-0.36312496,linear,linear
+3,,Published quantities (n=16),Relative difference (%),bar (y = height; low/high = bottom/top),,3,3,,0.037072754,,0,0.037072754,linear,linear
+3,,Published quantities (n=16),Relative difference (%),bar (y = height; low/high = bottom/top),,4,4,,-0.035638929,,0,-0.035638929,linear,linear
+3,,Published quantities (n=16),Relative difference (%),bar (y = height; low/high = bottom/top),,5,5,,0.1521581,,0,0.1521581,linear,linear
+3,,Published quantities (n=16),Relative difference (%),bar (y = height; low/high = bottom/top),,6,6,,-0.059907311,,0,-0.059907311,linear,linear
+3,,Published quantities (n=16),Relative difference (%),bar (y = height; low/high = bottom/top),,7,7,,0.0021547075,,0,0.0021547075,linear,linear
+3,,Published quantities (n=16),Relative difference (%),bar (y = height; low/high = bottom/top),,8,8,,-0.15654894,,0,-0.15654894,linear,linear
+3,,Published quantities (n=16),Relative difference (%),bar (y = height; low/high = bottom/top),,9,9,,0.13660393,,0,0.13660393,linear,linear
+3,,Published quantities (n=16),Relative difference (%),bar (y = height; low/high = bottom/top),,10,10,,0.045268522,,0,0.045268522,linear,linear
+3,,Published quantities (n=16),Relative difference (%),bar (y = height; low/high = bottom/top),,11,11,,0.11218889,,0,0.11218889,linear,linear
+3,,Published quantities (n=16),Relative difference (%),bar (y = height; low/high = bottom/top),,12,12,,0.044793346,,0,0.044793346,linear,linear
+3,,Published quantities (n=16),Relative difference (%),bar (y = height; low/high = bottom/top),,13,13,,-0.075988445,,0,-0.075988445,linear,linear
+3,,Published quantities (n=16),Relative difference (%),bar (y = height; low/high = bottom/top),,14,14,,0.09760338,,0,0.09760338,linear,linear
+3,,Published quantities (n=16),Relative difference (%),bar (y = height; low/high = bottom/top),,15,15,,-0.077139277,,0,-0.077139277,linear,linear

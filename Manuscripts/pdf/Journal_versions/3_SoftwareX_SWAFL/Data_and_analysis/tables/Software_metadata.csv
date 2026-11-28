@@ -1,0 +1,9 @@
+Nr.,Software metadata description,Metadata
+S1,Current software version,1.1.0
+S2,Permanent link to executables of this version,https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/releases/latest/download/SWAFL.exe
+S3,Permanent link to Reproducible Capsule,Not available
+S4,Legal Software License,MIT (source); end-user licence for the compiled application
+S5,Computing platforms/Operating Systems,Microsoft Windows (portable executable with Daisy); macOS and Linux (Electron); any modern web browser (everything except running Daisy)
+S6,Installation requirements & dependencies,"None for the Windows executable (no installation, administrator rights or network)"
+S7,"If available, link to user manual",https://github.com/halilunaziru73-creator/Coupled-Water-Fluxes-Pore-Scale-Dynamics-Precision-Irrigation-Mulching-Feedback-Loops/raw/main/Software/v1.1.0/SWAFL_Desktop/docs/manual_v1.1.0/SWAFL_Manual_v1.1.0.pdf
+S8,Support email for questions,halilunaziru73@gmail.com

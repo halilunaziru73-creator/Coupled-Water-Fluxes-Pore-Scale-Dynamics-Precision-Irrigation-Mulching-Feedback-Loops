@@ -34,6 +34,8 @@ bash run_all.sh ./work                              # ~15-20 min; writes only in
 | `intermediates/` | three small arrays used by figure scripts whose generating code was not kept as a script (see "Limits"). |
 | `make_data.py`, `make_e12.py` | rebuild the working pickle and the E12 input table of the Engine 1 held-out test from the CSV. |
 | `compare_results.py`, `audit_numbers.py` | the two checks above. |
+| `plotdata/sitecustomize.py` | records every point a figure script draws (put the folder on `PYTHONPATH` and set `PLOTDATA_DIR`); the recorded data of the journal figures are in `../results/plotdata`. |
+| `analysis/p4_kappa.py` | the determination of the constant kappa of Paper 4 (figure `fig6_kappa`, data `p4_fig6*.csv`). |
 | `CHECKSUMS.sha256` | SHA-256 of every file in this folder (and of the engine under test). `sha256sum -c CHECKSUMS.sha256` |
 | `requirements.txt` | pinned versions. |
 

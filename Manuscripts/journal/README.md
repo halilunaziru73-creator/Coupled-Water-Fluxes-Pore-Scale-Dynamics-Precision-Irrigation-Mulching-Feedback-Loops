@@ -5,8 +5,10 @@ Each article is within the limits of its journal and follows its rules; everythi
 | Article | Journal | Article file | Length | Supplementary Material S1 |
 |---|---|---|---|---|
 | Soil Hydraulic Memory and the Recoverability of Evaporation Savings and the Closure of the Water Balance (Paper 1) | Agricultural Water Management | `AWM_Paper1.pdf` | about 7,300 words with captions, 10 figures, 10 tables, 95 references | `Supplementary_AWM_Paper1.pdf` (complete text) |
-| The Reach of Suction-Triggered Irrigation and the Marginal Fate of Irrigation Water (Paper 4) | Agricultural Water Management | `AWM_Paper4.pdf` | about 5,200 words, 5 figures, 4 tables, 45 references | `Supplementary_AWM_Paper4.pdf` (complete text) |
+| The Reach of Suction-Triggered Irrigation and the Marginal Fate of Irrigation Water (Paper 4) | Agricultural Water Management | `AWM_Paper4.pdf` | about 5,300 words, 6 figures, 4 tables, 45 references | `Supplementary_AWM_Paper4.pdf` (complete text) |
 | SWAFL: An open desktop application for equation-traceable irrigation scheduling and design with a graphical interface to the Daisy model (Papers 2 and 3 merged) | SoftwareX | `SoftwareX_SWAFL.pdf` | about 2,500 words with captions (limit 3,000), 6 multi-panel figures (limit 6) built from the software screenshots of the presentation, 5 highlights, 62 references | `Supplementary_SoftwareX_SWAFL.pdf` (complete text of Papers 2 and 3, merged section by section) |
+
+Each package also has a folder **`Data_and_analysis`**, so that every figure and table can be traced to its numbers: `figures/Figure_N_*.csv` holds every point drawn in Figure N (recorded while the original script drew it) and the result tables it was drawn from, `tables/Table_N_*.csv` every table, `replot_from_csv.py` redraws every figure from the CSV files alone, and `analysis/` holds the Daisy ensemble, the scripts and `run_original.sh`, which runs the analysis again. Its `README.md` lists, for each figure and table, the data file and the script.
 
 Supplementary Material S2 of each article is the existing derivations, data and mechanisms PDF in `../pdf/Supplementary`.
 
@@ -23,6 +25,7 @@ Supplementary Material S2 of each article is the existing derivations, data and 
 ```
 python3 build.py     # the three articles, from src/
 python3 full.py      # the three Supplementary Material S1 files, from ../tex
+python3 data_package.py   # the Data_and_analysis folder of each package (figure data in ../results/plotdata)
 ```
 
 ## Before submitting (to do by the author)

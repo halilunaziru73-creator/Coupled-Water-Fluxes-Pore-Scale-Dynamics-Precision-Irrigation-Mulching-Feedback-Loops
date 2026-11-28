@@ -1,0 +1,457 @@
+panel,panel_title,x_label,y_label,kind,series,i,x,x_category,y,y_category,y_low,y_high,x_scale,y_scale
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,0,0,,0.016147214,,0,0,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,1,0,,0.03529627,,1,1,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,2,0,,0.071549283,,2,2,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,3,0,,0.13107733,,3,3,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,4,0,,0.21490305,,4,4,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,5,0,,0.30920977,,5,5,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,6,0,,0.40271844,,6,6,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,7,0,,0.48202668,,7,7,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,8,0,,0.55621162,,8,8,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,9,0,,0.61344672,,9,9,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,10,1,,0.01214326,,0,0,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,11,1,,0.021153609,,1,1,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,12,1,,0.045264404,,2,2,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,13,1,,0.089257582,,3,3,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,14,1,,0.1575292,,4,4,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,15,1,,0.2401773,,5,5,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,16,1,,0.33539251,,6,6,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,17,1,,0.42670135,,7,7,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,18,1,,0.50356742,,8,8,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,19,1,,0.57160185,,9,9,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,20,2,,0.012039238,,0,0,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,21,2,,0.015109725,,1,1,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,22,2,,0.02784089,,2,2,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,23,2,,0.058062874,,3,3,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,24,2,,0.11136776,,4,4,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,25,2,,0.17959363,,5,5,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,26,2,,0.26472283,,6,6,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,27,2,,0.35728623,,7,7,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,28,2,,0.44517725,,8,8,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,29,2,,0.52501307,,9,9,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,30,3,,0.012384302,,0,0,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,31,3,,0.014595251,,1,1,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,32,3,,0.019181075,,2,2,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,33,3,,0.035901521,,3,3,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,34,3,,0.075802752,,4,4,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,35,3,,0.13268406,,5,5,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,36,3,,0.20568905,,6,6,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,37,3,,0.29279262,,7,7,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,38,3,,0.38353665,,8,8,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,39,3,,0.47288339,,9,9,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,40,4,,0.012627426,,0,0,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,41,4,,0.014545611,,1,1,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,42,4,,0.01817173,,2,2,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,43,4,,0.026199341,,3,3,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,44,4,,0.048551538,,4,4,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,45,4,,0.092805281,,5,5,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,46,4,,0.15258103,,6,6,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,47,4,,0.22949972,,7,7,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,48,4,,0.31747691,,8,8,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,49,4,,0.40900324,,9,9,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,50,5,,0.013382949,,0,0,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,51,5,,0.015059114,,1,1,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,52,5,,0.018226711,,2,2,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,53,5,,0.023705102,,3,3,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,54,5,,0.036752768,,4,4,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,55,5,,0.063476238,,5,5,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,56,5,,0.10987255,,6,6,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,57,5,,0.17501664,,7,7,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,58,5,,0.25235218,,8,8,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,59,5,,0.33890074,,9,9,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,60,6,,0.01295608,,0,0,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,61,6,,0.014794649,,1,1,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,62,6,,0.01788192,,2,2,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,63,6,,0.023271873,,3,3,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,64,6,,0.032010689,,4,4,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,65,6,,0.049401777,,5,5,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,66,6,,0.078680375,,6,6,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,67,6,,0.12575832,,7,7,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,68,6,,0.19154879,,8,8,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,69,6,,0.26983546,,9,9,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,70,7,,0.013998426,,0,0,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,71,7,,0.0166749,,1,1,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,72,7,,0.018911661,,2,2,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,73,7,,0.023458018,,3,3,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,74,7,,0.031599664,,4,4,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,75,7,,0.044589028,,5,5,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,76,7,,0.065079213,,6,6,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,77,7,,0.096953201,,7,7,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,78,7,,0.14553913,,8,8,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,79,7,,0.21112984,,9,9,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,80,8,,0.015125047,,0,0,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,81,8,,0.016586575,,1,1,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,82,8,,0.018577592,,2,2,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,83,8,,0.023382284,,3,3,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,84,8,,0.031050264,,4,4,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,85,8,,0.041534984,,5,5,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,86,8,,0.05675974,,6,6,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,87,8,,0.078730918,,7,7,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,88,8,,0.11295968,,8,8,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,89,8,,0.16575393,,9,9,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,90,9,,0.013356301,,0,0,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,91,9,,0.012775794,,1,1,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,92,9,,0.01514164,,2,2,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,93,9,,0.019611534,,3,3,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,94,9,,0.023682332,,4,4,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,95,9,,0.029011674,,5,5,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,96,9,,0.036830651,,6,6,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,97,9,,0.048028987,,7,7,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,98,9,,0.064871842,,8,8,linear,linear
+1,,Rain scale $P$,Warming $\Delta T$ (°C),"cell(row=x,col=i)",,99,9,,0.093466349,,9,9,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,-1.0,0,0.5,,0.016147214,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,-1.0,1,0.6,,0.03529627,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,-1.0,2,0.7,,0.071549283,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,-1.0,3,0.8,,0.13107733,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,-1.0,4,0.9,,0.21490305,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,-1.0,5,1,,0.30920977,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,-1.0,6,1.1,,0.40271844,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,-1.0,7,1.2,,0.48202668,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,-1.0,8,1.3,,0.55621162,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,-1.0,9,1.4,,0.61344672,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+0.0,0,0.5,,0.012039238,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+0.0,1,0.6,,0.015109725,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+0.0,2,0.7,,0.02784089,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+0.0,3,0.8,,0.058062874,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+0.0,4,0.9,,0.11136776,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+0.0,5,1,,0.17959363,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+0.0,6,1.1,,0.26472283,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+0.0,7,1.2,,0.35728623,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+0.0,8,1.3,,0.44517725,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+0.0,9,1.4,,0.52501307,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+1.0,0,0.5,,0.012627426,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+1.0,1,0.6,,0.014545611,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+1.0,2,0.7,,0.01817173,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+1.0,3,0.8,,0.026199341,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+1.0,4,0.9,,0.048551538,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+1.0,5,1,,0.092805281,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+1.0,6,1.1,,0.15258103,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+1.0,7,1.2,,0.22949972,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+1.0,8,1.3,,0.31747691,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+1.0,9,1.4,,0.40900324,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+2.0,0,0.5,,0.01295608,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+2.0,1,0.6,,0.014794649,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+2.0,2,0.7,,0.01788192,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+2.0,3,0.8,,0.023271873,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+2.0,4,0.9,,0.032010689,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+2.0,5,1,,0.049401777,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+2.0,6,1.1,,0.078680375,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+2.0,7,1.2,,0.12575832,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+2.0,8,1.3,,0.19154879,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+2.0,9,1.4,,0.26983546,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+3.0,0,0.5,,0.015125047,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+3.0,1,0.6,,0.016586575,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+3.0,2,0.7,,0.018577592,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+3.0,3,0.8,,0.023382284,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+3.0,4,0.9,,0.031050264,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+3.0,5,1,,0.041534984,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+3.0,6,1.1,,0.05675974,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+3.0,7,1.2,,0.078730918,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+3.0,8,1.3,,0.11295968,,,,linear,linear
+2,,Rain scale $P$,$\psi_D$,line,+3.0,9,1.4,,0.16575393,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,0.5,0,-1,,0.016147214,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,0.5,1,-0.5,,0.01214326,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,0.5,2,0,,0.012039238,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,0.5,3,0.5,,0.012384302,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,0.5,4,1,,0.012627426,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,0.5,5,1.5,,0.013382949,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,0.5,6,2,,0.01295608,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,0.5,7,2.5,,0.013998426,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,0.5,8,3,,0.015125047,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,0.5,9,3.5,,0.013356301,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,0.7,0,-1,,0.071549283,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,0.7,1,-0.5,,0.045264404,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,0.7,2,0,,0.02784089,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,0.7,3,0.5,,0.019181075,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,0.7,4,1,,0.01817173,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,0.7,5,1.5,,0.018226711,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,0.7,6,2,,0.01788192,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,0.7,7,2.5,,0.018911661,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,0.7,8,3,,0.018577592,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,0.7,9,3.5,,0.01514164,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,0.9,0,-1,,0.21490305,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,0.9,1,-0.5,,0.1575292,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,0.9,2,0,,0.11136776,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,0.9,3,0.5,,0.075802752,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,0.9,4,1,,0.048551538,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,0.9,5,1.5,,0.036752768,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,0.9,6,2,,0.032010689,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,0.9,7,2.5,,0.031599664,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,0.9,8,3,,0.031050264,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,0.9,9,3.5,,0.023682332,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,1.1,0,-1,,0.40271844,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,1.1,1,-0.5,,0.33539251,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,1.1,2,0,,0.26472283,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,1.1,3,0.5,,0.20568905,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,1.1,4,1,,0.15258103,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,1.1,5,1.5,,0.10987255,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,1.1,6,2,,0.078680375,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,1.1,7,2.5,,0.065079213,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,1.1,8,3,,0.05675974,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,1.1,9,3.5,,0.036830651,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,1.3,0,-1,,0.55621162,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,1.3,1,-0.5,,0.50356742,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,1.3,2,0,,0.44517725,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,1.3,3,0.5,,0.38353665,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,1.3,4,1,,0.31747691,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,1.3,5,1.5,,0.25235218,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,1.3,6,2,,0.19154879,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,1.3,7,2.5,,0.14553913,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,1.3,8,3,,0.11295968,,,,linear,linear
+3,,Warming $\Delta T$ (°C),$\psi_D$,line,1.3,9,3.5,,0.064871842,,,,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,0,0,,0.013213862,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,1,1,,0.01556311,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,2,2,,0.017912358,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,3,3,,0.020261606,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,4,4,,0.022610854,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,5,5,,0.024960102,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,6,6,,0.02730935,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,7,7,,0.029658598,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,8,8,,0.032007846,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,9,9,,0.034357094,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,10,10,,0.036706342,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,11,11,,0.03905559,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,12,12,,0.041404838,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,13,13,,0.043754086,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,14,14,,0.046103334,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,15,15,,0.048452582,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,16,16,,0.05080183,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,17,17,,0.053151078,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,18,18,,0.055500326,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,19,19,,0.057849574,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,20,20,,0.060198822,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,21,21,,0.06254807,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,22,22,,0.064897318,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,23,23,,0.067246566,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,24,24,,0.069595814,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,25,25,,0.071945062,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,26,26,,0.07429431,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,27,27,,0.076643558,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,28,28,,0.078992806,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,29,29,,0.081342054,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,30,30,,0.083691302,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,31,31,,0.08604055,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,32,32,,0.088389798,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,33,33,,0.090739046,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,34,34,,0.093088294,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,35,35,,0.095437542,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,36,36,,0.09778679,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,37,37,,0.10013604,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,38,38,,0.10248529,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,39,39,,0.10483453,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,40,40,,0.10718378,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,41,41,,0.10953303,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,42,42,,0.11188228,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,43,43,,0.11423153,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,44,44,,0.11658077,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,45,45,,0.11893002,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,46,46,,0.12127927,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,47,47,,0.12362852,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,48,48,,0.12597777,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,49,49,,0.12832701,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,50,50,,0.13067626,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,51,51,,0.13302551,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,52,52,,0.13537476,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,53,53,,0.13772401,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,54,54,,0.14007325,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,55,55,,0.1424225,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,56,56,,0.14477175,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,57,57,,0.147121,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,58,58,,0.14947025,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,59,59,,0.15181949,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,60,60,,0.15416874,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,61,61,,0.15651799,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,62,62,,0.15886724,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,63,63,,0.16121649,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,64,64,,0.16356573,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,65,65,,0.16591498,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,66,66,,0.16826423,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,67,67,,0.17061348,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,68,68,,0.17296273,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,69,69,,0.17531197,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,70,70,,0.17766122,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,71,71,,0.18001047,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,72,72,,0.18235972,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,73,73,,0.18470897,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,74,74,,0.18705821,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,75,75,,0.18940746,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,76,76,,0.19175671,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,77,77,,0.19410596,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,78,78,,0.19645521,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,79,79,,0.19880445,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,80,80,,0.2011537,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,81,81,,0.20350295,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,82,82,,0.2058522,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,83,83,,0.20820145,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,84,84,,0.21055069,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,85,85,,0.21289994,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,86,86,,0.21524919,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,87,87,,0.21759844,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,88,88,,0.21994769,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,89,89,,0.22229693,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,90,90,,0.22464618,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,91,91,,0.22699543,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,92,92,,0.22934468,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,93,93,,0.23169393,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,94,94,,0.23404317,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,95,95,,0.23639242,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,96,96,,0.23874167,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,97,97,,0.24109092,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,98,98,,0.24344017,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,99,99,,0.24578941,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,100,100,,0.24813866,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,101,101,,0.25048791,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,102,102,,0.25283716,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,103,103,,0.25518641,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,104,104,,0.25753565,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,105,105,,0.2598849,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,106,106,,0.26223415,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,107,107,,0.2645834,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,108,108,,0.26693265,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,109,109,,0.26928189,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,110,110,,0.27163114,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,111,111,,0.27398039,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,112,112,,0.27632964,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,113,113,,0.27867889,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,114,114,,0.28102813,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,115,115,,0.28337738,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,116,116,,0.28572663,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,117,117,,0.28807588,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,118,118,,0.29042513,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,119,119,,0.29277437,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,120,120,,0.29512362,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,121,121,,0.29747287,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,122,122,,0.29982212,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,123,123,,0.30217136,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,124,124,,0.30452061,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,125,125,,0.30686986,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,126,126,,0.30921911,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,127,127,,0.31156836,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,128,128,,0.3139176,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,129,129,,0.31626685,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,130,130,,0.3186161,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,131,131,,0.32096535,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,132,132,,0.3233146,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,133,133,,0.32566384,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,134,134,,0.32801309,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,135,135,,0.33036234,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,136,136,,0.33271159,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,137,137,,0.33506084,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,138,138,,0.33741008,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,139,139,,0.33975933,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,140,140,,0.34210858,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,141,141,,0.34445783,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,142,142,,0.34680708,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,143,143,,0.34915632,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,144,144,,0.35150557,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,145,145,,0.35385482,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,146,146,,0.35620407,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,147,147,,0.35855332,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,148,148,,0.36090256,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,149,149,,0.36325181,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,150,150,,0.36560106,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,151,151,,0.36795031,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,152,152,,0.37029956,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,153,153,,0.3726488,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,154,154,,0.37499805,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,155,155,,0.3773473,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,156,156,,0.37969655,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,157,157,,0.3820458,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,158,158,,0.38439504,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,159,159,,0.38674429,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,160,160,,0.38909354,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,161,161,,0.39144279,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,162,162,,0.39379204,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,163,163,,0.39614128,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,164,164,,0.39849053,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,165,165,,0.40083978,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,166,166,,0.40318903,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,167,167,,0.40553828,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,168,168,,0.40788752,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,169,169,,0.41023677,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,170,170,,0.41258602,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,171,171,,0.41493527,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,172,172,,0.41728452,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,173,173,,0.41963376,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,174,174,,0.42198301,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,175,175,,0.42433226,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,176,176,,0.42668151,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,177,177,,0.42903076,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,178,178,,0.43138,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,179,179,,0.43372925,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,180,180,,0.4360785,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,181,181,,0.43842775,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,182,182,,0.440777,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,183,183,,0.44312624,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,184,184,,0.44547549,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,185,185,,0.44782474,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,186,186,,0.45017399,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,187,187,,0.45252324,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,188,188,,0.45487248,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,189,189,,0.45722173,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,190,190,,0.45957098,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,191,191,,0.46192023,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,192,192,,0.46426948,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,193,193,,0.46661872,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,194,194,,0.46896797,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,195,195,,0.47131722,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,196,196,,0.47366647,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,197,197,,0.47601572,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,198,198,,0.47836496,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,199,199,,0.48071421,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,200,200,,0.48306346,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,201,201,,0.48541271,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,202,202,,0.48776196,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,203,203,,0.4901112,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,204,204,,0.49246045,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,205,205,,0.4948097,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,206,206,,0.49715895,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,207,207,,0.4995082,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,208,208,,0.50185744,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,209,209,,0.50420669,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,210,210,,0.50655594,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,211,211,,0.50890519,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,212,212,,0.51125444,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,213,213,,0.51360368,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,214,214,,0.51595293,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,215,215,,0.51830218,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,216,216,,0.52065143,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,217,217,,0.52300068,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,218,218,,0.52534992,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,219,219,,0.52769917,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,220,220,,0.53004842,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,221,221,,0.53239767,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,222,222,,0.53474692,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,223,223,,0.53709616,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,224,224,,0.53944541,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,225,225,,0.54179466,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,226,226,,0.54414391,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,227,227,,0.54649316,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,228,228,,0.5488424,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,229,229,,0.55119165,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,230,230,,0.5535409,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,231,231,,0.55589015,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,232,232,,0.5582394,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,233,233,,0.56058864,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,234,234,,0.56293789,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,235,235,,0.56528714,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,236,236,,0.56763639,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,237,237,,0.56998564,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,238,238,,0.57233488,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,239,239,,0.57468413,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,240,240,,0.57703338,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,241,241,,0.57938263,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,242,242,,0.58173188,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,243,243,,0.58408112,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,244,244,,0.58643037,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,245,245,,0.58877962,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,246,246,,0.59112887,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,247,247,,0.59347812,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,248,248,,0.59582736,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,249,249,,0.59817661,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,250,250,,0.60052586,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,251,251,,0.60287511,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,252,252,,0.60522436,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,253,253,,0.6075736,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,254,254,,0.60992285,,0,0,linear,linear
+4,,,$\psi_D$ (S01),"cell(row=x,col=i)",,255,255,,0.6122721,,0,0,linear,linear
